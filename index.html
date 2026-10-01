@@ -906,7 +906,6 @@
                 </div>
             </section>
 
-            <!-- CÁC SECTION KHÁC -->
             <section id="sec-group" class="hidden">
                 <div class="bg-card rounded-xl p-4 sm:p-6 shadow-sm border border-theme mb-8">
                     <h2 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Nhóm</h2>
@@ -976,13 +975,16 @@
         </main>
     </div>
 
-    <!-- KHU VỰC SCRIPT VỚI CÁC BUGS ĐÃ ĐƯỢC FIX -->
+    <!-- KHU VỰC SCRIPT ĐÃ SỬA LỖI -->
     <script>
         let groups = []; let contexts = []; let sources = []; let grammars = [];
         let editingGrammarId = null;
         let currentQuizCorrect = null; let selectedQuizLevels = []; let selectedQuizMode = 'due';
         let sessionAnsweredIds = []; let quizTotalQuestions = 0; let currentTimeFilter = 'all';
         let currentLevelFilter = 'all'; let rawCSVData = []; let currentQuizSelection = { meaningId: null, structureId: null };
+
+        // MỚI: Biến lưu trữ danh sách ID các câu hỏi đã chốt cho phiên ôn tập hiện tại
+        let currentQuizSessionPool = [];
 
         function openSidebar() {
             document.getElementById('sidebar-overlay').classList.remove('hidden');
@@ -1017,13 +1019,10 @@
                 const btnText = document.getElementById('google-login-text');
                 if (user) {
                     currentUser = user; btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
-
-                    // [FIX BUG 1] Kiểm tra sessionStorage xem có phải người dùng vừa chủ động click không
                     if (sessionStorage.getItem('isManualLogin') === 'true') {
                         showToast("Đã kết nối tài khoản: " + user.displayName, "success");
                         sessionStorage.removeItem('isManualLogin');
                     }
-
                     fetchFromFirebaseRealtime();
                 } else {
                     currentUser = null; btnText.innerText = "Đăng nhập đồng bộ";
@@ -1039,13 +1038,10 @@
                 }
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
-
-                // [FIX BUG 1] Đánh dấu hành động đăng nhập là do người dùng bấm nút
                 sessionStorage.setItem('isManualLogin', 'true');
-
                 auth.signInWithPopup(provider).catch(error => {
                     showToast("Lỗi đăng nhập: " + error.message, "error");
-                    sessionStorage.removeItem('isManualLogin'); // Dọn dẹp nếu có lỗi xảy ra
+                    sessionStorage.removeItem('isManualLogin');
                 });
             }
         }
@@ -1066,31 +1062,14 @@
 
             unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
                 if (doc.exists) {
-
-                    // [FIX BUG 3] Chống lặp và sửa lỗi so sánh
-                    // doc.metadata.hasPendingWrites sẽ trả về 'true' nếu sự kiện này 
-                    // là do chính trình duyệt của bạn vừa push dữ liệu lên Firestore.
-                    // Nếu là true -> bỏ qua để không ghi đè và không render lại vô ích.
-                    // Nếu là false -> chắc chắn là dữ liệu đẩy từ một thiết bị khác.
-                    if (doc.metadata.hasPendingWrites) {
-                        return;
-                    }
+                    if (doc.metadata.hasPendingWrites) return;
 
                     const data = doc.data();
-
-                    // --- ĐOẠN CODE CŨ ĐƯỢC ẨN BẰNG COMMENT THEO YÊU CẦU ---
-                    // const cloudDataStr = JSON.stringify({ groups: data.groups || [], contexts: data.contexts || [], sources: data.sources || [], grammars: data.grammars || [] });
-                    // const localDataStr = JSON.stringify({ groups, contexts, sources, grammars });
-                    // if (cloudDataStr === localDataStr) return; 
-                    // --------------------------------------------------------
-
                     groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || []; grammars = data.grammars || [];
                     localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
                     localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
                     renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
 
-                    // [FIX BUG 2] Tắt thông báo nổi khi đồng bộ nền và chỉ hiện console log
-                    // showToast("☁️ Dữ liệu đã đồng bộ từ thiết bị khác!", "success");
                     console.log("☁️ Dữ liệu đã đồng bộ ngầm từ Cloud!");
                 } else { syncToFirebase(); }
             }, (error) => {
@@ -1706,19 +1685,41 @@
             document.getElementById('quiz-setup-step-1').classList.add('hidden'); document.getElementById('quiz-setup-step-2').classList.remove('hidden');
         }
 
+        // --- BẮT ĐẦU FIX LỖI ÔN TẬP TẠI ĐÂY ---
         function startQuizFiltered(mode) {
-            selectedQuizMode = mode; sessionAnsweredIds = []; const pool = getQuizPool();
+            selectedQuizMode = mode;
+            sessionAnsweredIds = [];
+
+            // Lỗi 2: Chốt cố định danh sách ngữ pháp ôn tập ngay tại thời điểm bắt đầu
+            let pool = grammars;
+            const sourceFilter = document.getElementById('quiz-source-select').value;
+            if (sourceFilter !== 'all') {
+                pool = pool.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
+            }
+
+            pool = pool.filter(g => selectedQuizLevels.includes(g.level));
+
+            const now = Date.now();
+            if (mode === 'due') {
+                pool = pool.filter(g => (g.nextReviewDate || 0) <= now && g.level !== 9);
+            } else {
+                pool = pool.filter(g => g.level !== 9);
+            }
+
             if (pool.length === 0) return showToast("Không có ngữ pháp nào phù hợp với tùy chọn này!", "success");
-            quizTotalQuestions = pool.length; closeModal('quizSetupModal'); switchTab('quiz'); nextQuestion();
+
+            // Lưu mảng ID của các câu sẽ được hỏi trong phiên này (snapshot cố định)
+            currentQuizSessionPool = pool.map(g => g.id);
+            quizTotalQuestions = currentQuizSessionPool.length;
+
+            closeModal('quizSetupModal');
+            switchTab('quiz');
+            nextQuestion();
         }
 
         function getQuizPool() {
-            let pool = grammars.filter(g => !sessionAnsweredIds.includes(g.id));
-            const sourceFilter = document.getElementById('quiz-source-select').value;
-            if (sourceFilter !== 'all') { pool = pool.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter))); }
-            pool = pool.filter(g => selectedQuizLevels.includes(g.level));
-            if (selectedQuizMode === 'due') pool = pool.filter(g => (g.nextReviewDate || 0) <= Date.now() && g.level !== 9);
-            return pool;
+            // Lấy ra các câu trong danh sách đã chốt ban đầu VÀ chưa được trả lời
+            return grammars.filter(g => currentQuizSessionPool.includes(g.id) && !sessionAnsweredIds.includes(g.id));
         }
 
         function nextQuestion() {
@@ -1728,18 +1729,36 @@
             const btnAction = document.getElementById('btn-quiz-action'); btnAction.onclick = skipQuestion; btnAction.className = "w-full sm:w-auto bg-btn px-8 py-3 sm:py-4 rounded-xl text-base font-bold border border-gray-300 text-gray-500 hover:bg-white transition-colors"; btnAction.innerText = "Bỏ Qua (Chưa thuộc)";
             const currentQNum = Math.min(sessionAnsweredIds.length + 1, quizTotalQuestions); document.getElementById('quiz-progress').innerText = `${currentQNum} / ${quizTotalQuestions}`;
             const optsContainer = document.getElementById('quiz-options'); optsContainer.innerHTML = '';
-            currentQuizCorrect = pool[Math.floor(Math.random() * pool.length)]; document.getElementById('quiz-question-label').innerText = "Tên ngữ pháp cần tìm:"; document.getElementById('quiz-question').innerHTML = currentQuizCorrect.name;
-            let allOtherGrammars = [...grammars].filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random());
-            let wrongOptsM = allOtherGrammars.slice(0, 3); let optionsM = [currentQuizCorrect, ...wrongOptsM].sort(() => 0.5 - Math.random());
-            let wrongOptsS = [...grammars].filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random()).slice(0, 3); let optionsS = [currentQuizCorrect, ...wrongOptsS].sort(() => 0.5 - Math.random());
+
+            currentQuizCorrect = pool[Math.floor(Math.random() * pool.length)];
+            document.getElementById('quiz-question-label').innerText = "Tên ngữ pháp cần tìm:"; document.getElementById('quiz-question').innerHTML = currentQuizCorrect.name;
+
+            // Lỗi 1: Bộ lọc đáp án nhiễu (sai) phải ưu tiên lấy trong cùng Nguồn đã chọn
+            const sourceFilter = document.getElementById('quiz-source-select').value;
+            let distractorSource = grammars;
+            if (sourceFilter !== 'all') {
+                distractorSource = distractorSource.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
+            }
+
+            let allOtherGrammars = distractorSource.filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random());
+            let wrongOptsM = allOtherGrammars.slice(0, 3);
+            let optionsM = [currentQuizCorrect, ...wrongOptsM].sort(() => 0.5 - Math.random());
+
+            let wrongOptsS = distractorSource.filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+            let optionsS = [currentQuizCorrect, ...wrongOptsS].sort(() => 0.5 - Math.random());
+
             currentQuizSelection = { meaningId: null, structureId: null };
             let colM = '<div class="flex flex-col gap-3"><div class="text-center font-bold text-gray-500 mb-2 uppercase tracking-wide text-xs">Cột Ý Nghĩa</div>';
             optionsM.forEach(opt => { colM += `<button id="opt-m-${opt.id}" onclick="selectQuizOption('m', ${opt.id}, this)" class="quiz-option-m text-left bg-white border-2 border-theme p-3 rounded-xl flex items-center gap-3 hover:bg-btn shadow-sm transition-all"><div class="font-bold text-base text-primary w-full rich-text text-center">${opt.meaning || '<i class="text-gray-400">Trống</i>'}</div></button>`; });
             colM += '</div>';
+
             let colS = '<div class="flex flex-col gap-3"><div class="text-center font-bold text-gray-500 mb-2 uppercase tracking-wide text-xs">Cột Cấu Trúc</div>';
             optionsS.forEach(opt => { colS += `<button id="opt-s-${opt.id}" onclick="selectQuizOption('s', ${opt.id}, this)" class="quiz-option-s text-left bg-white border-2 border-theme p-3 rounded-xl flex items-center gap-3 hover:bg-btn shadow-sm transition-all"><div class="font-bold text-base text-primary w-full rich-text text-center">${opt.structure || '<i class="text-gray-400">Trống</i>'}</div></button>`; });
-            colS += '</div>'; optsContainer.innerHTML = colM + colS;
+            colS += '</div>';
+
+            optsContainer.innerHTML = colM + colS;
         }
+        // --- KẾT THÚC FIX LỖI ÔN TẬP ---
 
         function selectQuizOption(type, id, btn) {
             document.querySelectorAll(`.quiz-option-${type}`).forEach(b => { b.classList.remove('ring-4', 'ring-[#F5AFAF]', 'bg-btn'); }); btn.classList.add('ring-4', 'ring-[#F5AFAF]', 'bg-btn');
