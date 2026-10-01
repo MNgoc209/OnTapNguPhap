@@ -1,0 +1,2533 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Học Ngữ Pháp Tiếng Nhật</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Thư viện Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        :root {
+            /* Theme Colors */
+            --color1: #F5AFAF;
+            --color2: #F9DFDF;
+            --color3: #FBEFEF;
+            --color4: #FCF8F8;
+            --color5: #FDEDED;
+            --color6: #FDACAC;
+
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --text: #4A4A4A;
+            --bg: #fdf8f8;
+
+            /* Levels */
+            --lv0: #95a5a6;
+            --lv1: #e74c3c;
+            --lv2: #e67e22;
+            --lv3: #f1c40f;
+            --lv4: #2ecc71;
+            --lv5: #3498db;
+            --lv6: #9b59b6;
+            --lv7: #1abc9c;
+            --lv8: #2c3e50;
+            --lv9: #7f8c8d;
+            /* Mastered - Đã thuộc */
+        }
+
+        body {
+            background-color: var(--color4);
+            color: var(--text);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .bg-primary {
+            background-color: var(--color1);
+        }
+
+        .text-primary {
+            color: var(--color1);
+        }
+
+        .bg-card {
+            background-color: var(--bg);
+        }
+
+        .border-theme {
+            border-color: var(--color2);
+        }
+
+        .bg-input {
+            background-color: var(--color2);
+        }
+
+        .bg-btn {
+            background-color: var(--color3);
+        }
+
+        .bg-btn:hover {
+            background-color: var(--color5);
+        }
+
+        .bg-action {
+            background-color: var(--color6);
+            color: white;
+        }
+
+        .bg-action:hover {
+            background-color: var(--color1);
+        }
+
+        .tab-active {
+            border-bottom: 3px solid var(--color1);
+            color: var(--color1);
+            font-weight: bold;
+        }
+
+        .time-filters {
+            scrollbar-width: none;
+        }
+
+        .time-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .time-filter-btn {
+            transition: 0.2s;
+            white-space: nowrap;
+            background: white;
+            color: var(--text);
+        }
+
+        .time-filter-btn.active {
+            background: var(--color3);
+            color: var(--color1);
+            border-color: var(--color1);
+            font-weight: 700;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        #toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: slideIn 0.3s ease-out forwards;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .toast.success {
+            background-color: var(--success);
+        }
+
+        .toast.error {
+            background-color: var(--danger);
+        }
+
+        .toast.warning {
+            background-color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        /* Quiz Option Animation */
+        .quiz-option-m,
+        .quiz-option-s {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .quiz-option-m:hover,
+        .quiz-option-s:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 175, 175, 0.4);
+        }
+
+        .correct-answer {
+            background-color: #eafaf1 !important;
+            color: #1e8449 !important;
+            border-color: #a3e4d7 !important;
+        }
+
+        .wrong-answer {
+            background-color: var(--danger) !important;
+            color: white !important;
+            border-color: var(--danger) !important;
+        }
+
+        .wrong-answer div {
+            color: white !important;
+        }
+
+        /* Rich Text & Content Editable Styles */
+        .rich-text-editor {
+            min-height: 80px;
+        }
+
+        .rich-text-editor:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        .rich-text ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rich-text b,
+        .rich-text strong {
+            font-weight: bold;
+        }
+
+        .rich-text i,
+        .rich-text em {
+            font-style: italic;
+        }
+
+        .toolbar-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: white;
+            border: 1px solid var(--color2);
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--text);
+            transition: 0.2s;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--color3);
+        }
+
+        /* Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #F5AFAF;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #F5AFAF;
+        }
+
+        .toggle-checkbox:checked+.toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
+
+        /* Custom ComboBox Select Styles */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: white;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23F5AFAF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.75rem center;
+            background-repeat: no-repeat;
+            background-size: 1.2em 1.2em;
+            padding-right: 2.5rem !important;
+            transition: all 0.2s;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--color1) !important;
+            box-shadow: 0 0 0 3px var(--color2) !important;
+        }
+
+        /* Inline Level Badge ComboBox */
+        .badge-select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.15rem center;
+            background-size: 1em 1em;
+            padding-right: 1.2rem !important;
+        }
+
+        /* Tùy chỉnh thanh cuộn cho vùng cố định */
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: var(--color1);
+            border-radius: 20px;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen relative">
+
+    <div id="toast-container"></div>
+
+    <!-- Modal: Bảng Chọn Bài Ôn Tập -->
+    <div id="quizSetupModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[80] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-8 rounded-2xl w-11/12 max-w-3xl flex flex-col shadow-2xl border border-theme transform transition-transform text-center relative">
+            <button onclick="closeModal('quizSetupModal')"
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors"
+                title="Đóng">&times;</button>
+            <h2 class="text-3xl font-bold mb-6 text-primary">Thiết Lập Ôn Tập</h2>
+
+            <div id="quiz-setup-step-1">
+                <div
+                    class="flex justify-center items-center gap-3 mb-6 bg-white p-3 rounded-xl border border-theme shadow-sm inline-flex mx-auto">
+                    <label class="text-gray-700 font-bold whitespace-nowrap">Lọc theo Nguồn:</label>
+                    <select id="quiz-source-select" class="p-2 border border-theme rounded-lg text-base min-w-[200px]"
+                        onchange="renderQuizLevelButtons()">
+                        <option value="all">Tất cả các nguồn</option>
+                    </select>
+                </div>
+
+                <p class="mb-4 text-lg text-gray-700 font-medium">Vui lòng chọn nhóm cấp độ bạn muốn ôn tập (có thể chọn
+                    nhiều):</p>
+                <div id="quiz-level-selection" class="flex flex-wrap justify-center gap-3 mb-2">
+                    <!-- Javascript sẽ nhúng các nút vào đây -->
+                </div>
+
+                <div id="quiz-step-1-actions" class="mt-8 w-full flex justify-center hidden">
+                    <button onclick="proceedToQuizStep2()"
+                        class="bg-action px-10 py-3 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md">Tiếp
+                        Tục ➔</button>
+                </div>
+            </div>
+
+            <div id="quiz-setup-step-2" class="hidden">
+                <p class="mb-4 text-lg">Bạn đang chuẩn bị ôn tập cho: <span id="selected-level-display"
+                        class="font-bold text-primary text-xl"></span></p>
+                <p class="mb-8 text-base text-gray-600">Nhiệm vụ của bạn là ghép đúng <b class="text-[#F5AFAF]">Ý
+                        nghĩa</b> và <b class="text-[#F5AFAF]">Cấu trúc</b> tương ứng với Tên ngữ pháp được hỏi.</p>
+
+                <div class="flex flex-wrap justify-center gap-4 mb-8">
+                    <button id="btn-quiz-mode-due" onclick="startQuizFiltered('due')"
+                        class="bg-action px-8 py-4 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md flex-1 min-w-[200px] max-w-[250px]">
+                        ⏰ Ôn Đến Hạn
+                    </button>
+                    <button id="btn-quiz-mode-all" onclick="startQuizFiltered('all')"
+                        class="bg-[#3498db] hover:bg-[#2980b9] text-white px-8 py-4 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md flex-1 min-w-[200px] max-w-[250px]">
+                        📚 Ôn Tất Cả
+                    </button>
+                </div>
+                <button onclick="openQuizSetup()"
+                    class="text-gray-500 font-medium hover:text-gray-700 underline text-lg transition-colors">🔙 Quay
+                    lại chọn Level khác</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="structureModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[60] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-6 rounded-2xl w-11/12 max-w-4xl h-[60vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+            <h3 class="text-2xl font-bold text-primary mb-4 flex items-center gap-2">Soạn Thảo Cấu Trúc Ngữ Pháp</h3>
+            <div class="flex gap-2 mb-2 items-center">
+                <button onclick="execCmd('bold', 'g-structure-modal')" class="toolbar-btn">B</button>
+                <button onclick="execCmd('italic', 'g-structure-modal')" class="toolbar-btn">I</button>
+                <button onclick="execCmd('insertUnorderedList', 'g-structure-modal')" class="toolbar-btn">•
+                    List</button>
+                <div class="w-px h-5 bg-gray-300 mx-1"></div>
+                <div class="relative inline-block color-palette-container">
+                    <button type="button" onclick="toggleColorPalette('cp-structure-modal')"
+                        class="w-8 h-8 p-0 border border-gray-300 rounded cursor-pointer bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+                        title="Đổi màu chữ đang chọn">
+                        <span
+                            class="w-5 h-5 rounded-sm bg-gradient-to-br from-red-400 via-green-400 to-blue-400 block"></span>
+                    </button>
+                    <div id="cp-structure-modal"
+                        class="color-palette hidden absolute top-full mt-2 left-0 bg-white border border-gray-200 shadow-xl rounded-lg p-2 z-[80] grid grid-cols-4 gap-2 w-[140px]">
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#e74c3c', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#e74c3c] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#e67e22', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#e67e22] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#f1c40f', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#f1c40f] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#2ecc71', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#2ecc71] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#3498db', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#3498db] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#9b59b6', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#9b59b6] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#4A4A4A', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#4A4A4A] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-structure-modal', '#000000', 'cp-structure-modal')"
+                            class="w-6 h-6 rounded bg-[#000000] hover:scale-110 transition-transform shadow-sm"></button>
+                    </div>
+                </div>
+            </div>
+            <div id="g-structure-modal" contenteditable="true" onmouseup="saveSelection('g-structure-modal')"
+                onkeyup="saveSelection('g-structure-modal')" onmouseleave="saveSelection('g-structure-modal')"
+                class="rich-text-editor rich-text flex-1 w-full p-4 rounded-xl bg-input border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] overflow-y-auto text-xl mb-4"
+                placeholder="Nhập chi tiết cấu trúc..."></div>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeModal('structureModal')"
+                    class="px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-lg">Hủy
+                    / Đóng</button>
+                <button onclick="saveModal('g-structure-modal', 'g-structure', 'structureModal')"
+                    class="bg-action px-6 py-3 rounded-lg font-medium transition-colors text-lg">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="exampleModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[60] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-6 rounded-2xl w-11/12 max-w-4xl h-[60vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+            <h3 class="text-2xl font-bold text-primary mb-4 flex items-center gap-2">Soạn Thảo Ví Dụ</h3>
+            <div class="flex gap-2 mb-2 items-center">
+                <button onclick="execCmd('bold', 'g-example-modal')" class="toolbar-btn">B</button>
+                <button onclick="execCmd('italic', 'g-example-modal')" class="toolbar-btn">I</button>
+                <button onclick="execCmd('insertUnorderedList', 'g-example-modal')" class="toolbar-btn">• List</button>
+                <div class="w-px h-5 bg-gray-300 mx-1"></div>
+                <div class="relative inline-block color-palette-container">
+                    <button type="button" onclick="toggleColorPalette('cp-example-modal')"
+                        class="w-8 h-8 p-0 border border-gray-300 rounded cursor-pointer bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+                        title="Đổi màu chữ đang chọn">
+                        <span
+                            class="w-5 h-5 rounded-sm bg-gradient-to-br from-red-400 via-green-400 to-blue-400 block"></span>
+                    </button>
+                    <div id="cp-example-modal"
+                        class="color-palette hidden absolute top-full mt-2 left-0 bg-white border border-gray-200 shadow-xl rounded-lg p-2 z-[80] grid grid-cols-4 gap-2 w-[140px]">
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#e74c3c', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#e74c3c] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#e67e22', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#e67e22] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#f1c40f', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#f1c40f] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#2ecc71', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#2ecc71] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#3498db', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#3498db] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#9b59b6', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#9b59b6] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#4A4A4A', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#4A4A4A] hover:scale-110 transition-transform shadow-sm"></button>
+                        <button type="button"
+                            onmousedown="event.preventDefault(); applyCustomColor('g-example-modal', '#000000', 'cp-example-modal')"
+                            class="w-6 h-6 rounded bg-[#000000] hover:scale-110 transition-transform shadow-sm"></button>
+                    </div>
+                </div>
+            </div>
+            <div id="g-example-modal" contenteditable="true" onmouseup="saveSelection('g-example-modal')"
+                onkeyup="saveSelection('g-example-modal')" onmouseleave="saveSelection('g-example-modal')"
+                class="rich-text-editor rich-text flex-1 w-full p-4 rounded-xl bg-input border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] overflow-y-auto text-xl mb-4"
+                placeholder="Nhập chi tiết ví dụ..."></div>
+            <div class="flex justify-end gap-3">
+                <button onclick="closeModal('exampleModal')"
+                    class="px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-lg">Hủy
+                    / Đóng</button>
+                <button onclick="saveModal('g-example-modal', 'g-example', 'exampleModal')"
+                    class="bg-action px-6 py-3 rounded-lg font-medium transition-colors text-lg">Lưu lại</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="equivalentModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[50] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-6 rounded-2xl w-11/12 max-w-xl flex flex-col shadow-2xl border border-theme transform transition-transform">
+            <h3 class="text-2xl font-bold text-primary mb-2">Ngữ pháp tương đương</h3>
+            <p class="text-gray-600 mb-4 text-base">Các mẫu câu tương đương với <b id="eq-source-name"
+                    class="text-[#d35400]"></b>:</p>
+            <ul id="eq-list"
+                class="pl-0 text-gray-800 font-medium space-y-2 text-lg mb-6 max-h-[40vh] overflow-y-auto w-full">
+            </ul>
+            <div class="flex justify-end">
+                <button onclick="closeModal('equivalentModal')"
+                    class="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition-colors text-base">Đóng
+                    lại</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal XEM CHI TIẾT NGỮ PHÁP (Dạng Bảng 2 cột) -->
+    <div id="grammarDetailModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[70] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-6 rounded-2xl w-11/12 max-w-5xl max-h-[85vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+            <div class="flex justify-between items-center mb-4 border-b border-theme pb-3">
+                <h3 id="gd-name" class="text-2xl font-bold text-primary flex-1 truncate pr-4"></h3>
+                <span id="gd-level"
+                    class="text-white px-3 py-1 rounded-lg text-sm font-bold shadow-sm flex-shrink-0"></span>
+            </div>
+            <div class="overflow-y-auto flex-1 pr-2 scrollbar-thin" id="gd-content">
+                <!-- Nội dung bảng 2 cột sẽ được chèn vào đây qua JS -->
+            </div>
+            <div class="flex justify-end pt-4 border-t border-theme mt-4">
+                <button onclick="closeModal('grammarDetailModal')"
+                    class="bg-action px-8 py-3 rounded-lg font-bold transition-colors shadow-sm">Đóng Chi Tiết</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="csvPreviewModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[60] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-6 rounded-2xl w-11/12 max-w-7xl max-h-[80vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+            <h3 class="text-2xl font-bold text-primary mb-2">Cấu Hình Dữ Liệu Nhập (CSV/Excel)</h3>
+            <p class="text-sm mb-4 text-gray-600">Chọn cột tương ứng cho dữ liệu. Hiển thị xem trước 3 dòng đầu tiên.
+            </p>
+
+            <div class="mb-4 flex items-center gap-3 bg-white p-3 rounded-xl border border-theme shadow-sm flex-wrap">
+                <div>
+                    <label class="font-bold text-gray-700">Chọn Nguồn gán cho danh sách này:</label>
+                    <select id="import-source-select"
+                        class="p-2 border border-theme rounded-lg text-base min-w-[200px] outline-none focus:ring-2 focus:ring-[#F5AFAF]">
+                        <option value="">-- Không gán nguồn --</option>
+                    </select>
+                </div>
+                <div class="hidden sm:block w-px h-6 bg-gray-300"></div>
+                <label
+                    class="flex items-center gap-2 cursor-pointer font-bold text-[#d35400] hover:text-orange-700 select-none">
+                    <input type="checkbox" id="csv-two-way-link" class="w-5 h-5 accent-orange-500 cursor-pointer"
+                        checked>
+                    Tự động liên kết 2 chiều
+                </label>
+            </div>
+
+            <div class="overflow-auto flex-1 border border-gray-200 rounded-lg">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0" id="csv-preview-head">
+                    </thead>
+                    <tbody id="csv-preview-body"></tbody>
+                </table>
+            </div>
+            <div class="flex justify-end gap-3 mt-4 pt-4 border-t border-theme">
+                <button onclick="closeModal('csvPreviewModal')"
+                    class="px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-lg">Hủy</button>
+                <button onclick="processCSVImport()"
+                    class="bg-action px-6 py-3 rounded-lg font-medium transition-colors text-lg shadow-sm">Tiến Hành
+                    Nhập Dữ Liệu</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="csvDuplicateModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[70] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-6 rounded-2xl w-11/12 max-w-3xl max-h-[80vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+            <h3 class="text-2xl font-bold text-primary mb-2">Xác Nhận Xử Lý Dữ Liệu</h3>
+            <p class="text-base mb-4 text-gray-700">Hệ thống sẽ tự động thêm mới từ chưa có, cập nhật từ có thay đổi và
+                bỏ qua từ trùng lặp hoàn toàn:</p>
+            <div class="overflow-auto flex-1 border border-gray-200 bg-gray-50 p-3 rounded-lg mb-4">
+                <ul id="csv-duplicate-list" class="list-disc pl-5 text-gray-800 font-medium space-y-1"></ul>
+            </div>
+            <div class="flex justify-end gap-3 pt-2 flex-wrap">
+                <button onclick="closeModal('csvDuplicateModal')"
+                    class="px-4 py-2 rounded-lg font-bold bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors text-sm">Hủy</button>
+                <button onclick="confirmImportCSV()"
+                    class="bg-action hover:bg-red-500 text-white px-4 py-2 rounded-lg font-bold transition-colors text-sm shadow-sm">Xác
+                    Nhận Nhập</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto p-4 sm:p-6 w-full">
+        <div class="flex flex-wrap justify-between items-center gap-3 mb-6">
+            <div class="flex gap-2 flex-wrap">
+                <button onclick="exportBackup()"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm text-sm flex items-center gap-2"
+                    title="Xuất dữ liệu & tiến độ học">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Xuất Backup
+                </button>
+                <button onclick="document.getElementById('json-file').click()"
+                    class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm text-sm flex items-center gap-2"
+                    title="Nhập dữ liệu & tiến độ học">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Nhập Backup
+                </button>
+                <input type="file" id="json-file" class="hidden" accept=".json" onchange="handleJSONUpload(event)">
+
+                <!-- Nút Đăng Nhập Firebase Google -->
+                <button id="btn-google-login" onclick="toggleGoogleLogin()"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm text-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                        fill="currentColor">
+                        <path
+                            d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
+                    </svg>
+                    <span id="google-login-text">Đăng nhập đồng bộ</span>
+                </button>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="document.getElementById('csv-file').click()"
+                    class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm text-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    Nhập CSV
+                </button>
+                <input type="file" id="csv-file" class="hidden" accept=".csv,.txt" onchange="handleCSVUpload(event)">
+
+                <button onclick="deleteAllData()"
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-bold transition-colors shadow-sm text-sm flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"></polyline>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                    Xóa
+                </button>
+            </div>
+        </div>
+
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-primary mb-3 flex justify-center items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
+                </svg>
+                Học Ngữ Pháp Tiếng Nhật
+            </h1>
+            <p class="text-base opacity-80">Ghi nhớ ngữ pháp dễ dàng hơn mỗi ngày</p>
+        </header>
+
+        <nav class="flex justify-center border-b border-theme mb-8">
+            <button onclick="switchTab('grammar')" id="tab-grammar"
+                class="px-5 py-3 text-lg tab-active transition-colors">📚 Ngữ Pháp</button>
+            <button onclick="switchTab('group')" id="tab-group"
+                class="px-5 py-3 text-lg text-gray-500 hover:text-primary transition-colors">📁 Nhóm</button>
+            <button onclick="switchTab('context')" id="tab-context"
+                class="px-5 py-3 text-lg text-gray-500 hover:text-primary transition-colors">🏷️ Ngữ Cảnh</button>
+            <button onclick="switchTab('source')" id="tab-source"
+                class="px-5 py-3 text-lg text-gray-500 hover:text-primary transition-colors">📖 Nguồn</button>
+            <button onclick="openQuizSetup()" id="tab-quiz"
+                class="px-5 py-3 text-lg text-gray-500 hover:text-primary transition-colors">🎮 Ôn Tập</button>
+        </nav>
+
+        <main>
+            <section id="sec-grammar" class="block">
+
+                <div class="bg-card rounded-xl shadow-md border border-theme mb-8 transition-shadow hover:shadow-lg">
+                    <div class="p-6 flex items-center justify-between cursor-pointer select-none"
+                        onclick="document.getElementById('add-grammar-form').classList.toggle('hidden'); document.getElementById('add-grammar-arrow').classList.toggle('rotate-180');">
+                        <h2 class="text-2xl font-bold text-primary mb-0 flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round">
+                                <path d="M12 5v14M5 12h14" />
+                            </svg>
+                            Thêm Ngữ Pháp Mới
+                        </h2>
+                        <svg id="add-grammar-arrow" class="w-6 h-6 text-gray-500 transform transition-transform"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7">
+                            </path>
+                        </svg>
+                    </div>
+
+                    <div id="add-grammar-form" class="p-6 pt-0 hidden border-t border-theme border-dashed mt-2">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-stretch mt-4">
+                            <div class="flex flex-col md:col-span-2">
+                                <label class="block text-base font-bold mb-2">Tên ngữ pháp</label>
+                                <input type="text" id="g-name"
+                                    class="w-full p-3 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-lg"
+                                    placeholder="Ví dụ: Mẫu câu xin phép">
+                            </div>
+
+                            <div class="flex flex-col h-full">
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="block text-base font-bold">Cấu trúc</label>
+                                    <button onclick="openModal('structureModal', 'g-structure', 'g-structure-modal')"
+                                        class="text-[#8e44ad] hover:text-blue-700 text-sm font-bold flex items-center gap-1 transition-colors">
+                                        Mở rộng
+                                    </button>
+                                </div>
+                                <div class="flex gap-1 mb-1 items-center">
+                                    <button onclick="execCmd('bold', 'g-structure')"
+                                        class="toolbar-btn text-xs">B</button>
+                                    <button onclick="execCmd('italic', 'g-structure')"
+                                        class="toolbar-btn text-xs">I</button>
+                                    <button onclick="execCmd('insertUnorderedList', 'g-structure')"
+                                        class="toolbar-btn text-xs">•</button>
+                                    <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                                    <div class="relative inline-block color-palette-container">
+                                        <button type="button" onclick="toggleColorPalette('cp-structure')"
+                                            class="w-6 h-6 p-0 border border-gray-300 rounded cursor-pointer bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            title="Đổi màu chữ đang chọn">
+                                            <span
+                                                class="w-4 h-4 rounded-sm bg-gradient-to-br from-red-400 via-green-400 to-blue-400 block"></span>
+                                        </button>
+                                        <div id="cp-structure"
+                                            class="color-palette hidden absolute top-full mt-2 left-0 bg-white border border-gray-200 shadow-xl rounded-lg p-2 z-[70] grid grid-cols-4 gap-1.5 w-[120px]">
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#e74c3c', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#e74c3c] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#e67e22', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#e67e22] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#f1c40f', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#f1c40f] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#2ecc71', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#2ecc71] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#3498db', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#3498db] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#9b59b6', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#9b59b6] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#4A4A4A', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#4A4A4A] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-structure', '#000000', 'cp-structure')"
+                                                class="w-6 h-6 rounded bg-[#000000] hover:scale-110 transition-transform shadow-sm"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="g-structure" contenteditable="true" onmouseup="saveSelection('g-structure')"
+                                    onkeyup="saveSelection('g-structure')" onmouseleave="saveSelection('g-structure')"
+                                    class="rich-text-editor rich-text w-full p-3 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] flex-1 text-lg overflow-y-auto"
+                                    placeholder="Ví dụ: Vて + もいいです"></div>
+                            </div>
+
+                            <div class="flex flex-col h-full">
+                                <label class="block text-base font-bold mb-2">Ý nghĩa</label>
+                                <div class="flex gap-1 mb-1 items-center">
+                                    <button onclick="execCmd('bold', 'g-meaning')"
+                                        class="toolbar-btn text-xs">B</button>
+                                    <button onclick="execCmd('italic', 'g-meaning')"
+                                        class="toolbar-btn text-xs">I</button>
+                                    <button onclick="execCmd('insertUnorderedList', 'g-meaning')"
+                                        class="toolbar-btn text-xs">•</button>
+                                    <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                                    <div class="relative inline-block color-palette-container">
+                                        <button type="button" onclick="toggleColorPalette('cp-meaning')"
+                                            class="w-6 h-6 p-0 border border-gray-300 rounded cursor-pointer bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            title="Đổi màu chữ đang chọn">
+                                            <span
+                                                class="w-4 h-4 rounded-sm bg-gradient-to-br from-red-400 via-green-400 to-blue-400 block"></span>
+                                        </button>
+                                        <div id="cp-meaning"
+                                            class="color-palette hidden absolute top-full mt-2 left-0 bg-white border border-gray-200 shadow-xl rounded-lg p-2 z-[70] grid grid-cols-4 gap-1.5 w-[120px]">
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#e74c3c', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#e74c3c] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#e67e22', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#e67e22] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#f1c40f', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#f1c40f] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#2ecc71', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#2ecc71] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#3498db', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#3498db] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#9b59b6', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#9b59b6] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#4A4A4A', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#4A4A4A] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-meaning', '#000000', 'cp-meaning')"
+                                                class="w-6 h-6 rounded bg-[#000000] hover:scale-110 transition-transform shadow-sm"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="g-meaning" contenteditable="true" onmouseup="saveSelection('g-meaning')"
+                                    onkeyup="saveSelection('g-meaning')" onmouseleave="saveSelection('g-meaning')"
+                                    class="rich-text-editor rich-text w-full p-3 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] flex-1 text-lg overflow-y-auto"
+                                    placeholder="Ví dụ: Cho phép làm gì đó"></div>
+                            </div>
+
+                            <div class="flex flex-col md:col-span-2 h-full">
+                                <div class="flex justify-between items-end mb-2">
+                                    <label class="block text-base font-bold">Ví dụ</label>
+                                    <button onclick="openModal('exampleModal', 'g-example', 'g-example-modal')"
+                                        class="text-[#8e44ad] hover:text-blue-700 text-sm font-bold flex items-center gap-1 transition-colors">
+                                        Mở rộng
+                                    </button>
+                                </div>
+                                <div class="flex gap-1 mb-1 items-center">
+                                    <button onclick="execCmd('bold', 'g-example')"
+                                        class="toolbar-btn text-xs">B</button>
+                                    <button onclick="execCmd('italic', 'g-example')"
+                                        class="toolbar-btn text-xs">I</button>
+                                    <button onclick="execCmd('insertUnorderedList', 'g-example')"
+                                        class="toolbar-btn text-xs">•</button>
+                                    <div class="w-px h-4 bg-gray-300 mx-1"></div>
+                                    <div class="relative inline-block color-palette-container">
+                                        <button type="button" onclick="toggleColorPalette('cp-example')"
+                                            class="w-6 h-6 p-0 border border-gray-300 rounded cursor-pointer bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+                                            title="Đổi màu chữ đang chọn">
+                                            <span
+                                                class="w-4 h-4 rounded-sm bg-gradient-to-br from-red-400 via-green-400 to-blue-400 block"></span>
+                                        </button>
+                                        <div id="cp-example"
+                                            class="color-palette hidden absolute top-full mt-2 left-0 bg-white border border-gray-200 shadow-xl rounded-lg p-2 z-[70] grid grid-cols-4 gap-1.5 w-[120px]">
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#e74c3c', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#e74c3c] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#e67e22', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#e67e22] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#f1c40f', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#f1c40f] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#2ecc71', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#2ecc71] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#3498db', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#3498db] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#9b59b6', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#9b59b6] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#4A4A4A', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#4A4A4A] hover:scale-110 transition-transform shadow-sm"></button>
+                                            <button type="button"
+                                                onmousedown="event.preventDefault(); applyCustomColor('g-example', '#000000', 'cp-example')"
+                                                class="w-6 h-6 rounded bg-[#000000] hover:scale-110 transition-transform shadow-sm"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="g-example" contenteditable="true" onmouseup="saveSelection('g-example')"
+                                    onkeyup="saveSelection('g-example')" onmouseleave="saveSelection('g-example')"
+                                    class="rich-text-editor rich-text w-full p-3 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] flex-1 text-lg overflow-y-auto"
+                                    placeholder="Ví dụ: 写真を撮ってもいいです。"></div>
+                            </div>
+
+                            <div class="md:col-span-2 mt-2">
+                                <label class="block text-base font-bold mb-2 text-[#d35400]">🔗 Ngữ pháp tương đương
+                                    (Mạng lưới)</label>
+                                <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
+                                    <input type="text" id="g-similar-text"
+                                        class="w-full sm:w-[48%] p-2 border border-[#ffe082] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
+                                        placeholder="Ghi chú thêm (Nếu mẫu chưa có trong danh sách...)">
+                                    <input type="text" id="search-related" onkeyup="debouncedFilterRelated()"
+                                        placeholder="🔍 Tìm nhanh mẫu câu..."
+                                        class="p-2 border border-[#ffe082] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white w-full sm:w-[48%] shadow-sm">
+                                </div>
+                                <div class="mb-2">
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-700 hover:text-[#d35400] transition-colors select-none">
+                                        <input type="checkbox" id="g-two-way-link"
+                                            class="w-4 h-4 accent-orange-500 cursor-pointer" checked>
+                                        Tự động tạo liên kết 2 chiều (Mẫu được chọn cũng sẽ liên kết ngược lại)
+                                    </label>
+                                </div>
+                                <div
+                                    class="w-full p-3 rounded-lg bg-[#fff8e1] border border-[#ffe082] max-h-[160px] overflow-y-auto text-base flex flex-col gap-2">
+                                    <div id="g-related-container" class="flex flex-col gap-2">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="md:col-span-2 mt-2">
+                                <div
+                                    class="flex items-center justify-between bg-input p-3 rounded-lg border border-theme">
+                                    <span class="text-base font-bold text-gray-700">Phân loại Nhóm / Ngữ cảnh /
+                                        Nguồn</span>
+                                    <div
+                                        class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in">
+                                        <input type="checkbox" name="toggle" id="toggle-category"
+                                            class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10"
+                                            onclick="toggleCategoryBox()" />
+                                        <label for="toggle-category"
+                                            class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="category-box" class="md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-5 hidden">
+                                <div class="flex flex-col h-full min-w-0">
+                                    <label class="block text-base font-bold mb-2">Nhóm</label>
+                                    <div id="g-group-container"
+                                        class="w-full p-3 rounded-lg bg-white border border-theme max-h-[156px] overflow-y-auto text-base flex flex-col gap-2 flex-shrink-0">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col h-full min-w-0">
+                                    <label class="block text-base font-bold mb-2">Ngữ cảnh</label>
+                                    <div id="g-context-container"
+                                        class="w-full p-3 rounded-lg bg-white border border-theme max-h-[156px] overflow-y-auto text-base flex flex-col gap-2 flex-shrink-0">
+                                    </div>
+                                </div>
+                                <div class="flex flex-col h-full min-w-0">
+                                    <label class="block text-base font-bold mb-2">Nguồn</label>
+                                    <div id="g-source-container"
+                                        class="w-full p-3 rounded-lg bg-white border border-theme max-h-[156px] overflow-y-auto text-base flex flex-col gap-2 flex-shrink-0">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end gap-3">
+                            <button id="btn-cancel-edit" onclick="cancelEdit()"
+                                class="hidden px-6 py-3 rounded-lg text-lg font-medium bg-gray-300 text-gray-700 hover:bg-gray-400 transition-colors">Hủy</button>
+                            <button id="btn-submit-grammar" onclick="addGrammar()"
+                                class="bg-action px-6 py-3 rounded-lg text-lg font-medium transition-colors shadow-sm">+
+                                Thêm Ngữ Pháp</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div
+                    class="bg-card rounded-xl shadow-md border border-theme max-h-[85vh] overflow-y-auto scrollbar-thin transition-shadow hover:shadow-lg mb-8 relative">
+
+                    <div class="sticky top-0 z-30 bg-card px-6 pt-6 pb-4 border-b border-theme shadow-sm mb-4">
+                        <div class="flex justify-between items-center mb-5 flex-wrap gap-3">
+                            <h2 class="text-2xl font-bold text-primary">Danh Sách Đã Học (<span
+                                    id="grammar-count">0</span>)</h2>
+                            <div class="flex gap-3 flex-wrap">
+                                <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()"
+                                    placeholder="🔍 Tìm kiếm ngữ pháp..."
+                                    class="p-2 border border-theme text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF]">
+                                <select id="filter-group" onchange="renderGrammars()"
+                                    class="p-2 border-theme text-base rounded-lg">
+                                    <option value="all">Tất cả nhóm</option>
+                                </select>
+                                <select id="filter-context" onchange="renderGrammars()"
+                                    class="p-2 border-theme text-base rounded-lg">
+                                    <option value="all">Tất cả ngữ cảnh</option>
+                                </select>
+                                <select id="filter-source" onchange="renderGrammars()"
+                                    class="p-2 border-theme text-base rounded-lg">
+                                    <option value="all">Tất cả nguồn</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="time-filters flex gap-3 mb-6 overflow-x-auto pb-2">
+                            <button
+                                class="time-filter-btn px-4 py-2 rounded-xl border border-theme text-base font-medium active shadow-sm"
+                                onclick="setTimeFilter('all')" id="tf-all">Tất cả (0)</button>
+                            <button
+                                class="time-filter-btn px-4 py-2 rounded-xl border border-theme text-base font-medium shadow-sm"
+                                onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn (0)</button>
+                            <button
+                                class="time-filter-btn px-4 py-2 rounded-xl border border-theme text-base font-medium shadow-sm"
+                                onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến hạn (0)</button>
+                        </div>
+
+                        <div class="flex flex-col gap-3 bg-white p-3 rounded-xl border border-theme shadow-sm">
+
+                            <div class="flex items-center gap-3 flex-wrap w-full">
+                                <label
+                                    class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none hover:text-[#F5AFAF] transition-colors">
+                                    <input type="checkbox" id="cb-select-all"
+                                        class="w-5 h-5 accent-[#F5AFAF] cursor-pointer" onclick="toggleSelectAll(this)">
+                                    Chọn tất cả
+                                </label>
+                                <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
+
+                                <select id="bulk-level-select"
+                                    class="p-2 border-theme text-sm font-bold disabled:opacity-50 cursor-pointer rounded-lg"
+                                    disabled>
+                                    <option value="">-- Đổi nhanh Level --</option>
+                                    <option value="0">Level 0</option>
+                                    <option value="1">Level 1</option>
+                                    <option value="2">Level 2</option>
+                                    <option value="3">Level 3</option>
+                                    <option value="4">Level 4</option>
+                                    <option value="5">Level 5</option>
+                                    <option value="6">Level 6</option>
+                                    <option value="7">Level 7</option>
+                                    <option value="8">Level 8</option>
+                                    <option value="9">Lv.9 (Đã thuộc - Không ôn)</option>
+                                </select>
+                                <button id="btn-bulk-level" onclick="applyBulkLevel()"
+                                    class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    disabled>Cập Nhật Level</button>
+
+                                <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
+
+                                <select id="bulk-source-select"
+                                    class="p-2 border-theme text-sm font-bold disabled:opacity-50 cursor-pointer rounded-lg"
+                                    disabled>
+                                    <option value="">-- Chuyển Nguồn --</option>
+                                </select>
+                                <button id="btn-bulk-source" onclick="applyBulkSource()"
+                                    class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                    disabled>Cập Nhật Nguồn</button>
+                            </div>
+
+                            <div id="level-filter-btns"
+                                class="flex flex-wrap gap-2 w-full pt-3 border-t border-gray-100">
+                                <button id="lf-all"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:#f0f0f0; color:#444;" onclick="setLevelFilter('all')">Tất cả
+                                    (0)</button>
+                                <button id="lf-0"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv0); color:#fff;" onclick="setLevelFilter(0)">Mới
+                                    (0)</button>
+                                <button id="lf-1"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv1); color:#fff;" onclick="setLevelFilter(1)">Lv 1
+                                    (0)</button>
+                                <button id="lf-2"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv2); color:#fff;" onclick="setLevelFilter(2)">Lv 2
+                                    (0)</button>
+                                <button id="lf-3"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv3); color:#fff;" onclick="setLevelFilter(3)">Lv 3
+                                    (0)</button>
+                                <button id="lf-4"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv4); color:#fff;" onclick="setLevelFilter(4)">Lv 4
+                                    (0)</button>
+                                <button id="lf-5"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv5); color:#fff;" onclick="setLevelFilter(5)">Lv 5
+                                    (0)</button>
+                                <button id="lf-6"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv6); color:#fff;" onclick="setLevelFilter(6)">Lv 6
+                                    (0)</button>
+                                <button id="lf-7"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv7); color:#fff;" onclick="setLevelFilter(7)">Lv 7
+                                    (0)</button>
+                                <button id="lf-8"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv8); color:#fff;" onclick="setLevelFilter(8)">Lv 8
+                                    (0)</button>
+                                <button id="lf-9"
+                                    class="lvl-tag px-3 py-1.5 rounded-lg text-sm font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
+                                    style="background:var(--lv9); color:#fff;" onclick="setLevelFilter(9)">Không ôn
+                                    (0)</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 pb-6">
+                        <div id="grammar-list" class="flex flex-col gap-4"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="sec-group" class="hidden">
+                <div class="bg-card rounded-xl p-6 shadow-sm border border-theme mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Nhóm</h2>
+                    <div class="flex gap-3 mb-8">
+                        <input type="text" id="gr-name"
+                            class="flex-1 p-3 rounded-lg bg-white border border-theme text-lg"
+                            placeholder="Nhập tên nhóm...">
+                        <button onclick="addGroup()"
+                            class="bg-action px-6 py-3 rounded-lg text-lg font-medium transition-colors">Thêm</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="group-list"></div>
+                </div>
+            </section>
+
+            <section id="sec-context" class="hidden">
+                <div class="bg-card rounded-xl p-6 shadow-sm border border-theme mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Ngữ Cảnh</h2>
+                    <div class="flex gap-3 mb-8">
+                        <input type="text" id="c-name"
+                            class="flex-1 p-3 rounded-lg bg-white border border-theme text-lg"
+                            placeholder="Nhập ngữ cảnh...">
+                        <button onclick="addContext()"
+                            class="bg-action px-6 py-3 rounded-lg text-lg font-medium transition-colors">Thêm</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="context-list"></div>
+                </div>
+            </section>
+
+            <section id="sec-source" class="hidden">
+                <div class="bg-card rounded-xl p-6 shadow-sm border border-theme mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Nguồn</h2>
+                    <div class="flex gap-3 mb-8">
+                        <input type="text" id="s-name"
+                            class="flex-1 p-3 rounded-lg bg-white border border-theme text-lg"
+                            placeholder="Nhập tên nguồn (VD: Sách N3)...">
+                        <button onclick="addSource()"
+                            class="bg-action px-6 py-3 rounded-lg text-lg font-medium transition-colors">Thêm</button>
+                    </div>
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4" id="source-list"></div>
+                </div>
+            </section>
+
+            <section id="sec-quiz" class="hidden">
+                <div id="quiz-play-screen" class="block">
+                    <div class="bg-card rounded-xl p-6 shadow-md border-t-4 border-[#F5AFAF] mb-6 relative">
+                        <div class="flex justify-between items-center mb-2">
+                            <div id="quiz-question-label"
+                                class="text-base text-gray-500 font-bold tracking-wide uppercase">Tên ngữ pháp cần tìm:
+                            </div>
+                            <div id="quiz-progress"
+                                class="text-sm font-bold bg-[#F9DFDF] text-primary px-3 py-1 rounded-full shadow-sm">
+                            </div>
+                        </div>
+                        <h3 id="quiz-question"
+                            class="text-4xl font-bold text-primary mb-3 whitespace-pre-wrap rich-text text-center py-4">
+                        </h3>
+                    </div>
+
+                    <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+                    <div id="quiz-correct-detail" class="hidden mt-6"></div>
+
+                    <div id="quiz-action-container" class="mt-8 text-center">
+                        <button id="btn-quiz-action" onclick="skipQuestion()"
+                            class="px-8 py-3 rounded-xl text-lg font-bold border-2 border-gray-300 text-gray-500 hover:bg-gray-100 transition-colors">
+                            Bỏ Qua (Chưa thuộc)
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // ==========================================
+        // KHỞI TẠO BIẾN TOÀN CỤC
+        // ==========================================
+        let groups = [];
+        let contexts = [];
+        let sources = [];
+        let grammars = [];
+        let editingGrammarId = null;
+
+        let currentQuizCorrect = null;
+        let selectedQuizLevels = [];
+        let selectedQuizMode = 'due';
+        let sessionAnsweredIds = [];
+        let quizTotalQuestions = 0;
+        let currentTimeFilter = 'all';
+        let currentLevelFilter = 'all';
+        let rawCSVData = [];
+        let currentQuizSelection = { meaningId: null, structureId: null };
+
+        // --- Kỹ thuật Debounce để tối ưu tìm kiếm ---
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                const context = this;
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(context, args), wait);
+            };
+        }
+
+        const debouncedRenderGrammars = debounce(() => renderGrammars(), 300);
+        const debouncedFilterRelated = debounce(() => filterRelatedGrammars(), 300);
+
+        // ==========================================
+        // CẤU HÌNH VÀ TÍCH HỢP FIREBASE (ĐỒNG BỘ GOOGLE)
+        // ==========================================
+
+        // Thay thế bằng cấu hình thực tế của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVZiAZB9yO2kRvf68nDbBV8nDbO_HjagQ",
+            authDomain: "nguphapjlpt.firebaseapp.com",
+            projectId: "nguphapjlpt",
+            storageBucket: "nguphapjlpt.firebasestorage.app",
+            messagingSenderId: "1080205092846",
+            appId: "1:1080205092846:web:47d6a3c3236dc46a3850ff",
+            measurementId: "G-QG56WVK813"
+        };
+
+        let db;
+        let auth;
+        let currentUser = null;
+
+        try {
+            // Khởi tạo Firebase với config mới
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.firestore();
+            auth = firebase.auth();
+
+            // Lắng nghe trạng thái đăng nhập
+            auth.onAuthStateChanged((user) => {
+                const btnText = document.getElementById('google-login-text');
+                if (user) {
+                    currentUser = user;
+                    btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
+                    showToast("Đã kết nối tài khoản: " + user.displayName, "success");
+                    // Tải dữ liệu từ Cloud về khi vừa đăng nhập
+                    fetchFromFirebase();
+                } else {
+                    currentUser = null;
+                    btnText.innerText = "Đăng nhập đồng bộ";
+                }
+            });
+        } catch (e) {
+            console.error("Firebase init error:", e);
+        }
+
+        // Bật popup Đăng nhập Google
+        function toggleGoogleLogin() {
+            if (currentUser) {
+                if (confirm("Bạn có muốn đăng xuất khỏi tài khoản " + currentUser.displayName + " không?")) {
+                    auth.signOut().then(() => showToast("Đã đăng xuất", "success"));
+                }
+            } else {
+                const provider = new firebase.auth.GoogleAuthProvider();
+                auth.signInWithPopup(provider).catch(error => {
+                    showToast("Lỗi đăng nhập: " + error.message, "error");
+                });
+            }
+        }
+
+        // Đẩy dữ liệu lên Firebase
+        function syncToFirebase() {
+            if (!currentUser || !db) return;
+            const dataToSync = {
+                groups: groups,
+                contexts: contexts,
+                sources: sources,
+                grammars: grammars,
+                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
+            };
+
+            db.collection("users").doc(currentUser.uid).set(dataToSync)
+                .then(() => {
+                    console.log("Đã đồng bộ lên Firebase thành công.");
+                })
+                .catch((error) => {
+                    console.error("Lỗi đồng bộ Firebase:", error);
+                    showToast("Lỗi đồng bộ lên Cloud", "error");
+                });
+        }
+
+        // Tải dữ liệu từ Firebase về
+        function fetchFromFirebase() {
+            if (!currentUser || !db) return;
+            db.collection("users").doc(currentUser.uid).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+
+                        // Hỏi người dùng trước khi ghi đè dữ liệu trên máy bằng dữ liệu đám mây
+                        if (confirm("Phát hiện dữ liệu trên Cloud! Bạn có muốn TẢI VỀ và ghi đè lên dữ liệu hiện tại trên trình duyệt này không?\n\n- Chọn OK: Lấy dữ liệu từ Cloud về máy.\n- Chọn Hủy: Giữ dữ liệu trên máy và ghi đè lên Cloud.")) {
+                            groups = data.groups || [];
+                            contexts = data.contexts || [];
+                            sources = data.sources || [];
+                            grammars = data.grammars || [];
+
+                            // Lưu vào bộ nhớ cục bộ
+                            localStorage.setItem('nhg_groups', JSON.stringify(groups));
+                            localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+                            localStorage.setItem('nhg_sources', JSON.stringify(sources));
+                            localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+
+                            // Cập nhật lại giao diện
+                            renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
+                            showToast("Đã tải dữ liệu từ Cloud về máy thành công!", "success");
+                        } else {
+                            // Nếu người dùng ấn Hủy, đồng nghĩa với việc lấy local đẩy lên Cloud
+                            syncToFirebase();
+                        }
+                    } else {
+                        // Nếu chưa có data trên cloud (user mới), đẩy data local lên
+                        syncToFirebase();
+                    }
+                })
+                .catch((error) => {
+                    console.error("Lỗi tải dữ liệu:", error);
+                    showToast("Lỗi tải dữ liệu từ Cloud", "error");
+                });
+        }
+        // ==========================================
+
+        function saveData() {
+            localStorage.setItem('nhg_groups', JSON.stringify(groups));
+            localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+            localStorage.setItem('nhg_sources', JSON.stringify(sources));
+            localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+
+            // KÍCH HOẠT ĐỒNG BỘ: Đẩy lên Cloud mỗi khi có sự thay đổi
+            if (typeof syncToFirebase === 'function') {
+                syncToFirebase();
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'fadeOut 0.3s ease-out forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        let editorSelections = {};
+
+        function saveSelection(elementId) {
+            const el = document.getElementById(elementId);
+            if (window.getSelection && document.activeElement === el) {
+                const sel = window.getSelection();
+                if (sel.getRangeAt && sel.rangeCount > 0) {
+                    editorSelections[elementId] = sel.getRangeAt(0);
+                }
+            }
+        }
+
+        function toggleColorPalette(paletteId) {
+            document.querySelectorAll('.color-palette').forEach(p => {
+                if (p.id !== paletteId) p.classList.add('hidden');
+            });
+            const palette = document.getElementById(paletteId);
+            palette.classList.toggle('hidden');
+        }
+
+        document.addEventListener('click', function (event) {
+            if (!event.target.closest('.color-palette-container')) {
+                document.querySelectorAll('.color-palette').forEach(p => p.classList.add('hidden'));
+            }
+        });
+
+        function applyCustomColor(elementId, colorValue, paletteId) {
+            const el = document.getElementById(elementId);
+            el.focus();
+
+            if (editorSelections[elementId]) {
+                const sel = window.getSelection();
+                sel.removeAllRanges();
+                sel.addRange(editorSelections[elementId]);
+            }
+
+            document.execCommand('foreColor', false, colorValue);
+            document.getElementById(paletteId).classList.add('hidden');
+        }
+
+        function getEquivalentGrammars(id) {
+            const target = grammars.find(g => g.id === id);
+            if (!target || !target.relatedGrammarIds) return [];
+            return grammars.filter(g => target.relatedGrammarIds.includes(g.id));
+        }
+
+        function filterRelatedGrammars() {
+            const val = document.getElementById('search-related').value.toLowerCase().trim();
+            const labels = document.querySelectorAll('.related-item-label');
+            labels.forEach(lbl => {
+                const text = lbl.getAttribute('data-name');
+                if (text.includes(val)) {
+                    lbl.style.display = 'flex';
+                } else {
+                    lbl.style.display = 'none';
+                }
+            });
+        }
+
+        function renderRelatedGrammarsList(editingId = null) {
+            const container = document.getElementById('g-related-container');
+            document.getElementById('search-related').value = '';
+
+            const pool = grammars.filter(g => g.id !== editingId);
+            if (pool.length === 0) {
+                container.innerHTML = '<span class="text-gray-400 italic">Chưa có ngữ pháp nào khác trong hệ thống để liên kết.</span>';
+                return;
+            }
+
+            let selectedIds = [];
+            if (editingId) {
+                const selfGrammar = grammars.find(g => g.id === editingId);
+                if (selfGrammar) selectedIds = selfGrammar.relatedGrammarIds || [];
+            }
+
+            let htmlParts = [];
+            pool.forEach(g => {
+                const isChecked = selectedIds.includes(g.id);
+                htmlParts.push(`
+                    <div class="related-item-label flex justify-between items-center hover:bg-white p-2 rounded-lg transition-colors w-full overflow-hidden flex-shrink-0 border border-transparent hover:border-orange-200" data-name="${g.name.toLowerCase()}">
+                        <label class="flex items-center gap-3 cursor-pointer flex-1 min-w-0 m-0">
+                            <input type="checkbox" value="${g.id}" class="related-cb accent-orange-500 w-5 h-5 flex-shrink-0" ${isChecked ? 'checked' : ''}> 
+                            <span class="truncate block w-full text-gray-700 text-lg" title="${g.name}">${g.name}</span>
+                        </label>
+                        <button type="button" onclick="showGrammarDetailModal(${g.id})" class="ml-2 text-sm text-blue-500 hover:text-blue-700 font-bold bg-blue-50 px-3 py-1 rounded shadow-sm border border-blue-200">Chi tiết</button>
+                    </div>
+                `);
+            });
+            // Ghi vào DOM 1 lần duy nhất để tối ưu hiệu suất
+            container.innerHTML = htmlParts.join('');
+        }
+
+        function showEquivalentModal(id) {
+            const grammar = grammars.find(g => g.id === id);
+            if (!grammar) return;
+            const eqs = getEquivalentGrammars(id);
+
+            document.getElementById('eq-source-name').innerText = grammar.name;
+            const listEl = document.getElementById('eq-list');
+            listEl.innerHTML = '';
+
+            eqs.forEach(eq => {
+                listEl.innerHTML += `
+                <li class="flex justify-between items-center border-b border-orange-100 py-3 gap-3">
+                    <span class="flex-1 truncate">${eq.name}</span>
+                    <button onclick="showGrammarDetailModal(${eq.id})" class="text-sm text-blue-500 hover:text-blue-700 font-bold bg-blue-50 px-3 py-1.5 rounded shadow-sm border border-blue-200 flex-shrink-0">Chi tiết ➔</button>
+                </li>`;
+            });
+
+            if (grammar.similarText) {
+                listEl.innerHTML += `<li class="mt-4 text-sm text-gray-600 bg-orange-50 p-3 rounded-lg border border-orange-100"><b>Ghi chú khác:</b><br>${grammar.similarText}</li>`;
+            }
+
+            document.getElementById('equivalentModal').classList.remove('hidden');
+        }
+
+        function showGrammarDetailModal(id) {
+            const g = grammars.find(item => item.id === id);
+            if (!g) return;
+
+            document.getElementById('gd-name').innerText = g.name;
+
+            const badge = document.getElementById('gd-level');
+            badge.style.backgroundColor = `var(--lv${g.level || 0})`;
+            badge.innerText = g.level === 9 ? 'Lv.9 (Đã thuộc)' : `Level ${g.level}`;
+
+            const eqGrammars = getEquivalentGrammars(g.id);
+
+            const container = document.getElementById('gd-content');
+            container.innerHTML = `
+                <div class="overflow-hidden border border-theme rounded-xl">
+                    <table class="w-full text-left border-collapse text-base sm:text-lg bg-white">
+                        <tbody>
+                            <tr class="border-b border-theme">
+                                <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-primary border-r border-theme align-top font-bold">Tên ngữ pháp</th>
+                                <td class="p-3 sm:p-4 text-gray-800 font-bold align-top">${g.name}</td>
+                            </tr>
+                            <tr class="border-b border-theme">
+                                <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Ý nghĩa</th>
+                                <td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.meaning || '<i class="text-gray-400">Trống</i>'}</td>
+                            </tr>
+                            <tr class="border-b border-theme">
+                                <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Cấu trúc</th>
+                                <td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.structure || '<i class="text-gray-400">Trống</i>'}</td>
+                            </tr>
+                            ${g.example ? `
+                            <tr class="border-b border-theme">
+                                <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Ví dụ</th>
+                                <td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.example}</td>
+                            </tr>` : ''}
+                            ${(eqGrammars.length > 0 || g.similarText) ? `
+                            <tr>
+                                <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#fff8e1] text-[#d35400] border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th>
+                                <td class="p-3 sm:p-4 text-gray-800 align-top bg-[#fffdf5]">
+                                    ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">
+                                        ${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-sm font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name} (Chi tiết)</button>`).join('')}
+                                    </div>` : ''}
+                                    ${g.similarText ? `<div class="text-sm text-gray-700 italic border-t border-orange-100 pt-2 mt-2 break-words whitespace-pre-wrap">${g.similarText}</div>` : ''}
+                                </td>
+                            </tr>` : ''}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            document.getElementById('grammarDetailModal').classList.remove('hidden');
+        }
+
+        function exportBackup() {
+            const data = { exportDate: Date.now(), groups: groups, contexts: contexts, sources: sources, grammars: grammars };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url;
+
+            const now = new Date();
+            const pad = n => n.toString().padStart(2, '0');
+            const datetimeStr = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+
+            a.download = `NguPhap_Backup_${datetimeStr}.json`;
+
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+            showToast("Đã xuất file Backup thành công!", "success");
+        }
+
+        function handleJSONUpload(event) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.grammars && Array.isArray(data.grammars)) {
+                        const now = Date.now(); const exportTime = data.exportDate || now; const timeDiff = Math.max(0, now - exportTime);
+                        let pauseTime = false;
+                        if (timeDiff > 60000) { pauseTime = confirm("Hệ thống phát hiện thời gian trôi qua từ lần sao lưu trước.\nBạn có muốn 'đóng băng' bù trừ thời gian không?\n\n- [OK]: Giữ nguyên đồng hồ đếm ngược như cũ.\n- [Cancel]: Đồng bộ với thời gian thực tế hiện tại."); }
+                        grammars = data.grammars.map(g => {
+                            g.level = parseInt(g.level || 0);
+                            if (!g.nextReviewDate) g.nextReviewDate = now;
+                            if (pauseTime && g.level !== 9 && g.nextReviewDate > exportTime) g.nextReviewDate += timeDiff;
+                            return g;
+                        });
+                        groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || [];
+                        saveData(); renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
+                        showToast(`Đã phục hồi ${grammars.length} ngữ pháp thành công!`, "success");
+                    } else showToast("File không đúng cấu trúc hệ thống!", "error");
+                } catch (err) { showToast("Lỗi đọc file JSON Backup!", "error"); }
+                event.target.value = '';
+            }; reader.readAsText(file);
+        }
+
+        function deleteAllData() {
+            if (confirm("⚠ CẢNH BÁO: Hành động này sẽ XÓA TOÀN BỘ dữ liệu Ngữ pháp, Nhóm, Ngữ cảnh và Nguồn của bạn.\nBạn có chắc chắn muốn xóa không?")) {
+                groups = []; contexts = []; sources = []; grammars = [];
+                saveData(); renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
+                showToast("Đã xóa toàn bộ dữ liệu thành công!", "success");
+            }
+        }
+
+        function execCmd(command, elementId) {
+            document.getElementById(elementId).focus();
+            document.execCommand(command, false, null);
+        }
+
+        function toggleCategoryBox(forceClose = false) {
+            const checkbox = document.getElementById('toggle-category');
+            if (forceClose) checkbox.checked = false;
+            const box = document.getElementById('category-box');
+            if (checkbox.checked) box.classList.remove('hidden'); else box.classList.add('hidden');
+        }
+
+        function openModal(modalId, sourceId, targetId) {
+            const val = document.getElementById(sourceId).innerHTML;
+            document.getElementById(targetId).innerHTML = val;
+            document.getElementById(modalId).classList.remove('hidden');
+            setTimeout(() => document.getElementById(targetId).focus(), 100);
+        }
+
+        function closeModal(modalId) { document.getElementById(modalId).classList.add('hidden'); }
+
+        function saveModal(sourceId, targetId, modalId) {
+            const val = document.getElementById(sourceId).innerHTML;
+            document.getElementById(targetId).innerHTML = val;
+            closeModal(modalId);
+        }
+
+        function switchTab(tabId) {
+            ['grammar', 'group', 'context', 'source', 'quiz'].forEach(id => {
+                const btn = document.getElementById(`tab-${id}`);
+                if (btn) btn.className = "px-5 py-3 text-lg transition-colors " + (id === tabId ? "tab-active" : "text-gray-500 hover:text-primary");
+                const sec = document.getElementById(`sec-${id}`);
+                if (sec) sec.style.display = (id === tabId) ? 'block' : 'none';
+            });
+            if (tabId === 'grammar') renderGrammars();
+        }
+
+        function csvToArray(str, delimiter = ",") {
+            const pattern = new RegExp(`(\\${delimiter}|\\r?\\n|\\r|^)(?:"([^"]*(?:""[^"]*)*)"|([^"\\${delimiter}\\r\\n]*))`, "gi");
+            let matches = null; const data = [[]];
+            while (matches = pattern.exec(str)) {
+                const matchedDelimiter = matches[1];
+                if (matchedDelimiter.length && matchedDelimiter !== delimiter) data.push([]);
+                const matchedValue = matches[2] ? matches[2].replace(new RegExp('""', 'g'), '"') : matches[3];
+                data[data.length - 1].push(matchedValue);
+            }
+            return data.filter(row => row.length > 0 && row.some(cell => cell && cell.trim() !== ''));
+        }
+
+        function handleCSVUpload(event) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const text = e.target.result; rawCSVData = csvToArray(text);
+                if (rawCSVData.length === 0) return showToast("File không có dữ liệu!", "error");
+                buildCSVPreview(); document.getElementById('csvPreviewModal').classList.remove('hidden'); event.target.value = '';
+            }; reader.readAsText(file);
+        }
+
+        function buildCSVPreview() {
+            const thead = document.getElementById('csv-preview-head'); const tbody = document.getElementById('csv-preview-body');
+            thead.innerHTML = ''; tbody.innerHTML = '';
+            let savedMapping = [];
+            try { const sm = localStorage.getItem('nhg_csv_mapping'); if (sm) savedMapping = JSON.parse(sm); } catch (e) { }
+            const numCols = rawCSVData[0].length; let headRow = '<tr>';
+            for (let i = 0; i < numCols; i++) {
+                const defaultVal = savedMapping[i] || 'ignore';
+                headRow += `<th class="px-4 py-3"><select id="csv-col-${i}" class="p-1 border-theme rounded-lg text-sm w-full font-bold">
+                    <option value="ignore" ${defaultVal === 'ignore' ? 'selected' : ''}>-- Bỏ qua --</option>
+                    <option value="name" ${defaultVal === 'name' ? 'selected' : ''}>Tên ngữ pháp</option>
+                    <option value="structure" ${defaultVal === 'structure' ? 'selected' : ''}>Cấu trúc</option>
+                    <option value="meaning" ${defaultVal === 'meaning' ? 'selected' : ''}>Ý nghĩa</option>
+                    <option value="example" ${defaultVal === 'example' ? 'selected' : ''}>Ví dụ</option>
+                    <option value="similarText" ${defaultVal === 'similarText' ? 'selected' : ''}>Tương đương / Phân biệt</option>
+                </select></th>`;
+            }
+            headRow += '</tr>'; thead.innerHTML = headRow;
+            const previewRows = Math.min(rawCSVData.length, 3);
+            for (let i = 0; i < previewRows; i++) {
+                let tr = '<tr class="bg-white border-b">';
+                for (let j = 0; j < numCols; j++) {
+                    let cellVal = rawCSVData[i][j] || '';
+                    cellVal = cellVal.replace(/\n/g, '<br>').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    tr += `<td class="px-4 py-3 whitespace-pre-wrap">${cellVal}</td>`;
+                }
+                tr += '</tr>'; tbody.innerHTML += tr;
+            }
+        }
+
+        let importPlan = { add: [], update: [], skip: [] };
+
+        function processCSVImport() {
+            const numCols = rawCSVData[0].length; const mapping = {}; const mappingArray = [];
+            for (let i = 0; i < numCols; i++) { const val = document.getElementById(`csv-col-${i}`).value; mapping[i] = val; mappingArray.push(val); }
+            localStorage.setItem('nhg_csv_mapping', JSON.stringify(mappingArray));
+            const mappedFields = Object.values(mapping).filter(v => v !== 'ignore');
+            if (!mappedFields.includes('name') && !mappedFields.includes('structure') && !mappedFields.includes('meaning')) return showToast("Vui lòng chọn ít nhất Tên, Cấu trúc hoặc Ý nghĩa!", "warning");
+
+            const importSourceVal = document.getElementById('import-source-select') ? document.getElementById('import-source-select').value : '';
+            const selectedSourceId = importSourceVal !== "" ? parseInt(importSourceVal) : null;
+            const isTwoWayCSV = document.getElementById('csv-two-way-link') ? document.getElementById('csv-two-way-link').checked : false;
+
+            importPlan = { add: [], update: [], skip: [] };
+            for (let i = 0; i < rawCSVData.length; i++) {
+                let row = rawCSVData[i]; let item = { groupIds: [], contextIds: [], sourceIds: [], relatedGrammarIds: [] };
+                for (let j = 0; j < numCols; j++) { let field = mapping[j]; if (field && field !== 'ignore') item[field] = (row[j] || '').replace(/\n/g, '<br>'); }
+                if (!item.name) item.name = '';
+
+                if (item.similarText) {
+                    let unlinked = [];
+                    let parts = item.similarText.split(',').map(s => s.trim()).filter(Boolean);
+                    parts.forEach(p => {
+                        let match = grammars.find(g => g.name.toLowerCase() === p.toLowerCase());
+                        if (match) {
+                            if (!item.relatedGrammarIds.includes(match.id)) item.relatedGrammarIds.push(match.id);
+                        } else {
+                            unlinked.push(p);
+                        }
+                    });
+                    item.similarText = unlinked.join(', ');
+                }
+
+                if (item.name || item.structure || item.meaning) {
+                    if (item.name) {
+                        let existing = grammars.find(g => {
+                            if (g.name.toLowerCase() !== item.name.toLowerCase()) return false;
+                            if (selectedSourceId) { return (g.sourceIds || []).includes(selectedSourceId); }
+                            else { return !(g.sourceIds && g.sourceIds.length > 0); }
+                        });
+
+                        if (existing) {
+                            let changes = [];
+                            if (mappedFields.includes('structure') && item.structure !== undefined && item.structure !== (existing.structure || '')) changes.push('Cấu trúc');
+                            if (mappedFields.includes('meaning') && item.meaning !== undefined && item.meaning !== (existing.meaning || '')) changes.push('Ý nghĩa');
+                            if (mappedFields.includes('example') && item.example !== undefined && item.example !== (existing.example || '')) changes.push('Ví dụ');
+                            if (mappedFields.includes('similarText') && item.similarText !== undefined && item.similarText !== (existing.similarText || '')) changes.push('Tương đương');
+                            if (changes.length > 0) importPlan.update.push({ item: item, existing: existing, changes: changes });
+                            else importPlan.skip.push(item.name);
+                        } else importPlan.add.push(item);
+                    } else importPlan.add.push(item);
+                }
+            }
+            closeModal('csvPreviewModal');
+            const listEl = document.getElementById('csv-duplicate-list'); let listHtml = '';
+            importPlan.add.forEach(a => listHtml += `<li><span class="font-bold text-green-600">+ Thêm mới:</span> ${a.name || '(Không tên)'}</li>`);
+            importPlan.update.forEach(u => listHtml += `<li><span class="font-bold text-blue-600">~ Cập nhật:</span> ${u.item.name} <span class="text-sm text-gray-600 ml-1">(${u.changes.join(', ')})</span></li>`);
+            importPlan.skip.forEach(s => listHtml += `<li><span class="font-bold text-gray-500">- Bỏ qua (Trùng khớp):</span> ${s}</li>`);
+            if (importPlan.add.length === 0 && importPlan.update.length === 0 && importPlan.skip.length === 0) return showToast("Không có dữ liệu hợp lệ để nhập!", "warning");
+            listEl.innerHTML = listHtml; document.getElementById('csvDuplicateModal').classList.remove('hidden');
+        }
+
+        function confirmImportCSV() {
+            document.getElementById('csvDuplicateModal').classList.add('hidden');
+            let addedCount = 0; let updatedCount = 0;
+
+            const importSourceVal = document.getElementById('import-source-select') ? document.getElementById('import-source-select').value : '';
+            const selectedSourceId = importSourceVal !== "" ? parseInt(importSourceVal) : null;
+            const isTwoWayCSV = document.getElementById('csv-two-way-link') ? document.getElementById('csv-two-way-link').checked : false;
+
+            importPlan.add.forEach(item => {
+                let sIds = [];
+                if (selectedSourceId) sIds.push(selectedSourceId);
+                const newId = Date.now() + Math.random();
+                grammars.push({
+                    id: newId, name: item.name || '', structure: item.structure || '', meaning: item.meaning || '', example: item.example || '', similarText: item.similarText || '',
+                    groupIds: [], contextIds: [], sourceIds: sIds, relatedGrammarIds: item.relatedGrammarIds || [], level: 0, nextReviewDate: Date.now()
+                });
+
+                if (isTwoWayCSV && item.relatedGrammarIds) {
+                    item.relatedGrammarIds.forEach(tid => {
+                        let tg = grammars.find(g => g.id === tid);
+                        if (tg) {
+                            tg.relatedGrammarIds = tg.relatedGrammarIds || [];
+                            if (!tg.relatedGrammarIds.includes(newId)) tg.relatedGrammarIds.push(newId);
+                        }
+                    });
+                }
+                addedCount++;
+            });
+            importPlan.update.forEach(u => {
+                if (u.item.structure !== undefined) u.existing.structure = u.item.structure;
+                if (u.item.meaning !== undefined) u.existing.meaning = u.item.meaning;
+                if (u.item.example !== undefined) u.existing.example = u.item.example;
+                if (u.item.similarText !== undefined) u.existing.similarText = u.item.similarText;
+
+                if (u.item.relatedGrammarIds && u.item.relatedGrammarIds.length > 0) {
+                    u.existing.relatedGrammarIds = u.existing.relatedGrammarIds || [];
+                    u.item.relatedGrammarIds.forEach(id => {
+                        if (!u.existing.relatedGrammarIds.includes(id)) u.existing.relatedGrammarIds.push(id);
+
+                        if (isTwoWayCSV) {
+                            let tg = grammars.find(g => g.id === id);
+                            if (tg) {
+                                tg.relatedGrammarIds = tg.relatedGrammarIds || [];
+                                if (!tg.relatedGrammarIds.includes(u.existing.id)) tg.relatedGrammarIds.push(u.existing.id);
+                            }
+                        }
+                    });
+                }
+                updatedCount++;
+            });
+            saveData(); renderGrammars(); renderRelatedGrammarsList(null);
+            let msg = [];
+            if (addedCount > 0) msg.push(`Thêm mới ${addedCount}`);
+            if (updatedCount > 0) msg.push(`Cập nhật ${updatedCount}`);
+            if (importPlan.skip.length > 0) msg.push(`Bỏ qua ${importPlan.skip.length}`);
+            if (msg.length > 0) showToast(msg.join(', ') + '!', "success"); else showToast("Không có thay đổi nào được áp dụng.", "warning");
+        }
+
+        function renderGroups() {
+            const list = document.getElementById('group-list'); const container = document.getElementById('g-group-container'); const filterSelect = document.getElementById('filter-group');
+            list.innerHTML = ''; container.innerHTML = ''; filterSelect.innerHTML = '<option value="all">Tất cả nhóm</option>';
+            groups.forEach(gr => {
+                list.innerHTML += `<div class="bg-btn border border-theme rounded-lg p-3 flex justify-between items-center text-base"><span class="truncate pr-2 font-medium">${gr.name}</span><div class="flex gap-2"><button onclick="editGroup(${gr.id})" class="text-blue-400 hover:text-blue-600 font-bold flex-shrink-0">✎</button><button onclick="deleteGroup(${gr.id})" class="text-red-400 hover:text-red-600 font-bold flex-shrink-0">✕</button></div></div>`;
+                container.innerHTML += `<label class="flex items-center gap-3 cursor-pointer hover:bg-[#FBEFEF] p-1.5 rounded transition-colors w-full overflow-hidden flex-shrink-0"><input type="checkbox" value="${gr.id}" class="group-cb accent-[#F5AFAF] w-5 h-5 flex-shrink-0"> <span class="truncate block w-full text-gray-700 text-lg" title="${gr.name}">${gr.name}</span></label>`;
+                filterSelect.innerHTML += `<option value="${gr.id}">${gr.name}</option>`;
+            });
+        }
+        function addGroup() {
+            const name = document.getElementById('gr-name').value.trim();
+            if (!name) return showToast("Vui lòng nhập tên nhóm!", "warning");
+            groups.push({ id: Date.now(), name }); document.getElementById('gr-name').value = ''; saveData(); renderGroups(); renderGrammars(); showToast("Đã thêm nhóm!");
+        }
+        function editGroup(id) {
+            const gr = groups.find(g => g.id === id); if (!gr) return;
+            const newName = prompt("Nhập tên Nhóm mới:", gr.name);
+            if (newName !== null && newName.trim() !== "") {
+                gr.name = newName.trim(); saveData(); renderGroups(); renderGrammars(); showToast("Đã cập nhật tên nhóm!");
+            }
+        }
+        function deleteGroup(id) {
+            if (grammars.some(g => (g.groupIds || []).includes(id))) return showToast("Nhóm đang được sử dụng!", "error");
+            groups = groups.filter(g => g.id !== id); saveData(); renderGroups(); showToast("Đã xóa nhóm.");
+        }
+
+        function renderContexts() {
+            const list = document.getElementById('context-list'); const container = document.getElementById('g-context-container'); const filterSelect = document.getElementById('filter-context');
+            list.innerHTML = ''; container.innerHTML = ''; filterSelect.innerHTML = '<option value="all">Tất cả ngữ cảnh</option>';
+            contexts.forEach(ctx => {
+                list.innerHTML += `<div class="bg-btn border border-theme rounded-lg p-3 flex justify-between items-center text-base"><span class="truncate pr-2 font-medium">${ctx.name}</span><div class="flex gap-2"><button onclick="editContext(${ctx.id})" class="text-blue-400 hover:text-blue-600 font-bold flex-shrink-0">✎</button><button onclick="deleteContext(${ctx.id})" class="text-red-400 hover:text-red-600 font-bold flex-shrink-0">✕</button></div></div>`;
+                container.innerHTML += `<label class="flex items-center gap-3 cursor-pointer hover:bg-[#FBEFEF] p-1.5 rounded transition-colors w-full overflow-hidden flex-shrink-0"><input type="checkbox" value="${ctx.id}" class="context-cb accent-[#F5AFAF] w-5 h-5 flex-shrink-0"> <span class="truncate block w-full text-gray-700 text-lg" title="${ctx.name}">${ctx.name}</span></label>`;
+                filterSelect.innerHTML += `<option value="${ctx.id}">${ctx.name}</option>`;
+            });
+        }
+        function addContext() {
+            const name = document.getElementById('c-name').value.trim();
+            if (!name) return showToast("Vui lòng nhập tên ngữ cảnh!", "warning");
+            contexts.push({ id: Date.now(), name }); document.getElementById('c-name').value = ''; saveData(); renderContexts(); renderGrammars(); showToast("Đã thêm ngữ cảnh!");
+        }
+        function editContext(id) {
+            const ctx = contexts.find(c => c.id === id); if (!ctx) return;
+            const newName = prompt("Nhập tên Ngữ cảnh mới:", ctx.name);
+            if (newName !== null && newName.trim() !== "") {
+                ctx.name = newName.trim(); saveData(); renderContexts(); renderGrammars(); showToast("Đã cập nhật tên ngữ cảnh!");
+            }
+        }
+        function deleteContext(id) {
+            if (grammars.some(g => (g.contextIds || []).includes(id))) return showToast("Ngữ cảnh đang được sử dụng!", "error");
+            contexts = contexts.filter(c => c.id !== id); saveData(); renderContexts(); showToast("Đã xóa ngữ cảnh.");
+        }
+
+        function renderSources() {
+            const list = document.getElementById('source-list');
+            const container = document.getElementById('g-source-container');
+            const filterSelect = document.getElementById('filter-source');
+            const quizSelect = document.getElementById('quiz-source-select');
+            const bulkSelect = document.getElementById('bulk-source-select');
+            const importSelect = document.getElementById('import-source-select');
+
+            if (list) list.innerHTML = '';
+            if (container) container.innerHTML = '';
+            if (filterSelect) filterSelect.innerHTML = '<option value="all">Tất cả nguồn</option>';
+            if (quizSelect) quizSelect.innerHTML = '<option value="all">Tất cả các nguồn</option>';
+            if (bulkSelect) bulkSelect.innerHTML = '<option value="">-- Chuyển Nguồn --</option><option value="clear">❌ Gỡ bỏ Nguồn</option>';
+            if (importSelect) importSelect.innerHTML = '<option value="">-- Không gán nguồn --</option>';
+
+            sources.forEach(src => {
+                if (list) list.innerHTML += `<div class="bg-btn border border-theme rounded-lg p-3 flex justify-between items-center text-base"><span class="truncate pr-2 font-medium">${src.name}</span><div class="flex gap-2"><button onclick="editSource(${src.id})" class="text-blue-400 hover:text-blue-600 font-bold flex-shrink-0">✎</button><button onclick="deleteSource(${src.id})" class="text-red-400 hover:text-red-600 font-bold flex-shrink-0">✕</button></div></div>`;
+                if (container) container.innerHTML += `<label class="flex items-center gap-3 cursor-pointer hover:bg-[#FBEFEF] p-1.5 rounded transition-colors w-full overflow-hidden flex-shrink-0"><input type="checkbox" value="${src.id}" class="source-cb accent-[#F5AFAF] w-5 h-5 flex-shrink-0"> <span class="truncate block w-full text-gray-700 text-lg" title="${src.name}">${src.name}</span></label>`;
+                if (filterSelect) filterSelect.innerHTML += `<option value="${src.id}">${src.name}</option>`;
+                if (quizSelect) quizSelect.innerHTML += `<option value="${src.id}">${src.name}</option>`;
+                if (bulkSelect) bulkSelect.innerHTML += `<option value="${src.id}">${src.name}</option>`;
+                if (importSelect) importSelect.innerHTML += `<option value="${src.id}">${src.name}</option>`;
+            });
+        }
+        function addSource() {
+            const name = document.getElementById('s-name').value.trim();
+            if (!name) return showToast("Vui lòng nhập tên nguồn!", "warning");
+            sources.push({ id: Date.now(), name });
+            document.getElementById('s-name').value = '';
+            saveData(); renderSources(); renderGrammars();
+            showToast("Đã thêm nguồn học!");
+        }
+        function editSource(id) {
+            const src = sources.find(s => s.id === id); if (!src) return;
+            const newName = prompt("Nhập tên Nguồn mới:", src.name);
+            if (newName !== null && newName.trim() !== "") {
+                src.name = newName.trim(); saveData(); renderSources(); renderGrammars(); showToast("Đã cập nhật tên Nguồn!");
+            }
+        }
+        function deleteSource(id) {
+            if (grammars.some(g => (g.sourceIds || []).includes(id))) return showToast("Nguồn đang được sử dụng trong bài học!", "error");
+            sources = sources.filter(s => s.id !== id);
+            saveData(); renderSources();
+            showToast("Đã xóa nguồn.");
+        }
+
+        function applyBulkSource() {
+            const val = document.getElementById('bulk-source-select').value;
+            if (val === '') return showToast('Vui lòng chọn Nguồn muốn đổi!', 'warning');
+
+            const checkedBoxes = document.querySelectorAll('.grammar-bulk-cb:checked');
+            if (checkedBoxes.length === 0) return;
+
+            let count = 0;
+            checkedBoxes.forEach(cb => {
+                const id = parseFloat(cb.value);
+                const g = grammars.find(item => item.id === id);
+                if (g) {
+                    if (val === 'clear') {
+                        g.sourceIds = [];
+                    } else {
+                        g.sourceIds = [parseInt(val)];
+                    }
+                    count++;
+                }
+            });
+            saveData();
+            renderGrammars();
+            document.getElementById('bulk-source-select').value = '';
+            document.getElementById('cb-select-all').checked = false;
+            showToast(`Đã chuyển nguồn cho ${count} ngữ pháp!`, 'success');
+        }
+
+        function getGroupName(id) { return (groups.find(g => g.id == id) || {}).name || "Không xác định"; }
+        function getContextName(id) { return (contexts.find(c => c.id == id) || {}).name || "Không xác định"; }
+        function getSourceName(id) { return (sources.find(s => s.id == id) || {}).name || "Không xác định"; }
+
+        function setTimeFilter(filter) {
+            currentTimeFilter = filter;
+            document.querySelectorAll('.time-filter-btn').forEach(btn => btn.classList.remove('active', 'bg-[var(--color3)]', 'bg-white'));
+            document.querySelectorAll('.time-filter-btn').forEach(btn => btn.classList.add('bg-white'));
+            const activeBtn = document.getElementById(`tf-${filter}`);
+            activeBtn.classList.add('active'); activeBtn.classList.remove('bg-white');
+            renderGrammars();
+        }
+
+        function setLevelFilter(level) {
+            currentLevelFilter = level;
+            renderGrammars();
+        }
+
+        function updateTimeFilterCounts() {
+            const filterGroupValue = document.getElementById('filter-group').value;
+            const filterContextValue = document.getElementById('filter-context').value;
+            const filterSourceValue = document.getElementById('filter-source') ? document.getElementById('filter-source').value : 'all';
+            const filterLevelValue = currentLevelFilter;
+            const searchValue = document.getElementById('search-name') ? document.getElementById('search-name').value.toLowerCase().trim() : '';
+            const now = Date.now();
+            let baseGrammars = grammars;
+
+            if (searchValue) baseGrammars = baseGrammars.filter(g => g.name.toLowerCase().includes(searchValue));
+            if (filterGroupValue !== 'all') baseGrammars = baseGrammars.filter(g => (g.groupIds || []).includes(parseInt(filterGroupValue)));
+            if (filterContextValue !== 'all') baseGrammars = baseGrammars.filter(g => (g.contextIds || []).includes(parseInt(filterContextValue)));
+            if (filterSourceValue !== 'all') baseGrammars = baseGrammars.filter(g => (g.sourceIds || []).includes(parseInt(filterSourceValue)));
+
+            let levelFilteredGrammars = baseGrammars;
+            if (filterLevelValue !== 'all') levelFilteredGrammars = levelFilteredGrammars.filter(g => g.level === parseInt(filterLevelValue));
+
+            document.getElementById('tf-all').innerText = `Tất cả (${levelFilteredGrammars.length})`;
+            document.getElementById('tf-due').innerText = `⏰ Đến hạn (${levelFilteredGrammars.filter(g => g.level !== 9 && (g.nextReviewDate || 0) <= now).length})`;
+            document.getElementById('tf-not_due').innerText = `💤 Chưa đến hạn (${levelFilteredGrammars.filter(g => g.level !== 9 && (g.nextReviewDate || 0) > now).length})`;
+
+            if (document.getElementById('lf-all')) {
+                document.getElementById('lf-all').innerText = `Tất cả (${baseGrammars.length})`;
+                for (let i = 0; i <= 9; i++) {
+                    const count = baseGrammars.filter(g => g.level === i).length;
+                    const el = document.getElementById(`lf-${i}`);
+                    if (el) {
+                        let label = i === 0 ? 'Mới' : (i === 9 ? 'Không ôn' : `Lv ${i}`);
+                        el.innerText = `${label} (${count})`;
+                    }
+                }
+
+                document.querySelectorAll('.lvl-tag').forEach(tag => {
+                    tag.classList.remove('ring-2', 'ring-offset-2', 'ring-gray-400', 'scale-105', 'shadow-md');
+                    tag.classList.add('opacity-60');
+                });
+                const activeTag = document.getElementById(`lf-${currentLevelFilter}`);
+                if (activeTag) {
+                    activeTag.classList.remove('opacity-60');
+                    activeTag.classList.add('ring-2', 'ring-offset-2', 'ring-gray-400', 'scale-105', 'shadow-md');
+                }
+            }
+        }
+
+        function renderGrammars() {
+            const list = document.getElementById('grammar-list');
+            updateTimeFilterCounts();
+            const filterGroupValue = document.getElementById('filter-group').value;
+            const filterContextValue = document.getElementById('filter-context').value;
+            const filterSourceValue = document.getElementById('filter-source') ? document.getElementById('filter-source').value : 'all';
+            const filterLevelValue = currentLevelFilter;
+            const searchValue = document.getElementById('search-name') ? document.getElementById('search-name').value.toLowerCase().trim() : '';
+            const now = Date.now();
+
+            let fg = grammars;
+
+            if (searchValue) fg = fg.filter(g => g.name.toLowerCase().includes(searchValue));
+            if (filterGroupValue !== 'all') fg = fg.filter(g => (g.groupIds || []).includes(parseInt(filterGroupValue)));
+            if (filterContextValue !== 'all') fg = fg.filter(g => (g.contextIds || []).includes(parseInt(filterContextValue)));
+            if (filterSourceValue !== 'all') fg = fg.filter(g => (g.sourceIds || []).includes(parseInt(filterSourceValue)));
+            if (filterLevelValue !== 'all') fg = fg.filter(g => g.level === parseInt(filterLevelValue));
+
+            if (currentTimeFilter === 'due') fg = fg.filter(g => g.level !== 9 && (g.nextReviewDate || 0) <= now);
+            else if (currentTimeFilter === 'not_due') fg = fg.filter(g => g.level !== 9 && (g.nextReviewDate || 0) > now);
+
+            document.getElementById('grammar-count').innerText = fg.length;
+
+            const cbAll = document.getElementById('cb-select-all');
+            if (cbAll) cbAll.checked = false;
+            updateBulkActionsState();
+
+            // Sử dụng mảng (String Builder) để tối ưu hóa việc vẽ giao diện 1 lần
+            if (fg.length === 0) {
+                list.innerHTML = '<p class="text-center text-gray-400 py-4 text-lg">Chưa có dữ liệu.</p>';
+                return;
+            }
+
+            let htmlParts = [];
+
+            [...fg].reverse().forEach((g, idx) => {
+                const isDue = g.nextReviewDate <= now && g.level !== 9;
+                let levelOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8].map(l => `<option value="${l}" class="text-black bg-white" ${g.level === l ? 'selected' : ''}>Lv.${l}</option>`);
+                levelOptions.push(`<option value="9" class="text-black bg-white" ${g.level === 9 ? 'selected' : ''}>Lv.9 (Đã thuộc)</option>`);
+                const eqGrammars = getEquivalentGrammars(g.id);
+
+                htmlParts.push(`
+                    <div class="bg-card rounded-xl border border-theme shadow-sm hover:shadow-md transition-shadow">
+                        <div class="p-5 flex items-center justify-between cursor-pointer select-none" onclick="this.nextElementSibling.classList.toggle('hidden'); this.querySelector('.arrow-icon').classList.toggle('rotate-180');">
+                            <div class="flex items-center gap-3 pr-2 flex-1 min-w-0">
+                                <input type="checkbox" class="grammar-bulk-cb w-5 h-5 accent-[#F5AFAF] flex-shrink-0 cursor-pointer" value="${g.id}" onclick="event.stopPropagation(); updateBulkActionsState()">
+                                <span class="text-sm font-bold text-gray-400 min-w-[1.5rem] flex-shrink-0">#${idx + 1}</span>
+                                <h3 class="text-lg sm:text-xl font-bold text-primary truncate flex-1 min-w-0 flex items-center gap-2">
+                                    ${g.name}
+                                    ${(eqGrammars.length > 0 || g.similarText) ? `<span onclick="event.stopPropagation(); showEquivalentModal(${g.id})" class="bg-orange-100 text-[#d35400] px-2 py-0.5 rounded text-sm font-bold border border-orange-200 hover:bg-orange-200 cursor-pointer flex-shrink-0 shadow-sm transition-colors" title="Click để xem chi tiết">🔗 ${eqGrammars.length > 0 ? eqGrammars.length + ' Tương đương' : 'Có Ghi Chú'}</span>` : ''}
+                                </h3>
+                                <select onclick="event.stopPropagation()" onchange="changeGrammarLevel(${g.id}, this.value)" class="badge-select text-xs sm:text-sm font-bold text-white pl-2 rounded shadow-sm flex-shrink-0 cursor-pointer outline-none transition-transform hover:scale-105" style="background-color: var(--lv${g.level || 0}); height: 26px; border: none; box-shadow: none;">
+                                    ${levelOptions.join('')}
+                                </select>
+                            </div>
+                            <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0 pl-3">
+                                <div class="text-xs sm:text-sm font-medium review-timer ${isDue ? 'text-green-600' : 'text-gray-400'}" data-next="${g.nextReviewDate}" data-level="${g.level}">
+                                    ${g.level === 9 ? "<span class='text-gray-500 font-bold'>✔️ Đã thuộc</span>" : (isDue ? "Đến hạn" : "⏳")}
+                                </div>
+                                <svg class="arrow-icon w-6 h-6 text-gray-500 transform transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                            </div>
+                        </div>
+
+                        <div class="p-5 pt-0 hidden border-t border-theme border-dashed mt-2">
+                            <div class="flex items-center justify-end mb-3 pt-3">
+                                <div class="flex gap-4">
+                                    <button onclick="editGrammar(${g.id})" class="text-gray-500 hover:text-blue-500 font-bold text-sm bg-gray-100 px-3 py-1.5 rounded hover:bg-blue-50 transition-colors">Sửa</button>
+                                    <button onclick="deleteGrammar(${g.id})" class="text-gray-500 hover:text-red-500 font-bold text-sm bg-gray-100 px-3 py-1.5 rounded hover:bg-red-50 transition-colors">Xóa</button>
+                                </div>
+                            </div>
+                            
+                            <div class="overflow-hidden border border-theme rounded-xl mb-4">
+                                <table class="w-full text-left border-collapse text-base sm:text-lg bg-white">
+                                    <tbody>
+                                        <tr class="border-b border-theme">
+                                            <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-primary border-r border-theme align-top font-bold">Tên ngữ pháp</th>
+                                            <td class="p-3 sm:p-4 text-gray-800 font-bold align-top">${g.name}</td>
+                                        </tr>
+                                        <tr class="border-b border-theme">
+                                            <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Ý nghĩa</th>
+                                            <td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.meaning || '<i class="text-gray-400">Trống</i>'}</td>
+                                        </tr>
+                                        <tr class="border-b border-theme">
+                                            <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Cấu trúc</th>
+                                            <td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.structure || '<i class="text-gray-400">Trống</i>'}</td>
+                                        </tr>
+                                        ${g.example ? `
+                                        <tr class="border-b border-theme">
+                                            <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Ví dụ</th>
+                                            <td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.example}</td>
+                                        </tr>` : ''}
+                                        ${(eqGrammars.length > 0 || g.similarText) ? `
+                                        <tr>
+                                            <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#fff8e1] text-[#d35400] border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th>
+                                            <td class="p-3 sm:p-4 text-gray-800 align-top bg-[#fffdf5]">
+                                                ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">
+                                                    ${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-sm font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name} (Chi tiết)</button>`).join('')}
+                                                </div>` : ''}
+                                                ${g.similarText ? `<div class="text-sm text-gray-700 italic border-t border-orange-100 pt-2 mt-2 break-words whitespace-pre-wrap">${g.similarText}</div>` : ''}
+                                            </td>
+                                        </tr>` : ''}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="flex flex-wrap gap-2 pt-3 border-t border-dashed border-[#F9DFDF]">
+                                ${(g.sourceIds || []).map(id => `<div class="text-sm text-gray-600 font-medium bg-[#fdf8f8] inline-block px-2.5 py-1.5 rounded-lg border border-[#F9DFDF]">📖 ${getSourceName(id)}</div>`).join('')}
+                                ${(g.groupIds || []).map(id => `<div class="text-sm text-gray-600 font-medium bg-[#fdf8f8] inline-block px-2.5 py-1.5 rounded-lg border border-[#F9DFDF]">📁 ${getGroupName(id)}</div>`).join('')}
+                                ${(g.contextIds || []).map(id => `<div class="text-sm text-gray-600 font-medium bg-[#fdf8f8] inline-block px-2.5 py-1.5 rounded-lg border border-[#F9DFDF]">🏷️ ${getContextName(id)}</div>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `);
+            });
+
+            // Render 1 lần duy nhất
+            list.innerHTML = htmlParts.join('');
+            updateTimers();
+        }
+
+        function updateTimers() {
+            const now = Date.now();
+            document.querySelectorAll('.review-timer').forEach(el => {
+                if (el.getAttribute('data-level') == '9') { el.innerHTML = "<span class='text-gray-500 font-bold'>✔️ Đã thuộc</span>"; return; }
+                const next = parseInt(el.getAttribute('data-next')); if (!next) return; const diff = next - now;
+                if (diff <= 0) el.innerHTML = "<span class='text-[#27ae60] font-bold'>⏰ Đến hạn!</span>";
+                else {
+                    const d = Math.floor(diff / (1000 * 60 * 60 * 24)); const h = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    el.innerText = `⏳ ${d > 0 ? d + 'd ' : ''}${h > 0 || d > 0 ? h + 'h ' : ''}${m}m`;
+                }
+            });
+        }
+        setInterval(updateTimers, 60000);
+
+        function changeGrammarLevel(id, newLevel) {
+            const g = grammars.find(item => item.id === id);
+            if (g) {
+                g.level = parseInt(newLevel);
+
+                const intervals = [5, 30, 120, 360, 720, 1440, 2880, 5760, 10080];
+                if (g.level === 9) {
+                    g.nextReviewDate = 4102444800000;
+                } else if (g.level === 0) {
+                    g.nextReviewDate = Date.now();
+                } else {
+                    const lIdx = Math.max(0, Math.min(g.level - 1, intervals.length - 1));
+                    g.nextReviewDate = Date.now() + (intervals[lIdx] * 60000);
+                }
+
+                saveData(); renderGrammars(); showToast(`Đã thay đổi cấp độ thành Lv.${g.level} và cập nhật thời gian!`, "success");
+            }
+        }
+
+        function toggleSelectAll(checkbox) {
+            const cbs = document.querySelectorAll('.grammar-bulk-cb'); cbs.forEach(cb => cb.checked = checkbox.checked); updateBulkActionsState();
+        }
+
+        function updateBulkActionsState() {
+            const cbs = document.querySelectorAll('.grammar-bulk-cb');
+            const checkedCbs = document.querySelectorAll('.grammar-bulk-cb:checked');
+
+            const btnBulkLvl = document.getElementById('btn-bulk-level');
+            const selectBulkLvl = document.getElementById('bulk-level-select');
+            const btnBulkSrc = document.getElementById('btn-bulk-source');
+            const selectBulkSrc = document.getElementById('bulk-source-select');
+            const cbAll = document.getElementById('cb-select-all');
+
+            if (!btnBulkLvl || !selectBulkLvl) return;
+
+            if (cbs.length > 0 && cbs.length === checkedCbs.length) { if (cbAll) cbAll.checked = true; }
+            else { if (cbAll) cbAll.checked = false; }
+
+            const hasChecked = checkedCbs.length > 0;
+            if (btnBulkLvl) btnBulkLvl.disabled = !hasChecked;
+            if (selectBulkLvl) selectBulkLvl.disabled = !hasChecked;
+            if (btnBulkSrc) btnBulkSrc.disabled = !hasChecked;
+            if (selectBulkSrc) selectBulkSrc.disabled = !hasChecked;
+        }
+
+        function applyBulkLevel() {
+            const levelStr = document.getElementById('bulk-level-select').value;
+            if (levelStr === '') return showToast('Vui lòng chọn level muốn đổi!', 'warning');
+            const newLevel = parseInt(levelStr); const checkedBoxes = document.querySelectorAll('.grammar-bulk-cb:checked');
+            if (checkedBoxes.length === 0) return;
+            let count = 0;
+            const intervals = [5, 30, 120, 360, 720, 1440, 2880, 5760, 10080];
+
+            checkedBoxes.forEach(cb => {
+                const id = parseFloat(cb.value); const g = grammars.find(item => item.id === id);
+                if (g) {
+                    g.level = newLevel;
+                    if (g.level === 9) {
+                        g.nextReviewDate = 4102444800000;
+                    } else if (g.level === 0) {
+                        g.nextReviewDate = Date.now();
+                    } else {
+                        const lIdx = Math.max(0, Math.min(g.level - 1, intervals.length - 1));
+                        g.nextReviewDate = Date.now() + (intervals[lIdx] * 60000);
+                    }
+                    count++;
+                }
+            });
+            saveData(); renderGrammars(); document.getElementById('bulk-level-select').value = ''; showToast(`Đã đổi cấp độ cho ${count} ngữ pháp thành Lv.${newLevel}!`, 'success');
+        }
+
+        function addGrammar() {
+            const name = document.getElementById('g-name').value.trim(); const structure = document.getElementById('g-structure').innerHTML.trim();
+            const meaning = document.getElementById('g-meaning').innerHTML.trim(); const example = document.getElementById('g-example').innerHTML.trim();
+            const similarText = document.getElementById('g-similar-text').value.trim();
+            const groupIds = Array.from(document.querySelectorAll('.group-cb:checked')).map(cb => parseInt(cb.value));
+            const contextIds = Array.from(document.querySelectorAll('.context-cb:checked')).map(cb => parseInt(cb.value));
+            const sourceIds = Array.from(document.querySelectorAll('.source-cb:checked')).map(cb => parseInt(cb.value));
+            const relatedGrammarIds = Array.from(document.querySelectorAll('.related-cb:checked')).map(cb => parseFloat(cb.value));
+            const isTwoWay = document.getElementById('g-two-way-link') ? document.getElementById('g-two-way-link').checked : false;
+
+            if (!name && !structure && !meaning) return showToast("Vui lòng điền nội dung!", "warning");
+
+            if (editingGrammarId) {
+                const idx = grammars.findIndex(g => g.id === editingGrammarId);
+                if (idx !== -1) {
+                    const oldRelatedIds = grammars[idx].relatedGrammarIds || [];
+                    grammars[idx] = { ...grammars[idx], name, structure, meaning, example, similarText, groupIds, contextIds, sourceIds, relatedGrammarIds };
+
+                    if (isTwoWay) {
+                        const removedIds = oldRelatedIds.filter(id => !relatedGrammarIds.includes(id));
+                        removedIds.forEach(tid => {
+                            let tg = grammars.find(g => g.id === tid);
+                            if (tg && tg.relatedGrammarIds) {
+                                tg.relatedGrammarIds = tg.relatedGrammarIds.filter(id => id !== editingGrammarId);
+                            }
+                        });
+
+                        relatedGrammarIds.forEach(tid => {
+                            let tg = grammars.find(g => g.id === tid);
+                            if (tg) {
+                                tg.relatedGrammarIds = tg.relatedGrammarIds || [];
+                                if (!tg.relatedGrammarIds.includes(editingGrammarId)) tg.relatedGrammarIds.push(editingGrammarId);
+                            }
+                        });
+                    }
+                }
+                showToast("Đã cập nhật thành công!"); cancelEdit();
+            } else {
+                const newId = Date.now() + Math.random();
+                grammars.push({ id: newId, name, structure, meaning, example, similarText, groupIds, contextIds, sourceIds, relatedGrammarIds, level: 0, nextReviewDate: Date.now() });
+
+                if (isTwoWay) {
+                    relatedGrammarIds.forEach(tid => {
+                        let tg = grammars.find(g => g.id === tid);
+                        if (tg) {
+                            tg.relatedGrammarIds = tg.relatedGrammarIds || [];
+                            if (!tg.relatedGrammarIds.includes(newId)) tg.relatedGrammarIds.push(newId);
+                        }
+                    });
+                }
+
+                document.getElementById('g-name').value = ''; document.getElementById('g-structure').innerHTML = ''; document.getElementById('g-meaning').innerHTML = ''; document.getElementById('g-example').innerHTML = ''; document.getElementById('g-similar-text').value = '';
+                document.querySelectorAll('.group-cb, .context-cb, .source-cb, .related-cb').forEach(cb => cb.checked = false); toggleCategoryBox(true); showToast("Đã thêm ngữ pháp!");
+            }
+            saveData(); renderGrammars(); renderRelatedGrammarsList(null);
+        }
+
+        function editGrammar(id) {
+            const g = grammars.find(item => item.id === id); if (!g) return; editingGrammarId = id;
+            const formBody = document.getElementById('add-grammar-form'); const formArrow = document.getElementById('add-grammar-arrow');
+            if (formBody.classList.contains('hidden')) { formBody.classList.remove('hidden'); formArrow.classList.add('rotate-180'); }
+            document.getElementById('g-name').value = g.name || ''; document.getElementById('g-structure').innerHTML = g.structure || '';
+            document.getElementById('g-meaning').innerHTML = g.meaning || ''; document.getElementById('g-example').innerHTML = g.example || '';
+            document.getElementById('g-similar-text').value = g.similarText || '';
+            document.querySelectorAll('.group-cb').forEach(cb => cb.checked = (g.groupIds || []).includes(parseInt(cb.value)));
+            document.querySelectorAll('.context-cb').forEach(cb => cb.checked = (g.contextIds || []).includes(parseInt(cb.value)));
+            document.querySelectorAll('.source-cb').forEach(cb => cb.checked = (g.sourceIds || []).includes(parseInt(cb.value)));
+
+            renderRelatedGrammarsList(id);
+            const submitBtn = document.getElementById('btn-submit-grammar'); submitBtn.innerText = 'Lưu Thay Đổi'; submitBtn.className = "bg-blue-500 text-white px-6 py-3 rounded-lg text-lg font-medium shadow-sm hover:bg-blue-600";
+            document.getElementById('btn-cancel-edit').classList.remove('hidden'); window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            editingGrammarId = null;
+            document.getElementById('g-name').value = ''; document.getElementById('g-structure').innerHTML = ''; document.getElementById('g-meaning').innerHTML = ''; document.getElementById('g-example').innerHTML = ''; document.getElementById('g-similar-text').value = '';
+            document.querySelectorAll('.group-cb, .context-cb, .source-cb').forEach(cb => cb.checked = false);
+            renderRelatedGrammarsList(null);
+            const submitBtn = document.getElementById('btn-submit-grammar'); submitBtn.innerText = '+ Thêm Ngữ Pháp'; submitBtn.className = "bg-action px-6 py-3 rounded-lg text-lg font-medium transition-colors shadow-sm";
+            document.getElementById('btn-cancel-edit').classList.add('hidden'); toggleCategoryBox(true);
+        }
+
+        function deleteGrammar(id) {
+            grammars = grammars.filter(g => g.id !== id); saveData(); renderGrammars(); renderRelatedGrammarsList(null); showToast("Đã xóa ngữ pháp.");
+        }
+
+        function openQuizSetup() {
+            document.getElementById('quizSetupModal').classList.remove('hidden');
+            document.getElementById('quiz-setup-step-1').classList.remove('hidden');
+            document.getElementById('quiz-setup-step-2').classList.add('hidden');
+
+            selectedQuizLevels = [];
+
+            let actionContainer = document.getElementById('quiz-step-1-actions');
+            if (actionContainer) actionContainer.classList.add('hidden');
+
+            renderQuizLevelButtons();
+        }
+
+        function toggleQuizLevel(level) {
+            if (level === 'all') {
+                const isAllSelected = [0, 1, 2, 3, 4, 5, 6, 7, 8].every(l => selectedQuizLevels.includes(l));
+                if (isAllSelected) {
+                    selectedQuizLevels = selectedQuizLevels.filter(l => l === 9);
+                } else {
+                    [0, 1, 2, 3, 4, 5, 6, 7, 8].forEach(l => {
+                        if (!selectedQuizLevels.includes(l)) selectedQuizLevels.push(l);
+                    });
+                }
+            } else {
+                const idx = selectedQuizLevels.indexOf(level);
+                if (idx > -1) {
+                    selectedQuizLevels.splice(idx, 1);
+                } else {
+                    selectedQuizLevels.push(level);
+                }
+            }
+            renderQuizLevelButtons();
+        }
+
+        function renderQuizLevelButtons() {
+            const container = document.getElementById('quiz-level-selection');
+            container.innerHTML = '';
+
+            const sourceFilter = document.getElementById('quiz-source-select').value;
+            let filteredGrammars = grammars;
+            if (sourceFilter !== 'all') {
+                filteredGrammars = filteredGrammars.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
+            }
+
+            const total0to8 = filteredGrammars.filter(g => g.level !== 9).length;
+            const isAllSelected = [0, 1, 2, 3, 4, 5, 6, 7, 8].every(l => selectedQuizLevels.includes(l)) && selectedQuizLevels.length > 0;
+
+            const btnAll = document.createElement('button');
+            btnAll.className = `px-6 py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 text-white bg-gray-500 w-full sm:w-auto text-lg ${isAllSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-60 hover:opacity-100'}`;
+            btnAll.innerText = `Tất cả Level 0-8 (${total0to8})`;
+            btnAll.onclick = () => toggleQuizLevel('all');
+            container.appendChild(btnAll);
+
+            for (let i = 0; i <= 9; i++) {
+                const count = filteredGrammars.filter(g => g.level === i).length;
+                const isSelected = selectedQuizLevels.includes(i);
+
+                const btn = document.createElement('button');
+                btn.className = `px-5 py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 text-white min-w-[110px] text-lg ${isSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-60 hover:opacity-100'}`;
+                btn.style.backgroundColor = `var(--lv${i})`;
+                let label = i === 0 ? 'Mới' : (i === 9 ? 'Không ôn' : `Lv ${i}`);
+                btn.innerText = `${label} (${count})`;
+                btn.onclick = () => toggleQuizLevel(i);
+                container.appendChild(btn);
+            }
+
+            let actionContainer = document.getElementById('quiz-step-1-actions');
+            if (selectedQuizLevels.length > 0) {
+                actionContainer.classList.remove('hidden');
+            } else {
+                actionContainer.classList.add('hidden');
+            }
+        }
+
+        function proceedToQuizStep2() {
+            if (selectedQuizLevels.length === 0) return showToast("Vui lòng chọn ít nhất 1 Level!", "warning");
+
+            const sourceFilter = document.getElementById('quiz-source-select').value;
+            let poolBase = grammars;
+            if (sourceFilter !== 'all') {
+                poolBase = poolBase.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
+            }
+
+            poolBase = poolBase.filter(g => selectedQuizLevels.includes(g.level));
+
+            let labels = selectedQuizLevels.slice().sort((a, b) => a - b).map(l => l === 0 ? 'Mới' : (l === 9 ? 'Không ôn' : `Lv ${l}`));
+            let displayName = `${labels.join(', ')} (${poolBase.length})`;
+
+            document.getElementById('selected-level-display').innerText = displayName;
+
+            const now = Date.now();
+            const dueCount = poolBase.filter(g => g.level !== 9 && (g.nextReviewDate || 0) <= now).length;
+            const allCount = poolBase.length;
+
+            document.getElementById('btn-quiz-mode-due').innerText = `⏰ Ôn Đến Hạn (${dueCount})`;
+            document.getElementById('btn-quiz-mode-all').innerText = `📚 Ôn Tất Cả (${allCount})`;
+
+            document.getElementById('quiz-setup-step-1').classList.add('hidden');
+            document.getElementById('quiz-setup-step-2').classList.remove('hidden');
+        }
+
+        function startQuizFiltered(mode) {
+            selectedQuizMode = mode; sessionAnsweredIds = [];
+            const pool = getQuizPool();
+            if (pool.length === 0) return showToast("Không có ngữ pháp nào phù hợp với tùy chọn này!", "success");
+
+            quizTotalQuestions = pool.length;
+
+            closeModal('quizSetupModal');
+            switchTab('quiz');
+            nextQuestion();
+        }
+
+        function getQuizPool() {
+            let pool = grammars.filter(g => !sessionAnsweredIds.includes(g.id));
+
+            const sourceFilter = document.getElementById('quiz-source-select').value;
+            if (sourceFilter !== 'all') {
+                pool = pool.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
+            }
+
+            pool = pool.filter(g => selectedQuizLevels.includes(g.level));
+            if (selectedQuizMode === 'due') pool = pool.filter(g => (g.nextReviewDate || 0) <= Date.now() && g.level !== 9);
+
+            return pool;
+        }
+
+        function nextQuestion() {
+            const pool = getQuizPool();
+            if (pool.length === 0) {
+                showToast("🎉 Hoàn thành đợt ôn tập theo mục tiêu!", "success");
+                switchTab('grammar');
+                return;
+            }
+
+            document.getElementById('quiz-correct-detail').classList.add('hidden');
+            document.getElementById('quiz-correct-detail').innerHTML = '';
+
+            const btnAction = document.getElementById('btn-quiz-action');
+            btnAction.onclick = skipQuestion;
+            btnAction.className = "px-8 py-3 rounded-xl text-lg font-bold border-2 border-gray-300 text-gray-500 hover:bg-gray-100 transition-colors";
+            btnAction.innerText = "Bỏ Qua (Chưa thuộc)";
+
+            const currentQNum = Math.min(sessionAnsweredIds.length + 1, quizTotalQuestions);
+            document.getElementById('quiz-progress').innerText = `${currentQNum} / ${quizTotalQuestions}`;
+            const optsContainer = document.getElementById('quiz-options'); optsContainer.innerHTML = '';
+            currentQuizCorrect = pool[Math.floor(Math.random() * pool.length)];
+            document.getElementById('quiz-question-label').innerText = "Tên ngữ pháp cần tìm:"; document.getElementById('quiz-question').innerHTML = currentQuizCorrect.name;
+
+            let allOtherGrammars = [...grammars].filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random());
+            let wrongOptsM = allOtherGrammars.slice(0, 3);
+            let optionsM = [currentQuizCorrect, ...wrongOptsM].sort(() => 0.5 - Math.random());
+
+            let wrongOptsS = [...grammars].filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+            let optionsS = [currentQuizCorrect, ...wrongOptsS].sort(() => 0.5 - Math.random());
+
+            currentQuizSelection = { meaningId: null, structureId: null };
+
+            let colM = '<div class="flex flex-col gap-3"><div class="text-center font-bold text-gray-500 mb-2 uppercase tracking-wide text-sm">Cột Ý Nghĩa</div>';
+            optionsM.forEach(opt => {
+                colM += `<button id="opt-m-${opt.id}" onclick="selectQuizOption('m', ${opt.id}, this)" class="quiz-option-m text-left bg-white border-2 border-theme p-4 rounded-xl flex items-center gap-3 hover:bg-btn shadow-sm transition-all"><div class="font-bold text-lg text-primary w-full rich-text text-center">${opt.meaning || '<i class="text-gray-400">Trống</i>'}</div></button>`;
+            });
+            colM += '</div>';
+
+            let colS = '<div class="flex flex-col gap-3"><div class="text-center font-bold text-gray-500 mb-2 uppercase tracking-wide text-sm">Cột Cấu Trúc</div>';
+            optionsS.forEach(opt => {
+                colS += `<button id="opt-s-${opt.id}" onclick="selectQuizOption('s', ${opt.id}, this)" class="quiz-option-s text-left bg-white border-2 border-theme p-4 rounded-xl flex items-center gap-3 hover:bg-btn shadow-sm transition-all"><div class="font-bold text-lg text-primary w-full rich-text text-center">${opt.structure || '<i class="text-gray-400">Trống</i>'}</div></button>`;
+            });
+            colS += '</div>';
+
+            optsContainer.innerHTML = colM + colS;
+        }
+
+        function selectQuizOption(type, id, btn) {
+            document.querySelectorAll(`.quiz-option-${type}`).forEach(b => {
+                b.classList.remove('ring-4', 'ring-[#F5AFAF]', 'bg-btn');
+            });
+            btn.classList.add('ring-4', 'ring-[#F5AFAF]', 'bg-btn');
+
+            if (type === 'm') currentQuizSelection.meaningId = id;
+            if (type === 's') currentQuizSelection.structureId = id;
+
+            if (currentQuizSelection.meaningId !== null && currentQuizSelection.structureId !== null) {
+                checkCombinedAnswer();
+            }
+        }
+
+        function checkCombinedAnswer() {
+            document.querySelectorAll('.quiz-option-m, .quiz-option-s').forEach(b => {
+                b.onclick = null;
+                b.classList.remove('hover:bg-btn', 'hover:transform', 'cursor-pointer');
+            });
+
+            const mId = currentQuizSelection.meaningId;
+            const sId = currentQuizSelection.structureId;
+            const target = grammars.find(g => g.id === currentQuizCorrect.id);
+            const intervals = [5, 30, 120, 360, 720, 1440, 2880, 5760, 10080];
+
+            const isCorrect = (mId === currentQuizCorrect.id && sId === currentQuizCorrect.id);
+
+            const btnM = document.getElementById(`opt-m-${mId}`);
+            const btnS = document.getElementById(`opt-s-${sId}`);
+            const correctBtnM = document.getElementById(`opt-m-${currentQuizCorrect.id}`);
+            const correctBtnS = document.getElementById(`opt-s-${currentQuizCorrect.id}`);
+
+            if (btnM) btnM.classList.remove('ring-4', 'ring-[#F5AFAF]', 'bg-btn');
+            if (btnS) btnS.classList.remove('ring-4', 'ring-[#F5AFAF]', 'bg-btn');
+
+            if (mId === currentQuizCorrect.id) {
+                if (btnM) btnM.classList.add('correct-answer');
+            } else {
+                if (btnM) btnM.classList.add('wrong-answer');
+                if (correctBtnM) correctBtnM.classList.add('correct-answer');
+            }
+
+            if (sId === currentQuizCorrect.id) {
+                if (btnS) btnS.classList.add('correct-answer');
+            } else {
+                if (btnS) btnS.classList.add('wrong-answer');
+                if (correctBtnS) correctBtnS.classList.add('correct-answer');
+            }
+
+            if (isCorrect) {
+                showToast("Đúng rồi 🥳", "success");
+                if (target.level < 8) target.level = (target.level || 0) + 1;
+
+                if (target.level !== 9) {
+                    const lIdx = Math.max(0, Math.min(target.level - 1, intervals.length - 1));
+                    target.nextReviewDate = Date.now() + (intervals[lIdx] * 60000);
+                }
+            } else {
+                showToast("Sai rồi! Hãy xem đáp án.", "error"); showCorrectDetail(target);
+                target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000);
+            }
+
+            sessionAnsweredIds.push(target.id); saveData();
+
+            const btnAction = document.getElementById('btn-quiz-action');
+            btnAction.onclick = nextQuestion;
+            btnAction.className = "bg-action px-10 py-4 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md";
+            btnAction.innerText = "Tiếp Tục ➔";
+        }
+
+        function skipQuestion() {
+            document.querySelectorAll('.quiz-option-m, .quiz-option-s').forEach(b => {
+                b.onclick = null;
+                b.classList.remove('hover:bg-btn', 'hover:transform', 'cursor-pointer');
+            });
+            const target = grammars.find(g => g.id === currentQuizCorrect.id);
+
+            const correctBtnM = document.getElementById(`opt-m-${currentQuizCorrect.id}`);
+            const correctBtnS = document.getElementById(`opt-s-${currentQuizCorrect.id}`);
+            if (correctBtnM) correctBtnM.classList.add('correct-answer');
+            if (correctBtnS) correctBtnS.classList.add('correct-answer');
+
+            showToast("Đã bỏ qua.", "warning"); showCorrectDetail(target);
+            target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000);
+            sessionAnsweredIds.push(target.id); saveData();
+
+            const btnAction = document.getElementById('btn-quiz-action');
+            btnAction.onclick = nextQuestion;
+            btnAction.className = "bg-action px-10 py-4 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md";
+            btnAction.innerText = "Tiếp Tục ➔";
+        }
+
+        function showCorrectDetail(g) {
+            const dc = document.getElementById('quiz-correct-detail'); dc.classList.remove('hidden'); const eqGrammars = getEquivalentGrammars(g.id);
+            dc.innerHTML = `
+                <div class="bg-card rounded-xl border-2 border-green-300 shadow-md text-left overflow-hidden mt-4">
+                    <div class="bg-green-100 px-4 py-3 border-b border-green-200"><span class="font-bold text-green-800 text-lg">💡 Đáp án đầy đủ:</span></div>
+                    <div class="p-5">
+                        <div class="overflow-hidden border border-theme rounded-xl">
+                            <table class="w-full text-left border-collapse text-base sm:text-lg bg-white">
+                                <tbody>
+                                    <tr class="border-b border-theme"><th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-primary border-r border-theme align-top font-bold">Tên ngữ pháp</th><td class="p-3 sm:p-4 text-gray-800 font-bold align-top">${g.name}</td></tr>
+                                    <tr class="border-b border-theme"><th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Ý nghĩa</th><td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.meaning || '<i class="text-gray-400">Trống</i>'}</td></tr>
+                                    <tr class="border-b border-theme"><th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Cấu trúc</th><td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.structure || '<i class="text-gray-400">Trống</i>'}</td></tr>
+                                    ${g.example ? `<tr class="border-b border-theme"><th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#FBEFEF] text-[#4A4A4A] border-r border-theme align-top font-bold">Ví dụ</th><td class="p-3 sm:p-4 text-gray-800 rich-text align-top">${g.example}</td></tr>` : ''}
+                                    ${(eqGrammars.length > 0 || g.similarText) ? `
+                                    <tr>
+                                        <th class="w-1/3 sm:w-1/4 p-3 sm:p-4 bg-[#fff8e1] text-[#d35400] border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th>
+                                        <td class="p-3 sm:p-4 text-gray-800 align-top bg-[#fffdf5]">
+                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">
+                                                ${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-sm font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name} (Chi tiết)</button>`).join('')}
+                                            </div>` : ''}
+                                            ${g.similarText ? `<div class="text-sm text-gray-700 italic border-t border-orange-100 pt-2 mt-2 break-words whitespace-pre-wrap">${g.similarText}</div>` : ''}
+                                        </td>
+                                    </tr>` : ''}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>`;
+
+            setTimeout(() => {
+                document.getElementById('quiz-correct-detail').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }, 100);
+        }
+
+        window.onload = () => {
+            const sg = localStorage.getItem('nhg_groups'); if (sg) groups = JSON.parse(sg);
+            const sc = localStorage.getItem('nhg_contexts'); if (sc) contexts = JSON.parse(sc);
+            const ss = localStorage.getItem('nhg_sources'); if (ss) sources = JSON.parse(ss);
+            const sgr = localStorage.getItem('nhg_grammars'); if (sgr) grammars = JSON.parse(sgr);
+            renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
+            document.getElementById('sec-grammar').style.display = 'block';
+        };
+    </script>
+</body>
+
+</html>
