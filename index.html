@@ -313,7 +313,7 @@
 
     <div id="toast-container"></div>
 
-    <!-- MỚI THÊM: OVERLAY VÀ SIDEBAR CHO MOBILE -->
+    <!-- OVERLAY VÀ SIDEBAR CHO MOBILE -->
     <div id="sidebar-overlay"
         class="fixed inset-0 bg-black bg-opacity-40 z-[90] hidden backdrop-blur-sm transition-opacity"
         onclick="closeSidebar()"></div>
@@ -334,7 +334,6 @@
 
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-thin pb-20">
 
-            <!-- Khu vực Tìm kiếm và Lọc (Di chuyển từ bên ngoài vào) -->
             <div class="mb-6 bg-white p-4 rounded-xl border border-theme shadow-sm">
                 <h3 class="font-bold text-gray-700 mb-3 border-b border-gray-100 pb-2">🔍 Bộ Lọc Danh Sách</h3>
 
@@ -356,7 +355,6 @@
                     </select>
                 </div>
 
-                <!-- Bộ lọc thời gian -->
                 <div class="time-filters flex flex-col gap-2 mb-4">
                     <button
                         class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium active shadow-sm"
@@ -369,7 +367,6 @@
                         onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến hạn (0)</button>
                 </div>
 
-                <!-- Bộ lọc theo Level -->
                 <div id="level-filter-btns" class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
                     <button id="lf-all"
                         class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
@@ -407,7 +404,6 @@
                 </div>
             </div>
 
-            <!-- Khu vực Thêm Ngữ pháp mới (Di chuyển từ bên ngoài vào) -->
             <div id="add-grammar-form-sidebar" class="bg-white p-4 rounded-xl border border-theme shadow-sm mb-4">
                 <h3 class="font-bold text-gray-700 mb-3 border-b border-gray-100 pb-2">➕ Soạn Thảo</h3>
                 <div class="flex flex-col gap-4">
@@ -543,7 +539,6 @@
     </div>
     <!-- KẾT THÚC SIDEBAR -->
 
-    <!-- CÁC MODALS KHÁC GIỮ NGUYÊN BÊN DƯỚI -->
     <!-- Modal: Bảng Chọn Bài Ôn Tập -->
     <div id="quizSetupModal"
         class="fixed inset-0 bg-black bg-opacity-40 hidden z-[80] flex justify-center items-center backdrop-blur-sm transition-opacity">
@@ -598,7 +593,7 @@
         </div>
     </div>
 
-    <!-- Modals Soạn Thảo (Structure, Example, Cấu Hình...) Giữ Nguyên HTML -->
+    <!-- Modals Soạn Thảo -->
     <div id="structureModal"
         class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
         <div
@@ -831,10 +826,8 @@
 
         <main>
             <section id="sec-grammar" class="block h-[85vh] flex flex-col">
-                <!-- VÙNG DANH SÁCH CHIẾM TOÀN BỘ KHÔNG GIAN -->
                 <div class="bg-card rounded-xl shadow-md border border-theme flex-1 flex flex-col min-h-0 relative">
 
-                    <!-- THÊM NÚT "MỞ MENU SIDEBAR" VÀO HEADER DANH SÁCH -->
                     <div
                         class="sticky top-0 z-30 bg-card px-4 sm:px-6 pt-4 pb-3 border-b border-theme shadow-sm mb-2 rounded-t-xl">
                         <div class="flex flex-row justify-between items-center gap-3">
@@ -860,7 +853,6 @@
                             </button>
                         </div>
 
-                        <!-- THANH HÀNH ĐỘNG HÀNG LOẠT (Vẫn giữ ở ngoài danh sách) -->
                         <div
                             class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full mt-4 bg-white p-2 sm:p-3 rounded-lg border border-theme">
                             <label
@@ -908,14 +900,13 @@
                         </div>
                     </div>
 
-                    <!-- DANH SÁCH CHI TIẾT NGỮ PHÁP ĐƯỢC CUỘN RỘNG RÃI -->
                     <div class="flex-1 overflow-y-auto scrollbar-thin px-4 sm:px-6 pb-6 pt-2">
                         <div id="grammar-list" class="flex flex-col gap-3 sm:gap-4 w-full"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- CÁC SECTION KHÁC GIỮ NGUYÊN -->
+            <!-- CÁC SECTION KHÁC -->
             <section id="sec-group" class="hidden">
                 <div class="bg-card rounded-xl p-4 sm:p-6 shadow-sm border border-theme mb-8">
                     <h2 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Nhóm</h2>
@@ -985,7 +976,7 @@
         </main>
     </div>
 
-    <!-- KHU VỰC SCRIPT (GIỮ NGUYÊN TOÀN BỘ LOGIC CŨ, CHỈ THÊM LOGIC SIDEBAR) -->
+    <!-- KHU VỰC SCRIPT VỚI CÁC BUGS ĐÃ ĐƯỢC FIX -->
     <script>
         let groups = []; let contexts = []; let sources = []; let grammars = [];
         let editingGrammarId = null;
@@ -993,19 +984,14 @@
         let sessionAnsweredIds = []; let quizTotalQuestions = 0; let currentTimeFilter = 'all';
         let currentLevelFilter = 'all'; let rawCSVData = []; let currentQuizSelection = { meaningId: null, structureId: null };
 
-        // MỚI THÊM: Điều khiển Sidebar
         function openSidebar() {
             document.getElementById('sidebar-overlay').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('sidebar-menu').classList.remove('translate-x-full');
-            }, 10);
+            setTimeout(() => { document.getElementById('sidebar-menu').classList.remove('translate-x-full'); }, 10);
         }
 
         function closeSidebar() {
             document.getElementById('sidebar-menu').classList.add('translate-x-full');
-            setTimeout(() => {
-                document.getElementById('sidebar-overlay').classList.add('hidden');
-            }, 300);
+            setTimeout(() => { document.getElementById('sidebar-overlay').classList.add('hidden'); }, 300);
         }
 
         function debounce(func, wait) {
@@ -1031,7 +1017,14 @@
                 const btnText = document.getElementById('google-login-text');
                 if (user) {
                     currentUser = user; btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
-                    showToast("Đã kết nối tài khoản: " + user.displayName, "success"); fetchFromFirebaseRealtime();
+
+                    // [FIX BUG 1] Kiểm tra sessionStorage xem có phải người dùng vừa chủ động click không
+                    if (sessionStorage.getItem('isManualLogin') === 'true') {
+                        showToast("Đã kết nối tài khoản: " + user.displayName, "success");
+                        sessionStorage.removeItem('isManualLogin');
+                    }
+
+                    fetchFromFirebaseRealtime();
                 } else {
                     currentUser = null; btnText.innerText = "Đăng nhập đồng bộ";
                     if (unsubscribeCloudSync) { unsubscribeCloudSync(); unsubscribeCloudSync = null; }
@@ -1046,7 +1039,14 @@
                 }
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
-                auth.signInWithPopup(provider).catch(error => { showToast("Lỗi đăng nhập: " + error.message, "error"); });
+
+                // [FIX BUG 1] Đánh dấu hành động đăng nhập là do người dùng bấm nút
+                sessionStorage.setItem('isManualLogin', 'true');
+
+                auth.signInWithPopup(provider).catch(error => {
+                    showToast("Lỗi đăng nhập: " + error.message, "error");
+                    sessionStorage.removeItem('isManualLogin'); // Dọn dẹp nếu có lỗi xảy ra
+                });
             }
         }
 
@@ -1063,20 +1063,40 @@
         function fetchFromFirebaseRealtime() {
             if (!currentUser || !db) return;
             if (unsubscribeCloudSync) unsubscribeCloudSync();
+
             unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
                 if (doc.exists) {
+
+                    // [FIX BUG 3] Chống lặp và sửa lỗi so sánh
+                    // doc.metadata.hasPendingWrites sẽ trả về 'true' nếu sự kiện này 
+                    // là do chính trình duyệt của bạn vừa push dữ liệu lên Firestore.
+                    // Nếu là true -> bỏ qua để không ghi đè và không render lại vô ích.
+                    // Nếu là false -> chắc chắn là dữ liệu đẩy từ một thiết bị khác.
+                    if (doc.metadata.hasPendingWrites) {
+                        return;
+                    }
+
                     const data = doc.data();
-                    const cloudDataStr = JSON.stringify({ groups: data.groups || [], contexts: data.contexts || [], sources: data.sources || [], grammars: data.grammars || [] });
-                    const localDataStr = JSON.stringify({ groups, contexts, sources, grammars });
-                    if (cloudDataStr === localDataStr) return;
+
+                    // --- ĐOẠN CODE CŨ ĐƯỢC ẨN BẰNG COMMENT THEO YÊU CẦU ---
+                    // const cloudDataStr = JSON.stringify({ groups: data.groups || [], contexts: data.contexts || [], sources: data.sources || [], grammars: data.grammars || [] });
+                    // const localDataStr = JSON.stringify({ groups, contexts, sources, grammars });
+                    // if (cloudDataStr === localDataStr) return; 
+                    // --------------------------------------------------------
 
                     groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || []; grammars = data.grammars || [];
                     localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
                     localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
                     renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
-                    showToast("☁️ Dữ liệu đã đồng bộ từ thiết bị khác!", "success");
+
+                    // [FIX BUG 2] Tắt thông báo nổi khi đồng bộ nền và chỉ hiện console log
+                    // showToast("☁️ Dữ liệu đã đồng bộ từ thiết bị khác!", "success");
+                    console.log("☁️ Dữ liệu đã đồng bộ ngầm từ Cloud!");
                 } else { syncToFirebase(); }
-            }, (error) => { console.error("Lỗi lắng nghe Cloud:", error); showToast("Không thể tải từ Cloud.", "error"); });
+            }, (error) => {
+                console.error("Lỗi lắng nghe Cloud:", error);
+                showToast("Không thể tải từ Cloud. Hãy cấp quyền đọc/ghi Firestore trong Firebase Console!", "error");
+            });
         }
 
         function saveData() {
@@ -1154,7 +1174,7 @@
                 <tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Cấu trúc</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.structure || '<i class="text-gray-400">Trống</i>'}</td></tr>
                 ${g.example ? `<tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Ví dụ</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.example}</td></tr>` : ''}
                 ${(eqGrammars.length > 0 || g.similarText) ? `<tr class="flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#fff8e1] text-[#d35400] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th><td class="p-3 text-gray-800 align-top bg-[#fffdf5] break-words">
-                    ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs sm:text-sm font-bold bg-white text-blue-600 px-3 py-2 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name} (Chi tiết)</button>`).join('')}</div>` : ''}
+                    ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs sm:text-sm font-bold bg-white text-blue-600 px-3 py-2 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer w-full sm:w-auto text-left sm:text-center">${eq.name} (Chi tiết)</button>`).join('')}</div>` : ''}
                     ${g.similarText ? `<div class="text-xs sm:text-sm text-gray-700 italic border-t border-orange-100 pt-2 mt-2 whitespace-pre-wrap">${g.similarText}</div>` : ''}
                 </td></tr>` : ''}
             </tbody></table></div>`;
@@ -1218,7 +1238,7 @@
                 const btn = document.getElementById(`tab-${id}`);
                 if (btn) btn.className = "whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg transition-colors " + (id === tabId ? "tab-active" : "text-gray-500 hover:text-primary");
                 const sec = document.getElementById(`sec-${id}`);
-                if (sec) sec.style.display = (id === tabId) ? 'flex' : 'none'; // Thay đổi block thành flex cho giao diện responsive scroll
+                if (sec) sec.style.display = (id === tabId) ? 'flex' : 'none';
                 if (id !== 'grammar' && sec) sec.style.display = (id === tabId) ? 'block' : 'none';
             });
             if (tabId === 'grammar') renderGrammars();
@@ -1517,7 +1537,7 @@
                                         <tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Cấu trúc</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.structure || '<i class="text-gray-400">Trống</i>'}</td></tr>
                                         ${g.example ? `<tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Ví dụ</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.example}</td></tr>` : ''}
                                         ${(eqGrammars.length > 0 || g.similarText) ? `<tr class="flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#fff8e1] text-[#d35400] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th><td class="p-3 text-gray-800 align-top bg-[#fffdf5] break-words">
-                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer w-full sm:w-auto text-left sm:text-center">${eq.name} (Chi tiết)</button>`).join('')}</div>` : ''}
+                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name} (Chi tiết)</button>`).join('')}</div>` : ''}
                                             ${g.similarText ? `<div class="text-xs text-gray-700 italic border-t border-orange-100 pt-2 mt-2 whitespace-pre-wrap">${g.similarText}</div>` : ''}
                                         </td></tr>` : ''}
                                     </tbody>
@@ -1623,7 +1643,7 @@
 
         function editGrammar(id) {
             const g = grammars.find(item => item.id === id); if (!g) return; editingGrammarId = id;
-            openSidebar(); // Mở Sidebar khi nhấn Edit
+            openSidebar();
 
             document.getElementById('g-name').value = g.name || ''; document.getElementById('g-structure').innerHTML = g.structure || '';
             document.getElementById('g-meaning').innerHTML = g.meaning || ''; document.getElementById('g-example').innerHTML = g.example || ''; document.getElementById('g-similar-text').value = g.similarText || '';
@@ -1788,7 +1808,7 @@
             const ss = localStorage.getItem('nhg_sources'); if (ss) sources = JSON.parse(ss);
             const sgr = localStorage.getItem('nhg_grammars'); if (sgr) grammars = JSON.parse(sgr);
             renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
-            document.getElementById('sec-grammar').style.display = 'flex'; // Cho flex để scrollable main area
+            document.getElementById('sec-grammar').style.display = 'flex';
         };
     </script>
 </body>
