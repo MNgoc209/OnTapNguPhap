@@ -158,154 +158,46 @@
             transform: translateX(100%);
         }
 
-        .toast.success {
-            background-color: var(--success);
-        }
+        .toast.success { background-color: var(--success); }
+        .toast.error { background-color: var(--danger); }
+        .toast.warning { background-color: var(--warning); }
 
-        .toast.error {
-            background-color: var(--danger);
-        }
+        @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeOut { to { opacity: 0; transform: translateX(100%); } }
 
-        .toast.warning {
-            background-color: var(--warning);
-        }
+        .quiz-option-m, .quiz-option-s { transition: all 0.2s ease; cursor: pointer; }
+        .quiz-option-m:hover, .quiz-option-s:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(245, 175, 175, 0.4); }
 
-        @keyframes slideIn {
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
+        .correct-answer { background-color: #eafaf1 !important; color: #1e8449 !important; border-color: #a3e4d7 !important; }
+        .wrong-answer { background-color: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
+        .wrong-answer div { color: white !important; }
 
-        @keyframes fadeOut {
-            to {
-                opacity: 0;
-                transform: translateX(100%);
-            }
-        }
+        .rich-text-editor { min-height: 80px; }
+        .rich-text-editor:empty:before { content: attr(placeholder); color: #9ca3af; pointer-events: none; }
+        .rich-text ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .rich-text b, .rich-text strong { font-weight: bold; }
+        .rich-text i, .rich-text em { font-style: italic; }
 
-        .quiz-option-m,
-        .quiz-option-s {
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
+        .toolbar-btn { padding: 4px 8px; border-radius: 4px; background: white; border: 1px solid var(--color2); cursor: pointer; font-weight: bold; color: var(--text); transition: 0.2s; }
+        .toolbar-btn:hover { background: var(--color3); }
 
-        .quiz-option-m:hover,
-        .quiz-option-s:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 175, 175, 0.4);
-        }
-
-        .correct-answer {
-            background-color: #eafaf1 !important;
-            color: #1e8449 !important;
-            border-color: #a3e4d7 !important;
-        }
-
-        .wrong-answer {
-            background-color: var(--danger) !important;
-            color: white !important;
-            border-color: var(--danger) !important;
-        }
-
-        .wrong-answer div {
-            color: white !important;
-        }
-
-        .rich-text-editor {
-            min-height: 80px;
-        }
-
-        .rich-text-editor:empty:before {
-            content: attr(placeholder);
-            color: #9ca3af;
-            pointer-events: none;
-        }
-
-        .rich-text ul {
-            list-style-type: disc;
-            padding-left: 1.5rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .rich-text b,
-        .rich-text strong {
-            font-weight: bold;
-        }
-
-        .rich-text i,
-        .rich-text em {
-            font-style: italic;
-        }
-
-        .toolbar-btn {
-            padding: 4px 8px;
-            border-radius: 4px;
-            background: white;
-            border: 1px solid var(--color2);
-            cursor: pointer;
-            font-weight: bold;
-            color: var(--text);
-            transition: 0.2s;
-        }
-
-        .toolbar-btn:hover {
-            background: var(--color3);
-        }
-
-        .toggle-checkbox:checked {
-            right: 0;
-            border-color: #F5AFAF;
-        }
-
-        .toggle-checkbox:checked+.toggle-label {
-            background-color: #F5AFAF;
-        }
-
-        .toggle-checkbox:checked+.toggle-label:after {
-            transform: translateX(100%);
-            border-color: white;
-        }
+        .toggle-checkbox:checked { right: 0; border-color: #F5AFAF; }
+        .toggle-checkbox:checked+.toggle-label { background-color: #F5AFAF; }
+        .toggle-checkbox:checked+.toggle-label:after { transform: translateX(100%); border-color: white; }
 
         select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
+            appearance: none; -webkit-appearance: none; -moz-appearance: none;
             background-color: white;
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23F5AFAF' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.75rem center;
-            background-repeat: no-repeat;
-            background-size: 1.2em 1.2em;
-            padding-right: 2.5rem !important;
-            transition: all 0.2s;
+            background-position: right 0.75rem center; background-repeat: no-repeat; background-size: 1.2em 1.2em;
+            padding-right: 2.5rem !important; transition: all 0.2s;
         }
+        select:focus { outline: none; border-color: var(--color1) !important; box-shadow: 0 0 0 3px var(--color2) !important; }
+        .badge-select { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.15rem center; background-size: 1em 1em; padding-right: 1.2rem !important; }
 
-        select:focus {
-            outline: none;
-            border-color: var(--color1) !important;
-            box-shadow: 0 0 0 3px var(--color2) !important;
-        }
-
-        .badge-select {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-            background-position: right 0.15rem center;
-            background-size: 1em 1em;
-            padding-right: 1.2rem !important;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .scrollbar-thin::-webkit-scrollbar-thumb {
-            background-color: var(--color1);
-            border-radius: 20px;
-        }
+        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+        .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+        .scrollbar-thin::-webkit-scrollbar-thumb { background-color: var(--color1); border-radius: 20px; }
     </style>
 </head>
 
@@ -314,93 +206,54 @@
     <div id="toast-container"></div>
 
     <!-- OVERLAY VÀ SIDEBAR CHO MOBILE -->
-    <div id="sidebar-overlay"
-        class="fixed inset-0 bg-black bg-opacity-40 z-[90] hidden backdrop-blur-sm transition-opacity"
-        onclick="closeSidebar()"></div>
-    <div id="sidebar-menu"
-        class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-card shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-40 z-[90] hidden backdrop-blur-sm transition-opacity" onclick="closeSidebar()"></div>
+    <div id="sidebar-menu" class="fixed top-0 right-0 h-full w-full sm:w-[400px] bg-card shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 flex flex-col">
         <div class="flex justify-between items-center p-4 sm:p-6 border-b border-theme bg-white sticky top-0 z-10">
             <h2 class="text-xl sm:text-2xl font-bold text-primary flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 5v14M5 12h14" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M5 12h14"/>
                 </svg>
                 Thêm & Lọc Dữ Liệu
             </h2>
-            <button onclick="closeSidebar()"
-                class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors"
-                title="Đóng">&times;</button>
+            <button onclick="closeSidebar()" class="w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors" title="Đóng">&times;</button>
         </div>
-
+        
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-thin pb-20">
-
+            
             <div class="mb-6 bg-white p-4 rounded-xl border border-theme shadow-sm">
                 <h3 class="font-bold text-gray-700 mb-3 border-b border-gray-100 pb-2">🔍 Bộ Lọc Danh Sách</h3>
-
+                
                 <div class="flex flex-col gap-3 mb-4">
-                    <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()"
-                        placeholder="Nhập tên ngữ pháp..."
-                        class="w-full p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF]">
-                    <select id="filter-group" onchange="renderGrammars()"
-                        class="w-full p-2 border-theme text-sm sm:text-base rounded-lg">
+                    <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()" placeholder="Nhập tên ngữ pháp..." class="w-full p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF]">
+                    <select id="filter-group" onchange="renderGrammars()" class="w-full p-2 border-theme text-sm sm:text-base rounded-lg">
                         <option value="all">Tất cả nhóm</option>
                     </select>
-                    <select id="filter-context" onchange="renderGrammars()"
-                        class="w-full p-2 border-theme text-sm sm:text-base rounded-lg">
+                    <select id="filter-context" onchange="renderGrammars()" class="w-full p-2 border-theme text-sm sm:text-base rounded-lg">
                         <option value="all">Tất cả ngữ cảnh</option>
                     </select>
-                    <select id="filter-source" onchange="renderGrammars()"
-                        class="w-full p-2 border-theme text-sm sm:text-base rounded-lg">
+                    <select id="filter-source" onchange="renderGrammars()" class="w-full p-2 border-theme text-sm sm:text-base rounded-lg">
                         <option value="all">Tất cả nguồn</option>
                     </select>
                 </div>
 
                 <div class="time-filters flex flex-col gap-2 mb-4">
-                    <button
-                        class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium active shadow-sm"
-                        onclick="setTimeFilter('all')" id="tf-all">Tất cả (0)</button>
-                    <button
-                        class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium shadow-sm"
-                        onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn (0)</button>
-                    <button
-                        class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium shadow-sm"
-                        onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến hạn (0)</button>
+                    <button class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium active shadow-sm" onclick="setTimeFilter('all')" id="tf-all">Tất cả (0)</button>
+                    <button class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium shadow-sm" onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn (0)</button>
+                    <button class="time-filter-btn px-3 py-2 rounded-xl border border-theme text-sm font-medium shadow-sm" onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến hạn (0)</button>
                 </div>
 
                 <div id="level-filter-btns" class="flex flex-wrap gap-2 pt-3 border-t border-gray-100">
-                    <button id="lf-all"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:#f0f0f0; color:#444;" onclick="setLevelFilter('all')">Tất cả (0)</button>
-                    <button id="lf-0"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv0); color:#fff;" onclick="setLevelFilter(0)">Mới (0)</button>
-                    <button id="lf-1"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv1); color:#fff;" onclick="setLevelFilter(1)">Lv 1 (0)</button>
-                    <button id="lf-2"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv2); color:#fff;" onclick="setLevelFilter(2)">Lv 2 (0)</button>
-                    <button id="lf-3"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv3); color:#fff;" onclick="setLevelFilter(3)">Lv 3 (0)</button>
-                    <button id="lf-4"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv4); color:#fff;" onclick="setLevelFilter(4)">Lv 4 (0)</button>
-                    <button id="lf-5"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv5); color:#fff;" onclick="setLevelFilter(5)">Lv 5 (0)</button>
-                    <button id="lf-6"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv6); color:#fff;" onclick="setLevelFilter(6)">Lv 6 (0)</button>
-                    <button id="lf-7"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv7); color:#fff;" onclick="setLevelFilter(7)">Lv 7 (0)</button>
-                    <button id="lf-8"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv8); color:#fff;" onclick="setLevelFilter(8)">Lv 8 (0)</button>
-                    <button id="lf-9"
-                        class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100"
-                        style="background:var(--lv9); color:#fff;" onclick="setLevelFilter(9)">Không ôn (0)</button>
+                    <button id="lf-all" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:#f0f0f0; color:#444;" onclick="setLevelFilter('all')">Tất cả (0)</button>
+                    <button id="lf-0" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv0); color:#fff;" onclick="setLevelFilter(0)">Mới (0)</button>
+                    <button id="lf-1" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv1); color:#fff;" onclick="setLevelFilter(1)">Lv 1 (0)</button>
+                    <button id="lf-2" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv2); color:#fff;" onclick="setLevelFilter(2)">Lv 2 (0)</button>
+                    <button id="lf-3" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv3); color:#fff;" onclick="setLevelFilter(3)">Lv 3 (0)</button>
+                    <button id="lf-4" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv4); color:#fff;" onclick="setLevelFilter(4)">Lv 4 (0)</button>
+                    <button id="lf-5" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv5); color:#fff;" onclick="setLevelFilter(5)">Lv 5 (0)</button>
+                    <button id="lf-6" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv6); color:#fff;" onclick="setLevelFilter(6)">Lv 6 (0)</button>
+                    <button id="lf-7" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv7); color:#fff;" onclick="setLevelFilter(7)">Lv 7 (0)</button>
+                    <button id="lf-8" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv8); color:#fff;" onclick="setLevelFilter(8)">Lv 8 (0)</button>
+                    <button id="lf-9" class="lvl-tag px-2 py-1.5 rounded-lg text-xs font-bold shadow-sm transition-all opacity-60 hover:opacity-100" style="background:var(--lv9); color:#fff;" onclick="setLevelFilter(9)">Không ôn (0)</button>
                 </div>
             </div>
 
@@ -409,28 +262,20 @@
                 <div class="flex flex-col gap-4">
                     <div class="flex flex-col">
                         <label class="block text-sm font-bold mb-1">Tên ngữ pháp</label>
-                        <input type="text" id="g-name"
-                            class="w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base"
-                            placeholder="Ví dụ: Mẫu câu xin phép">
+                        <input type="text" id="g-name" class="w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base" placeholder="Ví dụ: Mẫu câu xin phép">
                     </div>
 
                     <div class="flex flex-col">
                         <div class="flex justify-between items-end mb-1">
                             <label class="block text-sm font-bold">Cấu trúc</label>
-                            <button onclick="openModal('structureModal', 'g-structure', 'g-structure-modal')"
-                                class="text-[#8e44ad] hover:text-blue-700 text-xs font-bold flex items-center gap-1 transition-colors">Mở
-                                rộng</button>
+                            <button onclick="openModal('structureModal', 'g-structure', 'g-structure-modal')" class="text-[#8e44ad] hover:text-blue-700 text-xs font-bold flex items-center gap-1 transition-colors">Mở rộng</button>
                         </div>
                         <div class="flex gap-1 mb-1 items-center flex-wrap">
                             <button onclick="execCmd('bold', 'g-structure')" class="toolbar-btn text-xs">B</button>
                             <button onclick="execCmd('italic', 'g-structure')" class="toolbar-btn text-xs">I</button>
-                            <button onclick="execCmd('insertUnorderedList', 'g-structure')"
-                                class="toolbar-btn text-xs">•</button>
+                            <button onclick="execCmd('insertUnorderedList', 'g-structure')" class="toolbar-btn text-xs">•</button>
                         </div>
-                        <div id="g-structure" contenteditable="true" onmouseup="saveSelection('g-structure')"
-                            onkeyup="saveSelection('g-structure')" onmouseleave="saveSelection('g-structure')"
-                            class="rich-text-editor rich-text w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base overflow-y-auto"
-                            placeholder="Ví dụ: Vて + もいいです"></div>
+                        <div id="g-structure" contenteditable="true" onmouseup="saveSelection('g-structure')" onkeyup="saveSelection('g-structure')" onmouseleave="saveSelection('g-structure')" class="rich-text-editor rich-text w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base overflow-y-auto" placeholder="Ví dụ: Vて + もいいです"></div>
                     </div>
 
                     <div class="flex flex-col">
@@ -438,54 +283,37 @@
                         <div class="flex gap-1 mb-1 items-center flex-wrap">
                             <button onclick="execCmd('bold', 'g-meaning')" class="toolbar-btn text-xs">B</button>
                             <button onclick="execCmd('italic', 'g-meaning')" class="toolbar-btn text-xs">I</button>
-                            <button onclick="execCmd('insertUnorderedList', 'g-meaning')"
-                                class="toolbar-btn text-xs">•</button>
+                            <button onclick="execCmd('insertUnorderedList', 'g-meaning')" class="toolbar-btn text-xs">•</button>
                         </div>
-                        <div id="g-meaning" contenteditable="true" onmouseup="saveSelection('g-meaning')"
-                            onkeyup="saveSelection('g-meaning')" onmouseleave="saveSelection('g-meaning')"
-                            class="rich-text-editor rich-text w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base overflow-y-auto"
-                            placeholder="Ví dụ: Cho phép làm gì đó"></div>
+                        <div id="g-meaning" contenteditable="true" onmouseup="saveSelection('g-meaning')" onkeyup="saveSelection('g-meaning')" onmouseleave="saveSelection('g-meaning')" class="rich-text-editor rich-text w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base overflow-y-auto" placeholder="Ví dụ: Cho phép làm gì đó"></div>
                     </div>
 
                     <div class="flex flex-col">
                         <div class="flex justify-between items-end mb-1">
                             <label class="block text-sm font-bold">Ví dụ</label>
-                            <button onclick="openModal('exampleModal', 'g-example', 'g-example-modal')"
-                                class="text-[#8e44ad] hover:text-blue-700 text-xs font-bold flex items-center gap-1 transition-colors">Mở
-                                rộng</button>
+                            <button onclick="openModal('exampleModal', 'g-example', 'g-example-modal')" class="text-[#8e44ad] hover:text-blue-700 text-xs font-bold flex items-center gap-1 transition-colors">Mở rộng</button>
                         </div>
                         <div class="flex gap-1 mb-1 items-center flex-wrap">
                             <button onclick="execCmd('bold', 'g-example')" class="toolbar-btn text-xs">B</button>
                             <button onclick="execCmd('italic', 'g-example')" class="toolbar-btn text-xs">I</button>
-                            <button onclick="execCmd('insertUnorderedList', 'g-example')"
-                                class="toolbar-btn text-xs">•</button>
+                            <button onclick="execCmd('insertUnorderedList', 'g-example')" class="toolbar-btn text-xs">•</button>
                         </div>
-                        <div id="g-example" contenteditable="true" onmouseup="saveSelection('g-example')"
-                            onkeyup="saveSelection('g-example')" onmouseleave="saveSelection('g-example')"
-                            class="rich-text-editor rich-text w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base overflow-y-auto"
-                            placeholder="Ví dụ: 写真を撮ってもいいです。"></div>
+                        <div id="g-example" contenteditable="true" onmouseup="saveSelection('g-example')" onkeyup="saveSelection('g-example')" onmouseleave="saveSelection('g-example')" class="rich-text-editor rich-text w-full p-2.5 rounded-lg bg-white border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] text-base overflow-y-auto" placeholder="Ví dụ: 写真を撮ってもいいです。"></div>
                     </div>
 
                     <div class="mt-2">
                         <label class="block text-sm font-bold mb-1 text-[#d35400]">🔗 Tương đương (Mạng lưới)</label>
                         <div class="flex flex-col gap-2 mb-2">
-                            <input type="text" id="g-similar-text"
-                                class="w-full p-2 border border-[#ffe082] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm"
-                                placeholder="Ghi chú thêm...">
-                            <input type="text" id="search-related" onkeyup="debouncedFilterRelated()"
-                                placeholder="🔍 Tìm nhanh mẫu câu..."
-                                class="w-full p-2 border border-[#ffe082] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white shadow-sm">
+                            <input type="text" id="g-similar-text" class="w-full p-2 border border-[#ffe082] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 text-sm" placeholder="Ghi chú thêm...">
+                            <input type="text" id="search-related" onkeyup="debouncedFilterRelated()" placeholder="🔍 Tìm nhanh mẫu câu..." class="w-full p-2 border border-[#ffe082] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-300 bg-white shadow-sm">
                         </div>
                         <div class="mb-2">
-                            <label
-                                class="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-700 hover:text-[#d35400] transition-colors select-none">
-                                <input type="checkbox" id="g-two-way-link"
-                                    class="w-4 h-4 accent-orange-500 cursor-pointer flex-shrink-0" checked>
+                            <label class="flex items-center gap-2 cursor-pointer text-xs font-bold text-gray-700 hover:text-[#d35400] transition-colors select-none">
+                                <input type="checkbox" id="g-two-way-link" class="w-4 h-4 accent-orange-500 cursor-pointer flex-shrink-0" checked>
                                 <span class="break-words">Tự động liên kết 2 chiều</span>
                             </label>
                         </div>
-                        <div
-                            class="w-full p-2 rounded-lg bg-[#fff8e1] border border-[#ffe082] max-h-[160px] overflow-y-auto text-sm flex flex-col gap-2 scrollbar-thin">
+                        <div class="w-full p-2 rounded-lg bg-[#fff8e1] border border-[#ffe082] max-h-[160px] overflow-y-auto text-sm flex flex-col gap-2 scrollbar-thin">
                             <div id="g-related-container" class="flex flex-col gap-2"></div>
                         </div>
                     </div>
@@ -493,13 +321,9 @@
                     <div class="mt-2">
                         <div class="flex items-center justify-between bg-input p-3 rounded-lg border border-theme">
                             <span class="text-sm font-bold text-gray-700">Phân loại Nhóm / Ngữ cảnh / Nguồn</span>
-                            <div
-                                class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in flex-shrink-0">
-                                <input type="checkbox" name="toggle" id="toggle-category"
-                                    class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10"
-                                    onclick="toggleCategoryBox()" />
-                                <label for="toggle-category"
-                                    class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+                            <div class="relative inline-block w-12 h-6 align-middle select-none transition duration-200 ease-in flex-shrink-0">
+                                <input type="checkbox" name="toggle" id="toggle-category" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer z-10" onclick="toggleCategoryBox()" />
+                                <label for="toggle-category" class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
                             </div>
                         </div>
                     </div>
@@ -507,32 +331,22 @@
                     <div id="category-box" class="flex flex-col gap-4 hidden mt-2">
                         <div class="flex flex-col h-full min-w-0">
                             <label class="block text-sm font-bold mb-1">Nhóm</label>
-                            <div id="g-group-container"
-                                class="w-full p-2 rounded-lg bg-white border border-theme max-h-[120px] overflow-y-auto text-sm flex flex-col gap-1 scrollbar-thin">
-                            </div>
+                            <div id="g-group-container" class="w-full p-2 rounded-lg bg-white border border-theme max-h-[120px] overflow-y-auto text-sm flex flex-col gap-1 scrollbar-thin"></div>
                         </div>
                         <div class="flex flex-col h-full min-w-0">
                             <label class="block text-sm font-bold mb-1">Ngữ cảnh</label>
-                            <div id="g-context-container"
-                                class="w-full p-2 rounded-lg bg-white border border-theme max-h-[120px] overflow-y-auto text-sm flex flex-col gap-1 scrollbar-thin">
-                            </div>
+                            <div id="g-context-container" class="w-full p-2 rounded-lg bg-white border border-theme max-h-[120px] overflow-y-auto text-sm flex flex-col gap-1 scrollbar-thin"></div>
                         </div>
                         <div class="flex flex-col h-full min-w-0">
                             <label class="block text-sm font-bold mb-1">Nguồn</label>
-                            <div id="g-source-container"
-                                class="w-full p-2 rounded-lg bg-white border border-theme max-h-[120px] overflow-y-auto text-sm flex flex-col gap-1 scrollbar-thin">
-                            </div>
+                            <div id="g-source-container" class="w-full p-2 rounded-lg bg-white border border-theme max-h-[120px] overflow-y-auto text-sm flex flex-col gap-1 scrollbar-thin"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="mt-6 flex flex-col gap-2 sticky bottom-0 bg-white py-3 border-t border-gray-100">
-                    <button id="btn-submit-grammar" onclick="addGrammar(); closeSidebar();"
-                        class="bg-action w-full px-6 py-3 rounded-lg text-base font-bold transition-colors shadow-md">+
-                        Thêm / Lưu Ngữ Pháp</button>
-                    <button id="btn-cancel-edit" onclick="cancelEdit()"
-                        class="hidden w-full px-6 py-3 rounded-lg text-base font-bold bg-gray-200 text-gray-700 hover:text-red-500 transition-colors">Hủy
-                        Sửa</button>
+                    <button id="btn-submit-grammar" onclick="addGrammar(); closeSidebar();" class="bg-action w-full px-6 py-3 rounded-lg text-base font-bold transition-colors shadow-md">+ Thêm / Lưu Ngữ Pháp</button>
+                    <button id="btn-cancel-edit" onclick="cancelEdit()" class="hidden w-full px-6 py-3 rounded-lg text-base font-bold bg-gray-200 text-gray-700 hover:text-red-500 transition-colors">Hủy Sửa</button>
                 </div>
             </div>
         </div>
@@ -540,362 +354,210 @@
     <!-- KẾT THÚC SIDEBAR -->
 
     <!-- Modal: Bảng Chọn Bài Ôn Tập -->
-    <div id="quizSetupModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[80] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-6 sm:p-8 rounded-2xl w-11/12 max-w-3xl flex flex-col shadow-2xl border border-theme transform transition-transform text-center relative max-h-[90vh] overflow-y-auto scrollbar-thin">
-            <button onclick="closeModal('quizSetupModal')"
-                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors"
-                title="Đóng">&times;</button>
+    <div id="quizSetupModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[80] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-6 sm:p-8 rounded-2xl w-11/12 max-w-3xl flex flex-col shadow-2xl border border-theme transform transition-transform text-center relative max-h-[90vh] overflow-y-auto scrollbar-thin">
+            <button onclick="closeModal('quizSetupModal')" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors" title="Đóng">&times;</button>
             <h2 class="text-2xl sm:text-3xl font-bold mb-6 text-primary">Thiết Lập Ôn Tập</h2>
 
             <div id="quiz-setup-step-1">
-                <div
-                    class="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6 bg-white p-3 rounded-xl border border-theme shadow-sm w-full mx-auto">
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-3 mb-6 bg-white p-3 rounded-xl border border-theme shadow-sm w-full mx-auto">
                     <label class="text-gray-700 font-bold whitespace-nowrap">Lọc theo Nguồn:</label>
-                    <select id="quiz-source-select"
-                        class="p-2 border border-theme rounded-lg text-base w-full sm:min-w-[200px]"
-                        onchange="renderQuizLevelButtons()">
+                    <select id="quiz-source-select" class="p-2 border border-theme rounded-lg text-base w-full sm:min-w-[200px]" onchange="renderQuizLevelButtons()">
                         <option value="all">Tất cả các nguồn</option>
                     </select>
                 </div>
 
-                <p class="mb-4 text-base sm:text-lg text-gray-700 font-medium">Vui lòng chọn nhóm cấp độ bạn muốn ôn
-                    tập:</p>
+                <p class="mb-4 text-base sm:text-lg text-gray-700 font-medium">Vui lòng chọn nhóm cấp độ bạn muốn ôn tập:</p>
                 <div id="quiz-level-selection" class="flex flex-wrap justify-center gap-3 mb-2"></div>
 
                 <div id="quiz-step-1-actions" class="mt-8 w-full flex justify-center hidden">
-                    <button onclick="proceedToQuizStep2()"
-                        class="bg-action w-full sm:w-auto px-10 py-3 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md">Tiếp
-                        Tục ➔</button>
+                    <button onclick="proceedToQuizStep2()" class="bg-action w-full sm:w-auto px-10 py-3 rounded-xl font-bold text-xl transition-transform hover:scale-105 shadow-md">Tiếp Tục ➔</button>
                 </div>
             </div>
 
             <div id="quiz-setup-step-2" class="hidden">
-                <p class="mb-4 text-base sm:text-lg">Bạn đang chuẩn bị ôn tập cho: <span id="selected-level-display"
-                        class="font-bold text-primary text-lg sm:text-xl block sm:inline mt-2 sm:mt-0"></span></p>
-                <p class="mb-8 text-sm sm:text-base text-gray-600">Nhiệm vụ của bạn là ghép đúng <b
-                        class="text-[#F5AFAF]">Ý nghĩa</b> và <b class="text-[#F5AFAF]">Cấu trúc</b> tương ứng với Tên
-                    ngữ pháp được hỏi.</p>
+                <p class="mb-4 text-base sm:text-lg">Bạn đang chuẩn bị ôn tập cho: <span id="selected-level-display" class="font-bold text-primary text-lg sm:text-xl block sm:inline mt-2 sm:mt-0"></span></p>
+                <p class="mb-8 text-sm sm:text-base text-gray-600">Nhiệm vụ của bạn là ghép đúng <b class="text-[#F5AFAF]">Ý nghĩa</b> và <b class="text-[#F5AFAF]">Cấu trúc</b> tương ứng với Tên ngữ pháp được hỏi.</p>
 
                 <div class="flex flex-col sm:flex-row justify-center gap-4 mb-8">
-                    <button id="btn-quiz-mode-due" onclick="startQuizFiltered('due')"
-                        class="bg-action px-6 py-4 rounded-xl font-bold text-lg sm:text-xl transition-transform hover:scale-105 shadow-md w-full sm:flex-1 sm:max-w-[250px]">⏰
-                        Ôn Đến Hạn</button>
-                    <button id="btn-quiz-mode-all" onclick="startQuizFiltered('all')"
-                        class="bg-[#3498db] hover:bg-[#2980b9] text-white px-6 py-4 rounded-xl font-bold text-lg sm:text-xl transition-transform hover:scale-105 shadow-md w-full sm:flex-1 sm:max-w-[250px]">📚
-                        Ôn Tất Cả</button>
+                    <button id="btn-quiz-mode-due" onclick="startQuizFiltered('due')" class="bg-action px-6 py-4 rounded-xl font-bold text-lg sm:text-xl transition-transform hover:scale-105 shadow-md w-full sm:flex-1 sm:max-w-[250px]">⏰ Ôn Đến Hạn</button>
+                    <button id="btn-quiz-mode-all" onclick="startQuizFiltered('all')" class="bg-[#3498db] hover:bg-[#2980b9] text-white px-6 py-4 rounded-xl font-bold text-lg sm:text-xl transition-transform hover:scale-105 shadow-md w-full sm:flex-1 sm:max-w-[250px]">📚 Ôn Tất Cả</button>
                 </div>
-                <button onclick="openQuizSetup()"
-                    class="text-gray-500 font-medium hover:text-gray-700 underline text-base sm:text-lg transition-colors">🔙
-                    Quay lại chọn Level</button>
+                <button onclick="openQuizSetup()" class="text-gray-500 font-medium hover:text-gray-700 underline text-base sm:text-lg transition-colors">🔙 Quay lại chọn Level</button>
             </div>
         </div>
     </div>
 
     <!-- Modals Soạn Thảo -->
-    <div id="structureModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-4xl h-[70vh] sm:h-[60vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+    <div id="structureModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-4xl h-[70vh] sm:h-[60vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-4 flex items-center gap-2">Soạn Thảo Cấu Trúc</h3>
             <div class="flex flex-wrap gap-2 mb-2 items-center">
-                <button onclick="execCmd('bold', 'g-structure-modal')"
-                    class="toolbar-btn text-sm sm:text-base">B</button>
-                <button onclick="execCmd('italic', 'g-structure-modal')"
-                    class="toolbar-btn text-sm sm:text-base">I</button>
-                <button onclick="execCmd('insertUnorderedList', 'g-structure-modal')"
-                    class="toolbar-btn text-sm sm:text-base">• List</button>
+                <button onclick="execCmd('bold', 'g-structure-modal')" class="toolbar-btn text-sm sm:text-base">B</button>
+                <button onclick="execCmd('italic', 'g-structure-modal')" class="toolbar-btn text-sm sm:text-base">I</button>
+                <button onclick="execCmd('insertUnorderedList', 'g-structure-modal')" class="toolbar-btn text-sm sm:text-base">• List</button>
             </div>
-            <div id="g-structure-modal" contenteditable="true" onmouseup="saveSelection('g-structure-modal')"
-                onkeyup="saveSelection('g-structure-modal')" onmouseleave="saveSelection('g-structure-modal')"
-                class="rich-text-editor rich-text flex-1 w-full p-4 rounded-xl bg-input border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] overflow-y-auto text-lg sm:text-xl mb-4"
-                placeholder="Nhập chi tiết cấu trúc..."></div>
+            <div id="g-structure-modal" contenteditable="true" onmouseup="saveSelection('g-structure-modal')" onkeyup="saveSelection('g-structure-modal')" onmouseleave="saveSelection('g-structure-modal')" class="rich-text-editor rich-text flex-1 w-full p-4 rounded-xl bg-input border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] overflow-y-auto text-lg sm:text-xl mb-4" placeholder="Nhập chi tiết cấu trúc..."></div>
             <div class="flex flex-col sm:flex-row justify-end gap-3">
-                <button onclick="closeModal('structureModal')"
-                    class="w-full sm:w-auto px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-base sm:text-lg">Hủy
-                    / Đóng</button>
-                <button onclick="saveModal('g-structure-modal', 'g-structure', 'structureModal')"
-                    class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg font-medium transition-colors text-base sm:text-lg">Lưu
-                    lại</button>
+                <button onclick="closeModal('structureModal')" class="w-full sm:w-auto px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-base sm:text-lg">Hủy / Đóng</button>
+                <button onclick="saveModal('g-structure-modal', 'g-structure', 'structureModal')" class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg font-medium transition-colors text-base sm:text-lg">Lưu lại</button>
             </div>
         </div>
     </div>
 
-    <div id="exampleModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-4xl h-[70vh] sm:h-[60vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+    <div id="exampleModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-4xl h-[70vh] sm:h-[60vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-4 flex items-center gap-2">Soạn Thảo Ví Dụ</h3>
             <div class="flex flex-wrap gap-2 mb-2 items-center">
                 <button onclick="execCmd('bold', 'g-example-modal')" class="toolbar-btn text-sm sm:text-base">B</button>
-                <button onclick="execCmd('italic', 'g-example-modal')"
-                    class="toolbar-btn text-sm sm:text-base">I</button>
-                <button onclick="execCmd('insertUnorderedList', 'g-example-modal')"
-                    class="toolbar-btn text-sm sm:text-base">• List</button>
+                <button onclick="execCmd('italic', 'g-example-modal')" class="toolbar-btn text-sm sm:text-base">I</button>
+                <button onclick="execCmd('insertUnorderedList', 'g-example-modal')" class="toolbar-btn text-sm sm:text-base">• List</button>
             </div>
-            <div id="g-example-modal" contenteditable="true" onmouseup="saveSelection('g-example-modal')"
-                onkeyup="saveSelection('g-example-modal')" onmouseleave="saveSelection('g-example-modal')"
-                class="rich-text-editor rich-text flex-1 w-full p-4 rounded-xl bg-input border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] overflow-y-auto text-lg sm:text-xl mb-4"
-                placeholder="Nhập chi tiết ví dụ..."></div>
+            <div id="g-example-modal" contenteditable="true" onmouseup="saveSelection('g-example-modal')" onkeyup="saveSelection('g-example-modal')" onmouseleave="saveSelection('g-example-modal')" class="rich-text-editor rich-text flex-1 w-full p-4 rounded-xl bg-input border border-theme focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] overflow-y-auto text-lg sm:text-xl mb-4" placeholder="Nhập chi tiết ví dụ..."></div>
             <div class="flex flex-col sm:flex-row justify-end gap-3">
-                <button onclick="closeModal('exampleModal')"
-                    class="w-full sm:w-auto px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-base sm:text-lg">Hủy
-                    / Đóng</button>
-                <button onclick="saveModal('g-example-modal', 'g-example', 'exampleModal')"
-                    class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg font-medium transition-colors text-base sm:text-lg">Lưu
-                    lại</button>
+                <button onclick="closeModal('exampleModal')" class="w-full sm:w-auto px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-base sm:text-lg">Hủy / Đóng</button>
+                <button onclick="saveModal('g-example-modal', 'g-example', 'exampleModal')" class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg font-medium transition-colors text-base sm:text-lg">Lưu lại</button>
             </div>
         </div>
     </div>
 
-    <div id="equivalentModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-6 rounded-2xl w-11/12 max-w-xl flex flex-col shadow-2xl border border-theme transform transition-transform max-h-[80vh] overflow-y-auto scrollbar-thin">
+    <div id="equivalentModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-6 rounded-2xl w-11/12 max-w-xl flex flex-col shadow-2xl border border-theme transform transition-transform max-h-[80vh] overflow-y-auto scrollbar-thin">
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-2">Ngữ pháp tương đương</h3>
-            <p class="text-gray-600 mb-4 text-sm sm:text-base">Các mẫu câu tương đương với <b id="eq-source-name"
-                    class="text-[#d35400]"></b>:</p>
+            <p class="text-gray-600 mb-4 text-sm sm:text-base">Các mẫu câu tương đương với <b id="eq-source-name" class="text-[#d35400]"></b>:</p>
             <ul id="eq-list" class="pl-0 text-gray-800 font-medium space-y-2 text-base sm:text-lg mb-6 w-full"></ul>
             <div class="flex justify-end">
-                <button onclick="closeModal('equivalentModal')"
-                    class="bg-gray-200 text-gray-700 w-full sm:w-auto px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition-colors text-base">Đóng
-                    lại</button>
+                <button onclick="closeModal('equivalentModal')" class="bg-gray-200 text-gray-700 w-full sm:w-auto px-6 py-3 rounded-lg font-bold hover:bg-gray-300 transition-colors text-base">Đóng lại</button>
             </div>
         </div>
     </div>
 
     <!-- Modal XEM CHI TIẾT NGỮ PHÁP -->
-    <div id="grammarDetailModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[120] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-5xl max-h-[90vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+    <div id="grammarDetailModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[120] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-5xl max-h-[90vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
             <div class="flex justify-between items-center mb-4 border-b border-theme pb-3">
                 <h3 id="gd-name" class="text-xl sm:text-2xl font-bold text-primary flex-1 truncate pr-2 sm:pr-4"></h3>
-                <span id="gd-level"
-                    class="text-white px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-bold shadow-sm flex-shrink-0"></span>
+                <span id="gd-level" class="text-white px-2 sm:px-3 py-1 rounded-lg text-xs sm:text-sm font-bold shadow-sm flex-shrink-0"></span>
             </div>
             <div class="overflow-y-auto overflow-x-hidden flex-1 pr-2 scrollbar-thin" id="gd-content"></div>
             <div class="flex justify-end pt-4 border-t border-theme mt-4">
-                <button onclick="closeModal('grammarDetailModal')"
-                    class="bg-action w-full sm:w-auto px-8 py-3 rounded-lg font-bold transition-colors shadow-sm">Đóng
-                    Chi Tiết</button>
+                <button onclick="closeModal('grammarDetailModal')" class="bg-action w-full sm:w-auto px-8 py-3 rounded-lg font-bold transition-colors shadow-sm">Đóng Chi Tiết</button>
             </div>
         </div>
     </div>
 
     <!-- Modal CSV -->
-    <div id="csvPreviewModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[60] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-7xl max-h-[90vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+    <div id="csvPreviewModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[60] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-7xl max-h-[90vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-2">Cấu Hình Dữ Liệu Nhập</h3>
-            <div
-                class="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-white p-3 rounded-xl border border-theme shadow-sm w-full">
+            <div class="mb-4 flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-white p-3 rounded-xl border border-theme shadow-sm w-full">
                 <div class="w-full sm:w-auto">
                     <label class="font-bold text-gray-700 block mb-1 sm:mb-0">Chọn Nguồn gán cho danh sách này:</label>
-                    <select id="import-source-select"
-                        class="w-full sm:w-auto p-2 border border-theme rounded-lg text-sm sm:text-base outline-none focus:ring-2 focus:ring-[#F5AFAF]">
-                        <option value="">-- Không gán nguồn --</option>
-                    </select>
+                    <select id="import-source-select" class="w-full sm:w-auto p-2 border border-theme rounded-lg text-sm sm:text-base outline-none focus:ring-2 focus:ring-[#F5AFAF]"><option value="">-- Không gán nguồn --</option></select>
                 </div>
                 <div class="hidden sm:block w-px h-6 bg-gray-300"></div>
-                <label
-                    class="flex items-center gap-2 cursor-pointer font-bold text-[#d35400] hover:text-orange-700 select-none w-full sm:w-auto">
-                    <input type="checkbox" id="csv-two-way-link"
-                        class="w-5 h-5 accent-orange-500 cursor-pointer flex-shrink-0" checked> Tự động liên kết 2 chiều
+                <label class="flex items-center gap-2 cursor-pointer font-bold text-[#d35400] hover:text-orange-700 select-none w-full sm:w-auto">
+                    <input type="checkbox" id="csv-two-way-link" class="w-5 h-5 accent-orange-500 cursor-pointer flex-shrink-0" checked> Tự động liên kết 2 chiều
                 </label>
             </div>
             <div class="overflow-auto flex-1 border border-gray-200 rounded-lg w-full">
                 <table class="w-full text-xs sm:text-sm text-left text-gray-500 min-w-[600px]">
-                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0" id="csv-preview-head">
-                    </thead>
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 sticky top-0" id="csv-preview-head"></thead>
                     <tbody id="csv-preview-body"></tbody>
                 </table>
             </div>
             <div class="flex flex-col sm:flex-row justify-end gap-3 mt-4 pt-4 border-t border-theme">
-                <button onclick="closeModal('csvPreviewModal')"
-                    class="w-full sm:w-auto px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-base sm:text-lg">Hủy</button>
-                <button onclick="processCSVImport()"
-                    class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg font-medium transition-colors text-base sm:text-lg shadow-sm">Tiến
-                    Hành Nhập</button>
+                <button onclick="closeModal('csvPreviewModal')" class="w-full sm:w-auto px-6 py-3 rounded-lg font-medium bg-gray-200 text-gray-700 hover:bg-gray-300 transition-colors text-base sm:text-lg">Hủy</button>
+                <button onclick="processCSVImport()" class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg font-medium transition-colors text-base sm:text-lg shadow-sm">Tiến Hành Nhập</button>
             </div>
         </div>
     </div>
 
-    <div id="csvDuplicateModal"
-        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[70] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div
-            class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-3xl max-h-[90vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
+    <div id="csvDuplicateModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[70] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-3xl max-h-[90vh] flex flex-col shadow-2xl border border-theme transform transition-transform">
             <h3 class="text-xl sm:text-2xl font-bold text-primary mb-2">Xác Nhận Xử Lý Dữ Liệu</h3>
             <div class="overflow-auto flex-1 border border-gray-200 bg-gray-50 p-3 rounded-lg mb-4">
-                <ul id="csv-duplicate-list"
-                    class="list-disc pl-5 text-gray-800 font-medium space-y-1 text-sm sm:text-base"></ul>
+                <ul id="csv-duplicate-list" class="list-disc pl-5 text-gray-800 font-medium space-y-1 text-sm sm:text-base"></ul>
             </div>
             <div class="flex flex-col sm:flex-row justify-end gap-3 pt-2">
-                <button onclick="closeModal('csvDuplicateModal')"
-                    class="w-full sm:w-auto px-4 py-3 sm:py-2 rounded-lg font-bold bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors text-sm">Hủy</button>
-                <button onclick="confirmImportCSV()"
-                    class="w-full sm:w-auto bg-action hover:bg-red-500 text-white px-4 py-3 sm:py-2 rounded-lg font-bold transition-colors text-sm shadow-sm">Xác
-                    Nhận</button>
+                <button onclick="closeModal('csvDuplicateModal')" class="w-full sm:w-auto px-4 py-3 sm:py-2 rounded-lg font-bold bg-white border-2 border-gray-300 text-gray-700 hover:bg-gray-100 transition-colors text-sm">Hủy</button>
+                <button onclick="confirmImportCSV()" class="w-full sm:w-auto bg-action hover:bg-red-500 text-white px-4 py-3 sm:py-2 rounded-lg font-bold transition-colors text-sm shadow-sm">Xác Nhận</button>
             </div>
         </div>
     </div>
 
     <!-- MAIN APP LAYOUT -->
     <div class="max-w-6xl mx-auto p-4 sm:p-6 w-full pt-4">
-
+        
         <!-- Header Tools -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start">
-                <button onclick="exportBackup()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"
-                    title="Xuất dữ liệu & tiến độ học"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>Xuất</button>
-                <button onclick="document.getElementById('json-file').click()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"
-                    title="Nhập dữ liệu & tiến độ học"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>Nhập Backup</button>
+                <button onclick="exportBackup()" class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2" title="Xuất dữ liệu & tiến độ học"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>Xuất</button>
+                <button onclick="document.getElementById('json-file').click()" class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2" title="Nhập dữ liệu & tiến độ học"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>Nhập Backup</button>
                 <input type="file" id="json-file" class="hidden" accept=".json" onchange="handleJSONUpload(event)">
-                <button id="btn-google-login" onclick="toggleGoogleLogin()"
-                    class="w-full md:w-auto justify-center mt-1 md:mt-0 bg-action px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
-                        fill="currentColor">
-                        <path
-                            d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
-                    </svg><span id="google-login-text">Đăng nhập đồng bộ</span></button>
+                <button id="btn-google-login" onclick="toggleGoogleLogin()" class="w-full md:w-auto justify-center mt-1 md:mt-0 bg-action px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" /></svg><span id="google-login-text">Đăng nhập đồng bộ</span></button>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
-                <button onclick="document.getElementById('csv-file').click()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>Nhập CSV</button>
+                <button onclick="document.getElementById('csv-file').click()" class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>Nhập CSV</button>
                 <input type="file" id="csv-file" class="hidden" accept=".csv,.txt" onchange="handleCSVUpload(event)">
-                <button onclick="deleteAllData()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary hover:!text-red-500 px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg
-                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="3 6 5 6 21 6"></polyline>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                    </svg>Xóa</button>
+                <button onclick="deleteAllData()" class="flex-1 md:flex-none justify-center bg-btn text-primary hover:!text-red-500 px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>Xóa</button>
             </div>
         </div>
 
         <header class="text-center mb-6 sm:mb-8">
             <h1 class="text-3xl sm:text-4xl font-bold text-primary mb-2 sm:mb-3 flex justify-center items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" />
-                </svg> Học Ngữ Pháp
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20" /></svg> Học Ngữ Pháp
             </h1>
             <p class="text-sm sm:text-base opacity-80">Ghi nhớ ngữ pháp dễ dàng hơn mỗi ngày</p>
         </header>
 
-        <nav
-            class="flex overflow-x-auto hide-scrollbar justify-start md:justify-center border-b border-theme mb-6 sm:mb-8 gap-1 sm:gap-2 pb-1 px-1">
-            <button onclick="switchTab('grammar')" id="tab-grammar"
-                class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg tab-active transition-colors">📚
-                Ngữ Pháp</button>
-            <button onclick="switchTab('group')" id="tab-group"
-                class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">📁
-                Nhóm</button>
-            <button onclick="switchTab('context')" id="tab-context"
-                class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">🏷️
-                Ngữ Cảnh</button>
-            <button onclick="switchTab('source')" id="tab-source"
-                class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">📖
-                Nguồn</button>
-            <button onclick="openQuizSetup()" id="tab-quiz"
-                class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">🎮
-                Ôn Tập</button>
+        <nav class="flex overflow-x-auto hide-scrollbar justify-start md:justify-center border-b border-theme mb-6 sm:mb-8 gap-1 sm:gap-2 pb-1 px-1">
+            <button onclick="switchTab('grammar')" id="tab-grammar" class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg tab-active transition-colors">📚 Ngữ Pháp</button>
+            <button onclick="switchTab('group')" id="tab-group" class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">📁 Nhóm</button>
+            <button onclick="switchTab('context')" id="tab-context" class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">🏷️ Ngữ Cảnh</button>
+            <button onclick="switchTab('source')" id="tab-source" class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">📖 Nguồn</button>
+            <button onclick="openQuizSetup()" id="tab-quiz" class="whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg text-gray-500 hover:text-primary transition-colors">🎮 Ôn Tập</button>
         </nav>
 
         <main>
             <section id="sec-grammar" class="block h-[85vh] flex flex-col">
                 <div class="bg-card rounded-xl shadow-md border border-theme flex-1 flex flex-col min-h-0 relative">
-
-                    <div
-                        class="sticky top-0 z-30 bg-card px-4 sm:px-6 pt-4 pb-3 border-b border-theme shadow-sm mb-2 rounded-t-xl">
+                    
+                    <div class="sticky top-0 z-30 bg-card px-4 sm:px-6 pt-4 pb-3 border-b border-theme shadow-sm mb-2 rounded-t-xl">
                         <div class="flex flex-row justify-between items-center gap-3">
-                            <h2 class="text-lg sm:text-2xl font-bold text-primary">Danh Sách (<span
-                                    id="grammar-count">0</span>)</h2>
-                            <button onclick="openSidebar()"
-                                class="bg-action px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm sm:text-base font-bold shadow-md flex items-center gap-2 hover:scale-105 transition-transform">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round">
-                                    <line x1="4" y1="21" x2="4" y2="14"></line>
-                                    <line x1="4" y1="10" x2="4" y2="3"></line>
-                                    <line x1="12" y1="21" x2="12" y2="12"></line>
-                                    <line x1="12" y1="8" x2="12" y2="3"></line>
-                                    <line x1="20" y1="21" x2="20" y2="16"></line>
-                                    <line x1="20" y1="12" x2="20" y2="3"></line>
-                                    <line x1="1" y1="14" x2="7" y2="14"></line>
-                                    <line x1="9" y1="8" x2="15" y2="8"></line>
-                                    <line x1="17" y1="16" x2="23" y2="16"></line>
-                                </svg>
+                            <h2 class="text-lg sm:text-2xl font-bold text-primary">Danh Sách (<span id="grammar-count">0</span>)</h2>
+                            <button onclick="openSidebar()" class="bg-action px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm sm:text-base font-bold shadow-md flex items-center gap-2 hover:scale-105 transition-transform">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
                                 <span class="hidden sm:inline">Bộ Lọc & Thêm Mới</span>
                                 <span class="sm:hidden">Công cụ</span>
                             </button>
                         </div>
 
-                        <div
-                            class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full mt-4 bg-white p-2 sm:p-3 rounded-lg border border-theme">
-                            <label
-                                class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none hover:text-[#F5AFAF] transition-colors">
-                                <input type="checkbox" id="cb-select-all"
-                                    class="w-5 h-5 accent-[#F5AFAF] cursor-pointer flex-shrink-0"
-                                    onclick="toggleSelectAll(this)">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full mt-4 bg-white p-2 sm:p-3 rounded-lg border border-theme">
+                            <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none hover:text-[#F5AFAF] transition-colors">
+                                <input type="checkbox" id="cb-select-all" class="w-5 h-5 accent-[#F5AFAF] cursor-pointer flex-shrink-0" onclick="toggleSelectAll(this)">
                                 <span class="whitespace-nowrap text-sm sm:text-base">Chọn tất cả</span>
                             </label>
                             <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
 
                             <div class="flex gap-2 w-full sm:w-auto flex-wrap">
-                                <select id="bulk-level-select"
-                                    class="flex-1 sm:flex-none p-2 border-theme text-xs sm:text-sm font-bold disabled:opacity-50 cursor-pointer rounded-lg"
-                                    disabled>
+                                <select id="bulk-level-select" class="flex-1 sm:flex-none p-2 border-theme text-xs sm:text-sm font-bold disabled:opacity-50 cursor-pointer rounded-lg" disabled>
                                     <option value="">-- Đổi nhanh Level --</option>
-                                    <option value="0">Level 0</option>
-                                    <option value="1">Level 1</option>
-                                    <option value="2">Level 2</option>
-                                    <option value="3">Level 3</option>
-                                    <option value="4">Level 4</option>
-                                    <option value="5">Level 5</option>
-                                    <option value="6">Level 6</option>
-                                    <option value="7">Level 7</option>
-                                    <option value="8">Level 8</option>
+                                    <option value="0">Level 0</option><option value="1">Level 1</option><option value="2">Level 2</option>
+                                    <option value="3">Level 3</option><option value="4">Level 4</option><option value="5">Level 5</option>
+                                    <option value="6">Level 6</option><option value="7">Level 7</option><option value="8">Level 8</option>
                                     <option value="9">Lv.9 (Đã thuộc)</option>
                                 </select>
-                                <button id="btn-bulk-level" onclick="applyBulkLevel()"
-                                    class="bg-action px-3 py-2 rounded-lg text-xs sm:text-sm font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
-                                    disabled>Cập Nhật</button>
+                                <button id="btn-bulk-level" onclick="applyBulkLevel()" class="bg-action px-3 py-2 rounded-lg text-xs sm:text-sm font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap" disabled>Cập Nhật</button>
                             </div>
 
                             <div class="hidden sm:block h-6 w-px bg-gray-300"></div>
 
                             <div class="flex gap-2 w-full sm:w-auto flex-wrap mt-1 sm:mt-0">
-                                <select id="bulk-source-select"
-                                    class="flex-1 sm:flex-none p-2 border-theme text-xs sm:text-sm font-bold disabled:opacity-50 cursor-pointer rounded-lg"
-                                    disabled>
+                                <select id="bulk-source-select" class="flex-1 sm:flex-none p-2 border-theme text-xs sm:text-sm font-bold disabled:opacity-50 cursor-pointer rounded-lg" disabled>
                                     <option value="">-- Chuyen Nguon --</option>
                                 </select>
-                                <button id="btn-bulk-source" onclick="applyBulkSource()"
-                                    class="bg-action px-3 py-2 rounded-lg text-xs sm:text-sm font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
-                                    disabled>Cập Nhật</button>
+                                <button id="btn-bulk-source" onclick="applyBulkSource()" class="bg-action px-3 py-2 rounded-lg text-xs sm:text-sm font-bold shadow-sm disabled:opacity-50 disabled:cursor-not-allowed transition-colors whitespace-nowrap" disabled>Cập Nhật</button>
                             </div>
                         </div>
                     </div>
@@ -910,11 +572,8 @@
                 <div class="bg-card rounded-xl p-4 sm:p-6 shadow-sm border border-theme mb-8">
                     <h2 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Nhóm</h2>
                     <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
-                        <input type="text" id="gr-name"
-                            class="w-full sm:flex-1 p-3 rounded-lg bg-white border border-theme text-base sm:text-lg"
-                            placeholder="Nhập tên nhóm...">
-                        <button onclick="addGroup()"
-                            class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors">Thêm</button>
+                        <input type="text" id="gr-name" class="w-full sm:flex-1 p-3 rounded-lg bg-white border border-theme text-base sm:text-lg" placeholder="Nhập tên nhóm...">
+                        <button onclick="addGroup()" class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors">Thêm</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4" id="group-list"></div>
                 </div>
@@ -924,11 +583,8 @@
                 <div class="bg-card rounded-xl p-4 sm:p-6 shadow-sm border border-theme mb-8">
                     <h2 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Ngữ Cảnh</h2>
                     <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
-                        <input type="text" id="c-name"
-                            class="w-full sm:flex-1 p-3 rounded-lg bg-white border border-theme text-base sm:text-lg"
-                            placeholder="Nhập ngữ cảnh...">
-                        <button onclick="addContext()"
-                            class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors">Thêm</button>
+                        <input type="text" id="c-name" class="w-full sm:flex-1 p-3 rounded-lg bg-white border border-theme text-base sm:text-lg" placeholder="Nhập ngữ cảnh...">
+                        <button onclick="addContext()" class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors">Thêm</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4" id="context-list"></div>
                 </div>
@@ -938,11 +594,8 @@
                 <div class="bg-card rounded-xl p-4 sm:p-6 shadow-sm border border-theme mb-8">
                     <h2 class="text-xl sm:text-2xl font-bold mb-4 text-primary">Tạo Danh Sách Nguồn</h2>
                     <div class="flex flex-col sm:flex-row gap-3 mb-6 sm:mb-8">
-                        <input type="text" id="s-name"
-                            class="w-full sm:flex-1 p-3 rounded-lg bg-white border border-theme text-base sm:text-lg"
-                            placeholder="Nhập tên nguồn (VD: Sách N3)...">
-                        <button onclick="addSource()"
-                            class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors">Thêm</button>
+                        <input type="text" id="s-name" class="w-full sm:flex-1 p-3 rounded-lg bg-white border border-theme text-base sm:text-lg" placeholder="Nhập tên nguồn (VD: Sách N3)...">
+                        <button onclick="addSource()" class="w-full sm:w-auto bg-action px-6 py-3 rounded-lg text-base sm:text-lg font-medium transition-colors">Thêm</button>
                     </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4" id="source-list"></div>
                 </div>
@@ -952,39 +605,32 @@
                 <div id="quiz-play-screen" class="block">
                     <div class="bg-card rounded-xl p-4 sm:p-6 shadow-md border-t-4 border-[#F5AFAF] mb-6 relative">
                         <div class="flex flex-col sm:flex-row justify-between items-center sm:items-start mb-2 gap-2">
-                            <div id="quiz-question-label"
-                                class="text-sm sm:text-base text-gray-500 font-bold tracking-wide uppercase text-center sm:text-left">
-                                Tên ngữ pháp cần tìm:</div>
-                            <div id="quiz-progress"
-                                class="text-xs sm:text-sm font-bold bg-[#F9DFDF] text-primary px-3 py-1 rounded-full shadow-sm">
-                            </div>
+                            <div id="quiz-question-label" class="text-sm sm:text-base text-gray-500 font-bold tracking-wide uppercase text-center sm:text-left">Tên ngữ pháp cần tìm:</div>
+                            <div id="quiz-progress" class="text-xs sm:text-sm font-bold bg-[#F9DFDF] text-primary px-3 py-1 rounded-full shadow-sm"></div>
                         </div>
-                        <h3 id="quiz-question"
-                            class="text-2xl sm:text-4xl font-bold text-primary mb-2 sm:mb-3 whitespace-pre-wrap rich-text text-center py-2 sm:py-4">
-                        </h3>
+                        <h3 id="quiz-question" class="text-2xl sm:text-4xl font-bold text-primary mb-2 sm:mb-3 whitespace-pre-wrap rich-text text-center py-2 sm:py-4"></h3>
                     </div>
                     <div id="quiz-options" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6"></div>
                     <div id="quiz-correct-detail" class="hidden mt-6 overflow-x-auto w-full"></div>
                     <div id="quiz-action-container" class="mt-6 sm:mt-8 text-center">
-                        <button id="btn-quiz-action" onclick="skipQuestion()"
-                            class="w-full sm:w-auto bg-btn px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold border border-gray-300 text-gray-500 hover:bg-white transition-colors">Bỏ
-                            Qua (Chưa thuộc)</button>
+                        <button id="btn-quiz-action" onclick="skipQuestion()" class="w-full sm:w-auto bg-btn px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold border border-gray-300 text-gray-500 hover:bg-white transition-colors">Bỏ Qua (Chưa thuộc)</button>
                     </div>
                 </div>
             </section>
         </main>
     </div>
 
-    <!-- KHU VỰC SCRIPT ĐÃ SỬA LỖI -->
+    <!-- KHU VỰC SCRIPT VỚI CÁC BUGS ĐÃ ĐƯỢC FIX -->
     <script>
         let groups = []; let contexts = []; let sources = []; let grammars = [];
         let editingGrammarId = null;
         let currentQuizCorrect = null; let selectedQuizLevels = []; let selectedQuizMode = 'due';
         let sessionAnsweredIds = []; let quizTotalQuestions = 0; let currentTimeFilter = 'all';
         let currentLevelFilter = 'all'; let rawCSVData = []; let currentQuizSelection = { meaningId: null, structureId: null };
+        let currentQuizSessionPool = []; // Mảng ID chứa danh sách các câu đã chốt khi ôn
 
-        // MỚI: Biến lưu trữ danh sách ID các câu hỏi đã chốt cho phiên ôn tập hiện tại
-        let currentQuizSessionPool = [];
+        // MỚI: Biến đánh dấu thời gian để giải quyết Bug đồng bộ Ping-Pong
+        let lastPushTimestamp = 0;
 
         function openSidebar() {
             document.getElementById('sidebar-overlay').classList.remove('hidden');
@@ -1019,10 +665,12 @@
                 const btnText = document.getElementById('google-login-text');
                 if (user) {
                     currentUser = user; btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
+                    
                     if (sessionStorage.getItem('isManualLogin') === 'true') {
                         showToast("Đã kết nối tài khoản: " + user.displayName, "success");
                         sessionStorage.removeItem('isManualLogin');
                     }
+                    
                     fetchFromFirebaseRealtime();
                 } else {
                     currentUser = null; btnText.innerText = "Đăng nhập đồng bộ";
@@ -1039,16 +687,26 @@
             } else {
                 const provider = new firebase.auth.GoogleAuthProvider();
                 sessionStorage.setItem('isManualLogin', 'true');
-                auth.signInWithPopup(provider).catch(error => {
-                    showToast("Lỗi đăng nhập: " + error.message, "error");
-                    sessionStorage.removeItem('isManualLogin');
+                
+                auth.signInWithPopup(provider).catch(error => { 
+                    showToast("Lỗi đăng nhập: " + error.message, "error"); 
+                    sessionStorage.removeItem('isManualLogin'); 
                 });
             }
         }
 
         function syncToFirebase() {
             if (!currentUser || !db) return;
-            const dataToSync = { groups, contexts, sources, grammars, lastUpdated: firebase.firestore.FieldValue.serverTimestamp() };
+            
+            // Cập nhật nhãn thời gian của thiết bị này trước khi đẩy lên
+            lastPushTimestamp = Date.now(); 
+            
+            const dataToSync = { 
+                groups, contexts, sources, grammars, 
+                lastUpdated: firebase.firestore.FieldValue.serverTimestamp(),
+                pushTimestamp: lastPushTimestamp // Gửi kèm dấu thời gian lên Cloud
+            };
+            
             db.collection("users").doc(currentUser.uid).set(dataToSync).then(() => {
                 console.log("Đã lưu dữ liệu hiện tại lên Cloud.");
             }).catch((error) => {
@@ -1059,22 +717,30 @@
         function fetchFromFirebaseRealtime() {
             if (!currentUser || !db) return;
             if (unsubscribeCloudSync) unsubscribeCloudSync();
-
+            
             unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
                 if (doc.exists) {
-                    if (doc.metadata.hasPendingWrites) return;
-
                     const data = doc.data();
+                    
+                    // NGUYÊN TẮC: So sánh dấu thời gian
+                    // Nếu dữ liệu trả về từ Cloud có thời gian BẰNG hoặc CŨ HƠN lần cuối thiết bị này lưu -> Lờ đi (Không ghi đè ngược lại)
+                    if (data.pushTimestamp && data.pushTimestamp <= lastPushTimestamp) {
+                        return;
+                    }
+
+                    // Cập nhật lại cột mốc thời gian bằng với trên Cloud để chuẩn bị cho lần sau
+                    lastPushTimestamp = data.pushTimestamp || Date.now();
+
                     groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || []; grammars = data.grammars || [];
                     localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
                     localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
                     renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
-
+                    
                     console.log("☁️ Dữ liệu đã đồng bộ ngầm từ Cloud!");
                 } else { syncToFirebase(); }
-            }, (error) => {
-                console.error("Lỗi lắng nghe Cloud:", error);
-                showToast("Không thể tải từ Cloud. Hãy cấp quyền đọc/ghi Firestore trong Firebase Console!", "error");
+            }, (error) => { 
+                console.error("Lỗi lắng nghe Cloud:", error); 
+                showToast("Không thể tải từ Cloud. Hãy cấp quyền đọc/ghi Firestore trong Firebase Console!", "error"); 
             });
         }
 
@@ -1217,8 +883,8 @@
                 const btn = document.getElementById(`tab-${id}`);
                 if (btn) btn.className = "whitespace-nowrap flex-shrink-0 px-4 py-2 sm:px-5 sm:py-3 text-base sm:text-lg transition-colors " + (id === tabId ? "tab-active" : "text-gray-500 hover:text-primary");
                 const sec = document.getElementById(`sec-${id}`);
-                if (sec) sec.style.display = (id === tabId) ? 'flex' : 'none';
-                if (id !== 'grammar' && sec) sec.style.display = (id === tabId) ? 'block' : 'none';
+                if (sec) sec.style.display = (id === tabId) ? 'flex' : 'none'; 
+                if(id !== 'grammar' && sec) sec.style.display = (id === tabId) ? 'block' : 'none';
             });
             if (tabId === 'grammar') renderGrammars();
         }
@@ -1516,7 +1182,7 @@
                                         <tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Cấu trúc</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.structure || '<i class="text-gray-400">Trống</i>'}</td></tr>
                                         ${g.example ? `<tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Ví dụ</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.example}</td></tr>` : ''}
                                         ${(eqGrammars.length > 0 || g.similarText) ? `<tr class="flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#fff8e1] text-[#d35400] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th><td class="p-3 text-gray-800 align-top bg-[#fffdf5] break-words">
-                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name} (Chi tiết)</button>`).join('')}</div>` : ''}
+                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name}</button>`).join('')}</div>` : ''}
                                             ${g.similarText ? `<div class="text-xs text-gray-700 italic border-t border-orange-100 pt-2 mt-2 whitespace-pre-wrap">${g.similarText}</div>` : ''}
                                         </td></tr>` : ''}
                                     </tbody>
@@ -1622,8 +1288,8 @@
 
         function editGrammar(id) {
             const g = grammars.find(item => item.id === id); if (!g) return; editingGrammarId = id;
-            openSidebar();
-
+            openSidebar(); 
+            
             document.getElementById('g-name').value = g.name || ''; document.getElementById('g-structure').innerHTML = g.structure || '';
             document.getElementById('g-meaning').innerHTML = g.meaning || ''; document.getElementById('g-example').innerHTML = g.example || ''; document.getElementById('g-similar-text').value = g.similarText || '';
             document.querySelectorAll('.group-cb').forEach(cb => cb.checked = (g.groupIds || []).includes(parseInt(cb.value)));
@@ -1687,18 +1353,18 @@
 
         // --- BẮT ĐẦU FIX LỖI ÔN TẬP TẠI ĐÂY ---
         function startQuizFiltered(mode) {
-            selectedQuizMode = mode;
-            sessionAnsweredIds = [];
-
+            selectedQuizMode = mode; 
+            sessionAnsweredIds = []; 
+            
             // Lỗi 2: Chốt cố định danh sách ngữ pháp ôn tập ngay tại thời điểm bắt đầu
             let pool = grammars;
             const sourceFilter = document.getElementById('quiz-source-select').value;
-            if (sourceFilter !== 'all') {
-                pool = pool.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
+            if (sourceFilter !== 'all') { 
+                pool = pool.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter))); 
             }
-
+            
             pool = pool.filter(g => selectedQuizLevels.includes(g.level));
-
+            
             const now = Date.now();
             if (mode === 'due') {
                 pool = pool.filter(g => (g.nextReviewDate || 0) <= now && g.level !== 9);
@@ -1707,13 +1373,13 @@
             }
 
             if (pool.length === 0) return showToast("Không có ngữ pháp nào phù hợp với tùy chọn này!", "success");
-
+            
             // Lưu mảng ID của các câu sẽ được hỏi trong phiên này (snapshot cố định)
             currentQuizSessionPool = pool.map(g => g.id);
-            quizTotalQuestions = currentQuizSessionPool.length;
-
-            closeModal('quizSetupModal');
-            switchTab('quiz');
+            quizTotalQuestions = currentQuizSessionPool.length; 
+            
+            closeModal('quizSetupModal'); 
+            switchTab('quiz'); 
             nextQuestion();
         }
 
@@ -1729,33 +1395,33 @@
             const btnAction = document.getElementById('btn-quiz-action'); btnAction.onclick = skipQuestion; btnAction.className = "w-full sm:w-auto bg-btn px-8 py-3 sm:py-4 rounded-xl text-base font-bold border border-gray-300 text-gray-500 hover:bg-white transition-colors"; btnAction.innerText = "Bỏ Qua (Chưa thuộc)";
             const currentQNum = Math.min(sessionAnsweredIds.length + 1, quizTotalQuestions); document.getElementById('quiz-progress').innerText = `${currentQNum} / ${quizTotalQuestions}`;
             const optsContainer = document.getElementById('quiz-options'); optsContainer.innerHTML = '';
-
-            currentQuizCorrect = pool[Math.floor(Math.random() * pool.length)];
+            
+            currentQuizCorrect = pool[Math.floor(Math.random() * pool.length)]; 
             document.getElementById('quiz-question-label').innerText = "Tên ngữ pháp cần tìm:"; document.getElementById('quiz-question').innerHTML = currentQuizCorrect.name;
-
+            
             // Lỗi 1: Bộ lọc đáp án nhiễu (sai) phải ưu tiên lấy trong cùng Nguồn đã chọn
             const sourceFilter = document.getElementById('quiz-source-select').value;
             let distractorSource = grammars;
             if (sourceFilter !== 'all') {
                 distractorSource = distractorSource.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter)));
             }
-
+            
             let allOtherGrammars = distractorSource.filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random());
-            let wrongOptsM = allOtherGrammars.slice(0, 3);
+            let wrongOptsM = allOtherGrammars.slice(0, 3); 
             let optionsM = [currentQuizCorrect, ...wrongOptsM].sort(() => 0.5 - Math.random());
-
-            let wrongOptsS = distractorSource.filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random()).slice(0, 3);
+            
+            let wrongOptsS = distractorSource.filter(g => g.id !== currentQuizCorrect.id).sort(() => 0.5 - Math.random()).slice(0, 3); 
             let optionsS = [currentQuizCorrect, ...wrongOptsS].sort(() => 0.5 - Math.random());
-
+            
             currentQuizSelection = { meaningId: null, structureId: null };
             let colM = '<div class="flex flex-col gap-3"><div class="text-center font-bold text-gray-500 mb-2 uppercase tracking-wide text-xs">Cột Ý Nghĩa</div>';
             optionsM.forEach(opt => { colM += `<button id="opt-m-${opt.id}" onclick="selectQuizOption('m', ${opt.id}, this)" class="quiz-option-m text-left bg-white border-2 border-theme p-3 rounded-xl flex items-center gap-3 hover:bg-btn shadow-sm transition-all"><div class="font-bold text-base text-primary w-full rich-text text-center">${opt.meaning || '<i class="text-gray-400">Trống</i>'}</div></button>`; });
             colM += '</div>';
-
+            
             let colS = '<div class="flex flex-col gap-3"><div class="text-center font-bold text-gray-500 mb-2 uppercase tracking-wide text-xs">Cột Cấu Trúc</div>';
             optionsS.forEach(opt => { colS += `<button id="opt-s-${opt.id}" onclick="selectQuizOption('s', ${opt.id}, this)" class="quiz-option-s text-left bg-white border-2 border-theme p-3 rounded-xl flex items-center gap-3 hover:bg-btn shadow-sm transition-all"><div class="font-bold text-base text-primary w-full rich-text text-center">${opt.structure || '<i class="text-gray-400">Trống</i>'}</div></button>`; });
-            colS += '</div>';
-
+            colS += '</div>'; 
+            
             optsContainer.innerHTML = colM + colS;
         }
         // --- KẾT THÚC FIX LỖI ÔN TẬP ---
