@@ -1061,25 +1061,32 @@
             });
         }
 
+        // BỎ HOÀN TOÀN TÍNH NĂNG CHẶN (hasPendingWrites) ĐỂ TRÁNH MẤT DỮ LIỆU KHI ÔN TẬP NHANH
         function fetchFromFirebaseRealtime() {
             if (!currentUser || !db) return;
             if (unsubscribeCloudSync) unsubscribeCloudSync();
 
-            // Lắng nghe thay đổi kèm metadata để nhận biết dữ liệu vừa lưu
-            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot({ includeMetadataChanges: true }, (doc) => {
-                
-                // Nếu thay đổi này do chính thiết bị hiện tại vừa đẩy lên thì bỏ qua để chống vòng lặp (Ping-Pong)
-                if (doc.metadata.hasPendingWrites) {
-                    return; 
-                }
-
+            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
 
-                    groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || []; grammars = data.grammars || [];
-                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
-                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-                    renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
+                    groups = data.groups || []; 
+                    contexts = data.contexts || []; 
+                    sources = data.sources || []; 
+                    grammars = data.grammars || [];
+                    
+                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); 
+                    localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); 
+                    localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+                    
+                    renderGroups(); 
+                    renderContexts(); 
+                    renderSources(); 
+                    renderGrammars(); 
+                    
+                    // Cập nhật quan trọng: Truyền editingGrammarId vào để bảo vệ giao diện đang sửa
+                    renderRelatedGrammarsList(editingGrammarId);
 
                     console.log("☁️ Dữ liệu đã đồng bộ ngầm từ Cloud!");
                 } else { syncToFirebase(); }
@@ -1696,7 +1703,6 @@
             document.getElementById('quiz-setup-step-1').classList.add('hidden'); document.getElementById('quiz-setup-step-2').classList.remove('hidden');
         }
 
-        // --- FIX LỖI ÔN TẬP ĐÃ TÍCH HỢP ---
         function startQuizFiltered(mode) {
             selectedQuizMode = mode;
             sessionAnsweredIds = [];
