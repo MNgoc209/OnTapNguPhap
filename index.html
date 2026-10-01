@@ -68,7 +68,7 @@
             background-color: var(--color2);
         }
 
-        /* NÂNG CẤP 5: Hiệu ứng kính (Glassmorphism) tái sử dụng */
+        /* Hiệu ứng kính (Glassmorphism) */
         .glass-btn {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(12px);
@@ -334,8 +334,6 @@
         </div>
 
         <div class="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-thin pb-20">
-
-            <!-- NÂNG CẤP 3: Phần Bộ lọc đã được di chuyển ra màn hình chính, chỉ để lại Soạn Thảo ở Sidebar -->
             <div id="add-grammar-form-sidebar" class="bg-white p-4 rounded-xl border border-theme shadow-sm mb-4">
                 <h3 class="font-bold text-gray-700 mb-3 border-b border-gray-100 pb-2">➕ Biểu Mẫu</h3>
                 <div class="flex flex-col gap-4">
@@ -681,7 +679,7 @@
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
             <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start">
                 <button onclick="exportBackup()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"
+                    class="flex-1 md:flex-none justify-center glass-btn text-primary px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2"
                     title="Xuất dữ liệu & tiến độ học"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -690,7 +688,7 @@
                         <line x1="12" y1="15" x2="12" y2="3"></line>
                     </svg>Xuất</button>
                 <button onclick="document.getElementById('json-file').click()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"
+                    class="flex-1 md:flex-none justify-center glass-btn text-primary px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2"
                     title="Nhập dữ liệu & tiến độ học"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                         stroke-linejoin="round">
@@ -709,7 +707,7 @@
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
                 <button onclick="document.getElementById('csv-file').click()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg
+                    class="flex-1 md:flex-none justify-center glass-btn text-primary px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2"><svg
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
@@ -718,7 +716,7 @@
                     </svg>Nhập CSV</button>
                 <input type="file" id="csv-file" class="hidden" accept=".csv,.txt" onchange="handleCSVUpload(event)">
                 <button onclick="deleteAllData()"
-                    class="flex-1 md:flex-none justify-center bg-btn text-primary hover:!text-red-500 px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg
+                    class="flex-1 md:flex-none justify-center glass-btn text-primary hover:!text-red-500 px-3 py-2 rounded-lg font-bold text-sm flex items-center gap-2"><svg
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="3 6 5 6 21 6"></polyline>
@@ -783,44 +781,55 @@
                             </div>
                         </div>
 
-                        <!-- NÂNG CẤP 3 & 4: Khu vực Bộ Lọc & Thao tác hàng loạt -->
+                        <!-- CỤM LỌC VÀ THAO TÁC -->
                         <div class="w-full mt-4 bg-white p-3 rounded-lg border border-theme shadow-sm transition-all">
                             
-                            <!-- BỘ LỌC (1) - Ẩn khi có checkbox được chọn -->
-                            <div id="normal-filters-container" class="flex flex-col gap-3">
-                                <div class="flex flex-col sm:flex-row gap-2">
-                                    <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()"
-                                        placeholder="🔍 Tìm tên..."
-                                        class="w-full sm:w-1/3 p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF]">
-                                    <select id="filter-group" onchange="renderGrammars()"
-                                        class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
-                                        <option value="all">Tất cả nhóm</option>
-                                    </select>
-                                    <select id="filter-context" onchange="renderGrammars()"
-                                        class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
-                                        <option value="all">Tất cả ngữ cảnh</option>
-                                    </select>
-                                    <select id="filter-source" onchange="renderGrammars()"
-                                        class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
+                            <!-- (1) BỘ LỌC - Sẽ ẩn đi nếu có Checkbox được chọn -->
+                            <div id="normal-filters-container" class="flex flex-col gap-3 w-full">
+                                <!-- Hàng tìm kiếm và Cờ bật tắt -->
+                                <div class="flex flex-col sm:flex-row gap-2 w-full">
+                                    <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()" placeholder="🔍 Tìm tên..." class="w-full sm:flex-1 p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] min-w-0">
+                                    <select id="filter-source" onchange="renderGrammars()" class="w-full sm:w-auto min-w-[150px] p-2 border-theme text-sm sm:text-base rounded-lg outline-none flex-shrink-0">
                                         <option value="all">Tất cả nguồn</option>
                                     </select>
-                                </div>
-                                <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-                                    <div class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto">
-                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium active shadow-sm" onclick="setTimeFilter('all')" id="tf-all">Tất cả</button>
-                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm" onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn</button>
-                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm" onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến</button>
+                                    <div class="flex items-center bg-gray-50 px-3 py-2 rounded-lg border border-theme flex-shrink-0">
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-600 select-none">
+                                            <input type="checkbox" id="toggle-advanced-filters" class="w-4 h-4 accent-[#F5AFAF] cursor-pointer" onchange="toggleAdvancedFilters()">
+                                            <span class="whitespace-nowrap">Lọc mở rộng</span>
+                                        </label>
                                     </div>
-                                    <div class="hidden sm:block w-px h-6 bg-gray-200"></div>
-                                    <div id="level-filter-btns" class="flex flex-wrap gap-1.5">
+                                </div>
+                        
+                                <!-- Vùng Lọc Nhóm/Ngữ cảnh (Bị ẩn mặc định) -->
+                                <div id="advanced-filters-container" class="hidden flex flex-col sm:flex-row gap-2 w-full transition-all">
+                                    <select id="filter-group" onchange="renderGrammars()" class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
+                                        <option value="all">Tất cả nhóm</option>
+                                    </select>
+                                    <select id="filter-context" onchange="renderGrammars()" class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
+                                        <option value="all">Tất cả ngữ cảnh</option>
+                                    </select>
+                                </div>
+                        
+                                <!-- Thời gian & Level cuộn ngang -->
+                                <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full min-w-0">
+                                    <div class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto flex-shrink-0 hide-scrollbar pb-1 sm:pb-0">
+                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium active shadow-sm" onclick="setTimeFilter('all')" id="tf-all">Tất cả</button>
+                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap" onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn</button>
+                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap" onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến</button>
+                                    </div>
+                                    <div class="hidden sm:block w-px h-6 bg-gray-200 flex-shrink-0"></div>
+                                    <div id="level-filter-btns" class="flex overflow-x-auto hide-scrollbar gap-2 pb-1 sm:pb-0 w-full sm:flex-1 min-w-0">
                                         <!-- Nút Level Glassmorphism sinh tự động ở JS -->
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- THAO TÁC HÀNG LOẠT (2) - Hiện khi có checkbox được chọn -->
+                            <!-- (2) THAO TÁC HÀNG LOẠT - Chỉ hiện khi có Checkbox được chọn -->
                             <div id="bulk-actions-container" class="hidden flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                                <span class="font-bold text-primary flex items-center gap-2"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> Đã chọn mục</span>
+                                <span class="font-bold text-primary flex items-center gap-2 whitespace-nowrap">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> 
+                                    Đang chọn nhiều mục
+                                </span>
                                 <div class="hidden sm:block h-6 w-px bg-gray-300 mx-2"></div>
                                 
                                 <div class="flex gap-2 w-full sm:w-auto flex-wrap">
@@ -837,7 +846,7 @@
                                         <option value="8">Level 8</option>
                                         <option value="9">Lv.9 (Đã thuộc)</option>
                                     </select>
-                                    <button id="btn-bulk-level" onclick="applyBulkLevel()" class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập Nhật</button>
+                                    <button id="btn-bulk-level" onclick="applyBulkLevel()" class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập Nhật Level</button>
                                 </div>
 
                                 <div class="hidden sm:block h-6 w-px bg-gray-300 mx-2"></div>
@@ -846,7 +855,7 @@
                                     <select id="bulk-source-select" class="flex-1 sm:flex-none p-2 border-theme text-sm font-bold cursor-pointer rounded-lg outline-none focus:ring-2 focus:ring-[#F5AFAF]">
                                         <option value="">-- Chuyển Nguồn --</option>
                                     </select>
-                                    <button id="btn-bulk-source" onclick="applyBulkSource()" class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập Nhật</button>
+                                    <button id="btn-bulk-source" onclick="applyBulkSource()" class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập Nhật Nguồn</button>
                                 </div>
                             </div>
                         </div>
@@ -998,7 +1007,6 @@
             }
         }
 
-        // NÂNG CẤP 1: Cập nhật giao diện Đồng bộ ngay lập tức
         function syncToFirebase() {
             if (!currentUser || !db) return;
 
@@ -1016,7 +1024,7 @@
                 btnText.innerText = "✅ Đã đồng bộ";
                 setTimeout(() => {
                     if (currentUser) btnText.innerText = "Đồng bộ: " + originalName;
-                }, 2000); // Trả lại chữ Đồng bộ sau 2 giây
+                }, 2000); 
             }).catch((error) => {
                 console.error("Lỗi đồng bộ Firebase:", error); 
                 btnText.innerText = "❌ Lỗi đồng bộ";
@@ -1368,7 +1376,6 @@
             const filterSelect = document.getElementById('filter-source'); const quizSelect = document.getElementById('quiz-source-select');
             const bulkSelect = document.getElementById('bulk-source-select'); const importSelect = document.getElementById('import-source-select');
             
-            // Lưu lại giá trị ô select Nguồn trong Quiz để không bị reset khi render
             let currentQuizSrc = quizSelect ? quizSelect.value : 'all';
 
             if (list) list.innerHTML = ''; if (container) container.innerHTML = ''; if (filterSelect) filterSelect.innerHTML = '<option value="all">Tất cả nguồn</option>';
@@ -1381,7 +1388,6 @@
                 if (bulkSelect) bulkSelect.innerHTML += `<option value="${src.id}">${src.name}</option>`; if (importSelect) importSelect.innerHTML += `<option value="${src.id}">${src.name}</option>`;
             });
 
-            // Phục hồi lại giá trị ô select Nguồn trong Quiz
             if (quizSelect) quizSelect.value = currentQuizSrc;
         }
         function addSource() { const name = document.getElementById('s-name').value.trim(); if (!name) return showToast("Vui lòng nhập tên nguồn!", "warning"); sources.push({ id: Date.now(), name }); document.getElementById('s-name').value = ''; saveData(); renderSources(); renderGrammars(); showToast("Đã thêm nguồn học!"); }
@@ -1408,7 +1414,23 @@
         }
         function setLevelFilter(level) { currentLevelFilter = level; renderGrammars(); }
 
-        // NÂNG CẤP 5: Render các nút Level có hiệu ứng Kính (Glassmorphism)
+        // Bật tắt bộ lọc mở rộng bằng Checkbox
+        function toggleAdvancedFilters() {
+            const isChecked = document.getElementById('toggle-advanced-filters').checked;
+            const container = document.getElementById('advanced-filters-container');
+            if (isChecked) {
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+                // Tự động trả về Tất cả khi tắt để tránh lỗi bị lọc ngầm mà không thấy
+                document.getElementById('filter-group').value = 'all';
+                document.getElementById('filter-context').value = 'all';
+                renderGrammars();
+            }
+            localStorage.setItem('nhg_show_advanced', isChecked);
+        }
+
+        // Tạo nút Level Glassmorphism và đếm số lượng
         function updateTimeFilterCounts() {
             const filterGroupValue = document.getElementById('filter-group').value; const filterContextValue = document.getElementById('filter-context').value;
             const filterSourceValue = document.getElementById('filter-source') ? document.getElementById('filter-source').value : 'all';
@@ -1424,20 +1446,21 @@
             document.getElementById('tf-due').innerText = `⏰ Đến hạn (${levelFilteredGrammars.filter(g => g.level !== 9 && (g.nextReviewDate || 0) <= now).length})`;
             document.getElementById('tf-not_due').innerText = `💤 Chưa đến (${levelFilteredGrammars.filter(g => g.level !== 9 && (g.nextReviewDate || 0) > now).length})`;
 
-            // Vẽ lại các nút Filter Level dạng kính
             const levelFilterContainer = document.getElementById('level-filter-btns');
             if (levelFilterContainer) {
                 levelFilterContainer.innerHTML = '';
                 const allCount = baseGrammars.length;
                 const isAllActive = currentLevelFilter === 'all';
-                levelFilterContainer.innerHTML += `<button onclick="setLevelFilter('all')" class="glass-btn px-2 py-1.5 rounded-lg text-xs font-bold transition-all ${isAllActive ? 'ring-2 ring-gray-400 opacity-100' : 'opacity-60 hover:opacity-100'}" style="background: rgba(240, 240, 240, 0.5); color:#444;">Tất cả (${allCount})</button>`;
+                
+                // Thuộc tính flex-shrink-0 và whitespace-nowrap giúp nút không bị ép nhỏ và cuộn ngang mượt
+                levelFilterContainer.innerHTML += `<button onclick="setLevelFilter('all')" class="glass-btn flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isAllActive ? 'ring-2 ring-gray-400 opacity-100' : 'opacity-60 hover:opacity-100'}" style="background: rgba(240, 240, 240, 0.5); color:#444;">Tất cả (${allCount})</button>`;
 
                 for (let i = 0; i <= 9; i++) {
                     const count = baseGrammars.filter(g => g.level === i).length;
                     const isActive = currentLevelFilter === i;
                     let label = i === 0 ? 'Mới' : (i === 9 ? 'Không ôn' : `Lv ${i}`);
-                    // Tạo hiệu ứng kính sử dụng color-mix mix với màu nền trong suốt
-                    levelFilterContainer.innerHTML += `<button onclick="setLevelFilter(${i})" class="glass-btn px-2 py-1.5 rounded-lg text-xs font-bold transition-all ${isActive ? 'ring-2 ring-offset-1 ring-gray-400 opacity-100' : 'opacity-70 hover:opacity-100'}" style="background: color-mix(in srgb, var(--lv${i}) 15%, transparent); border: 1px solid var(--lv${i}); color: var(--lv${i}); backdrop-filter: blur(8px);">${label} (${count})</button>`;
+                    
+                    levelFilterContainer.innerHTML += `<button onclick="setLevelFilter(${i})" class="glass-btn flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isActive ? 'ring-2 ring-offset-1 ring-gray-400 opacity-100' : 'opacity-70 hover:opacity-100'}" style="background: color-mix(in srgb, var(--lv${i}) 15%, transparent); border: 1px solid var(--lv${i}); color: var(--lv${i}); backdrop-filter: blur(8px);">${label} (${count})</button>`;
                 }
             }
         }
@@ -1548,7 +1571,6 @@
 
         function toggleSelectAll(checkbox) { const cbs = document.querySelectorAll('.grammar-bulk-cb'); cbs.forEach(cb => cb.checked = checkbox.checked); updateBulkActionsState(); }
         
-        // NÂNG CẤP 4: Ẩn hiện khối Bộ Lọc (1) và Thao tác Hàng loạt (2)
         function updateBulkActionsState() {
             const cbs = document.querySelectorAll('.grammar-bulk-cb'); 
             const checkedCbs = document.querySelectorAll('.grammar-bulk-cb:checked');
@@ -1557,7 +1579,7 @@
 
             if (cbs.length > 0 && cbs.length === checkedCbs.length) { if (cbAll) cbAll.checked = true; } else { if (cbAll) cbAll.checked = false; }
             
-            // Xử lý Ẩn/Hiện
+            // Xử lý Ẩn Hiện Bộ lọc 1 và Khu vực Thao tác 2
             const normalFilters = document.getElementById('normal-filters-container');
             const bulkActions = document.getElementById('bulk-actions-container');
             
@@ -1648,17 +1670,9 @@
 
         function deleteGrammar(id) { grammars = grammars.filter(g => g.id !== id); saveData(); renderGrammars(); renderRelatedGrammarsList(null); showToast("Đã xóa ngữ pháp."); }
 
-        // NÂNG CẤP 2: Giữ nguyên lựa chọn ôn tập (Không reset mảng selectedQuizLevels)
         function openQuizSetup() {
-            document.getElementById('quizSetupModal').classList.remove('hidden'); 
-            document.getElementById('quiz-setup-step-1').classList.remove('hidden'); 
-            document.getElementById('quiz-setup-step-2').classList.add('hidden');
-            
-            // Đã xóa dòng "selectedQuizLevels = []" ở đây để giữ lại lịch sử chọn Level.
-            
-            let actionContainer = document.getElementById('quiz-step-1-actions'); 
-            if (actionContainer) actionContainer.classList.add('hidden'); 
-            renderQuizLevelButtons();
+            document.getElementById('quizSetupModal').classList.remove('hidden'); document.getElementById('quiz-setup-step-1').classList.remove('hidden'); document.getElementById('quiz-setup-step-2').classList.add('hidden');
+            let actionContainer = document.getElementById('quiz-step-1-actions'); if (actionContainer) actionContainer.classList.add('hidden'); renderQuizLevelButtons();
         }
 
         function toggleQuizLevel(level) {
@@ -1669,7 +1683,6 @@
             renderQuizLevelButtons();
         }
 
-        // NÂNG CẤP 5: Hiệu ứng kính (Glassmorphism) cho Nút chọn Level trong Ôn Tập
         function renderQuizLevelButtons() {
             const container = document.getElementById('quiz-level-selection'); container.innerHTML = '';
             const sourceFilter = document.getElementById('quiz-source-select').value; let filteredGrammars = grammars;
@@ -1686,7 +1699,6 @@
                 const count = filteredGrammars.filter(g => g.level === i).length; const isSelected = selectedQuizLevels.includes(i);
                 const btn = document.createElement('button'); 
                 btn.className = `glass-btn px-4 sm:px-5 py-2 sm:py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 w-[45%] sm:min-w-[110px] sm:w-auto text-sm sm:text-lg ${isSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-70 hover:opacity-100'}`; 
-                // Sử dụng color-mix để tạo hiệu ứng kính ám màu
                 btn.style.background = `color-mix(in srgb, var(--lv${i}) 15%, transparent)`;
                 btn.style.border = `1px solid var(--lv${i})`;
                 btn.style.color = `var(--lv${i})`;
@@ -1840,10 +1852,19 @@
         }
 
         window.onload = () => {
+            // Tải dữ liệu từ LocalStorage
             const sg = localStorage.getItem('nhg_groups'); if (sg) groups = JSON.parse(sg);
             const sc = localStorage.getItem('nhg_contexts'); if (sc) contexts = JSON.parse(sc);
             const ss = localStorage.getItem('nhg_sources'); if (ss) sources = JSON.parse(ss);
             const sgr = localStorage.getItem('nhg_grammars'); if (sgr) grammars = JSON.parse(sgr);
+            
+            // Phục hồi cờ Lọc mở rộng (Flag)
+            const showAdv = localStorage.getItem('nhg_show_advanced') === 'true';
+            document.getElementById('toggle-advanced-filters').checked = showAdv;
+            if (showAdv) {
+                document.getElementById('advanced-filters-container').classList.remove('hidden');
+            }
+
             renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
             document.getElementById('sec-grammar').style.display = 'flex';
         };
