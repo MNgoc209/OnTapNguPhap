@@ -725,7 +725,7 @@
             </div>
         </div>
 
-        <header class="text-center mb-6 sm:mb-8">
+        <header class="text-center mb-6 sm:mb-8 relative">
             <h1 class="text-3xl sm:text-4xl font-bold text-primary mb-2 sm:mb-3 flex justify-center items-center gap-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -733,6 +733,11 @@
                 </svg> Học Ngữ Pháp
             </h1>
             <p class="text-sm sm:text-base opacity-80">Ghi nhớ ngữ pháp dễ dàng hơn mỗi ngày</p>
+            
+            <!-- NÂNG CẤP MỚI: Thẻ theo dõi tiến độ học tập trong ngày -->
+            <div class="mt-3 inline-block bg-white px-4 py-1.5 rounded-full border border-theme shadow-sm transition-transform hover:scale-105 cursor-default">
+                <span class="text-sm font-bold text-gray-600">🔥 Hôm nay đã ôn: <span id="daily-review-count" class="text-[#27ae60] text-base mx-1">0</span> mục</span>
+            </div>
         </header>
 
         <nav
@@ -810,15 +815,17 @@
                                     </select>
                                 </div>
                         
-                                <!-- Thời gian & Level cuộn ngang -->
+                                <!-- NÂNG CẤP MỚI: Sửa lỗi thanh lọc bị che khuất bằng cách thêm py-2 px-1 vào vùng chứa (container) -->
                                 <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full min-w-0">
-                                    <div class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto flex-shrink-0 hide-scrollbar pb-1 sm:pb-0">
+                                    <div class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto flex-shrink-0 hide-scrollbar py-2 px-1">
                                         <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium active shadow-sm" onclick="setTimeFilter('all')" id="tf-all">Tất cả</button>
                                         <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap" onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn</button>
                                         <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap" onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến</button>
                                     </div>
                                     <div class="hidden sm:block w-px h-6 bg-gray-200 flex-shrink-0"></div>
-                                    <div id="level-filter-btns" class="flex overflow-x-auto hide-scrollbar gap-2 pb-1 sm:pb-0 w-full sm:flex-1 min-w-0">
+                                    
+                                    <!-- Thêm py-2 px-1 để có đủ khoảng trống cho các nút hiện viền -->
+                                    <div id="level-filter-btns" class="flex overflow-x-auto hide-scrollbar gap-2 py-2 px-1 w-full sm:flex-1 min-w-0">
                                         <!-- Nút Level Glassmorphism sinh tự động ở JS -->
                                     </div>
                                 </div>
@@ -1072,6 +1079,50 @@
             toast.className = `toast ${type}`; toast.innerText = message; container.appendChild(toast);
             setTimeout(() => { toast.style.animation = 'fadeOut 0.3s ease-out forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
         }
+
+        // ==========================================
+        // TÍNH NĂNG MỚI: CẬP NHẬT GIAO DIỆN THEO DÕI ÔN TẬP
+        // ==========================================
+        function updateDailyReviewUI() {
+            const today = new Date().toLocaleDateString('vi-VN');
+            const savedDate = localStorage.getItem('nhg_daily_date');
+            let reviewedIds = [];
+            
+            // Nếu là ngày hôm nay thì đọc dữ liệu, khác ngày thì làm mới (reset)
+            if (savedDate === today) {
+                try { 
+                    reviewedIds = JSON.parse(localStorage.getItem('nhg_daily_ids') || '[]'); 
+                } catch(e) {}
+            } else {
+                localStorage.setItem('nhg_daily_date', today);
+                localStorage.setItem('nhg_daily_ids', JSON.stringify([]));
+            }
+            
+            // Cập nhật số hiển thị
+            const countEl = document.getElementById('daily-review-count');
+            if (countEl) countEl.innerText = reviewedIds.length;
+        }
+
+        // Hàm ghi nhận một lần ôn tập
+        function recordDailyReview(grammarId) {
+            const today = new Date().toLocaleDateString('vi-VN');
+            const savedDate = localStorage.getItem('nhg_daily_date');
+            let reviewedIds = [];
+            
+            if (savedDate === today) {
+                try { reviewedIds = JSON.parse(localStorage.getItem('nhg_daily_ids') || '[]'); } catch(e) {}
+            } else {
+                localStorage.setItem('nhg_daily_date', today);
+            }
+
+            // Nếu ID ngữ pháp này chưa có trong danh sách ôn của ngày hôm nay, thêm vào và cập nhật
+            if (!reviewedIds.includes(grammarId)) {
+                reviewedIds.push(grammarId);
+                localStorage.setItem('nhg_daily_ids', JSON.stringify(reviewedIds));
+                updateDailyReviewUI();
+            }
+        }
+        // ==========================================
 
         let editorSelections = {};
         function saveSelection(elementId) {
@@ -1422,7 +1473,6 @@
                 container.classList.remove('hidden');
             } else {
                 container.classList.add('hidden');
-                // Tự động trả về Tất cả khi tắt để tránh lỗi bị lọc ngầm mà không thấy
                 document.getElementById('filter-group').value = 'all';
                 document.getElementById('filter-context').value = 'all';
                 renderGrammars();
@@ -1430,7 +1480,6 @@
             localStorage.setItem('nhg_show_advanced', isChecked);
         }
 
-        // Tạo nút Level Glassmorphism và đếm số lượng
         function updateTimeFilterCounts() {
             const filterGroupValue = document.getElementById('filter-group').value; const filterContextValue = document.getElementById('filter-context').value;
             const filterSourceValue = document.getElementById('filter-source') ? document.getElementById('filter-source').value : 'all';
@@ -1452,7 +1501,6 @@
                 const allCount = baseGrammars.length;
                 const isAllActive = currentLevelFilter === 'all';
                 
-                // Thuộc tính flex-shrink-0 và whitespace-nowrap giúp nút không bị ép nhỏ và cuộn ngang mượt
                 levelFilterContainer.innerHTML += `<button onclick="setLevelFilter('all')" class="glass-btn flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isAllActive ? 'ring-2 ring-gray-400 opacity-100' : 'opacity-60 hover:opacity-100'}" style="background: rgba(240, 240, 240, 0.5); color:#444;">Tất cả (${allCount})</button>`;
 
                 for (let i = 0; i <= 9; i++) {
@@ -1579,7 +1627,6 @@
 
             if (cbs.length > 0 && cbs.length === checkedCbs.length) { if (cbAll) cbAll.checked = true; } else { if (cbAll) cbAll.checked = false; }
             
-            // Xử lý Ẩn Hiện Bộ lọc 1 và Khu vực Thao tác 2
             const normalFilters = document.getElementById('normal-filters-container');
             const bulkActions = document.getElementById('bulk-actions-container');
             
@@ -1809,6 +1856,10 @@
                 showToast("Đúng rồi 🥳", "success"); if (target.level < 8) target.level = (target.level || 0) + 1;
                 if (target.level !== 9) { const lIdx = Math.max(0, Math.min(target.level - 1, intervals.length - 1)); target.nextReviewDate = Date.now() + (intervals[lIdx] * 60000); }
             } else { showToast("Sai rồi! Hãy xem đáp án.", "error"); showCorrectDetail(target); target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); }
+            
+            // Ghi nhận số đếm ôn tập hàng ngày
+            recordDailyReview(target.id);
+            
             sessionAnsweredIds.push(target.id); saveData();
             const btnAction = document.getElementById('btn-quiz-action'); btnAction.onclick = nextQuestion; btnAction.className = "bg-action w-full sm:w-auto px-10 py-3 rounded-xl font-bold text-lg transition-transform hover:scale-105 shadow-md"; btnAction.innerText = "Tiếp Tục ➔";
         }
@@ -1818,7 +1869,12 @@
             const target = grammars.find(g => g.id === currentQuizCorrect.id);
             const correctBtnM = document.getElementById(`opt-m-${currentQuizCorrect.id}`); const correctBtnS = document.getElementById(`opt-s-${currentQuizCorrect.id}`);
             if (correctBtnM) correctBtnM.classList.add('correct-answer'); if (correctBtnS) correctBtnS.classList.add('correct-answer');
-            showToast("Đã bỏ qua.", "warning"); showCorrectDetail(target); target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); sessionAnsweredIds.push(target.id); saveData();
+            showToast("Đã bỏ qua.", "warning"); showCorrectDetail(target); target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); 
+            
+            // Ghi nhận số đếm ôn tập hàng ngày
+            recordDailyReview(target.id);
+
+            sessionAnsweredIds.push(target.id); saveData();
             const btnAction = document.getElementById('btn-quiz-action'); btnAction.onclick = nextQuestion; btnAction.className = "bg-action w-full sm:w-auto px-10 py-3 rounded-xl font-bold text-lg transition-transform hover:scale-105 shadow-md"; btnAction.innerText = "Tiếp Tục ➔";
         }
 
@@ -1864,6 +1920,9 @@
             if (showAdv) {
                 document.getElementById('advanced-filters-container').classList.remove('hidden');
             }
+
+            // Gọi hàm cập nhật bộ đếm trong ngày
+            updateDailyReviewUI();
 
             renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
             document.getElementById('sec-grammar').style.display = 'flex';
