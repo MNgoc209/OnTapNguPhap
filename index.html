@@ -202,7 +202,6 @@
         .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
         .scrollbar-thin::-webkit-scrollbar-thumb { background-color: var(--color1); border-radius: 20px; }
         
-        /* Cải tiến UI Lịch Ôn Tập */
         .calendar-cell {
             aspect-ratio: 1 / 1;
             display: flex;
@@ -376,7 +375,7 @@
     </div>
     <!-- KẾT THÚC SIDEBAR -->
 
-    <!-- NÂNG CẤP: Modal Lịch Theo Dõi Học Tập -->
+    <!-- Modal Lịch Theo Dõi Học Tập -->
     <div id="calendarModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[130] flex justify-center items-center backdrop-blur-sm transition-opacity">
         <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-md flex flex-col shadow-2xl border border-theme transform transition-transform text-center relative max-h-[90vh] overflow-y-auto scrollbar-thin">
             <button onclick="closeModal('calendarModal')" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors" title="Đóng">&times;</button>
@@ -667,7 +666,6 @@
             </h1>
             <p class="text-sm sm:text-base opacity-80">Ghi nhớ ngữ pháp dễ dàng hơn mỗi ngày</p>
             
-            <!-- NÂNG CẤP: Chuyển thẻ này thành nút có thể click mở Lịch -->
             <div onclick="openCalendarModal()" class="mt-3 inline-block bg-white px-4 py-1.5 rounded-full border border-theme shadow-sm transition-transform hover:scale-105 cursor-pointer">
                 <span class="text-sm font-bold text-gray-600">🔥 Hôm nay đã ôn: <span id="daily-review-count" class="text-[#27ae60] text-base mx-1">0</span> mục</span>
             </div>
@@ -722,9 +720,7 @@
                         <!-- CỤM LỌC VÀ THAO TÁC -->
                         <div class="w-full mt-4 bg-white p-3 rounded-lg border border-theme shadow-sm transition-all">
                             
-                            <!-- (1) BỘ LỌC - Sẽ ẩn đi nếu có Checkbox được chọn -->
                             <div id="normal-filters-container" class="flex flex-col gap-3 w-full">
-                                <!-- Hàng tìm kiếm và Cờ bật tắt -->
                                 <div class="flex flex-col sm:flex-row gap-2 w-full">
                                     <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()" placeholder="🔍 Tìm tên..." class="w-full sm:flex-1 p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] min-w-0">
                                     <select id="filter-source" onchange="renderGrammars()" class="w-full sm:w-auto min-w-[150px] p-2 border-theme text-sm sm:text-base rounded-lg outline-none flex-shrink-0">
@@ -738,7 +734,6 @@
                                     </div>
                                 </div>
                         
-                                <!-- Vùng Lọc Nhóm/Ngữ cảnh (Bị ẩn mặc định) -->
                                 <div id="advanced-filters-container" class="hidden flex flex-col sm:flex-row gap-2 w-full transition-all">
                                     <select id="filter-group" onchange="renderGrammars()" class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
                                         <option value="all">Tất cả nhóm</option>
@@ -748,7 +743,6 @@
                                     </select>
                                 </div>
                         
-                                <!-- Thời gian & Level cuộn ngang -->
                                 <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full min-w-0">
                                     <div class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto flex-shrink-0 hide-scrollbar py-2 px-1">
                                         <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium active shadow-sm" onclick="setTimeFilter('all')" id="tf-all">Tất cả</button>
@@ -763,7 +757,6 @@
                                 </div>
                             </div>
 
-                            <!-- (2) THAO TÁC HÀNG LOẠT - Chỉ hiện khi có Checkbox được chọn -->
                             <div id="bulk-actions-container" class="hidden flex flex-col sm:flex-row items-start sm:items-center gap-3">
                                 <span class="font-bold text-primary flex items-center gap-2 whitespace-nowrap">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> 
@@ -978,7 +971,6 @@
             const history = getReviewHistory();
             if (!history[todayStr]) history[todayStr] = [];
             
-            // Chống đếm trùng: Chỉ thêm vào nếu ID này chưa được ôn trong ngày hôm nay
             if (!history[todayStr].includes(grammarId)) {
                 history[todayStr].push(grammarId);
                 saveReviewHistory(history);
@@ -986,7 +978,6 @@
             }
         }
 
-        // Cập nhật Firebase để lưu cả Lịch sử ôn tập
         function syncToFirebase() {
             if (!currentUser || !db) return;
 
@@ -996,7 +987,7 @@
 
             const dataToSync = {
                 groups, contexts, sources, grammars,
-                reviewHistory: getReviewHistory(), // Đồng bộ lịch sử lên Cloud
+                reviewHistory: getReviewHistory(),
                 lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
             };
 
@@ -1055,10 +1046,10 @@
         let currentCalendarDate = new Date();
 
         function openCalendarModal() {
-            currentCalendarDate = new Date(); // Reset về tháng hiện tại
+            currentCalendarDate = new Date();
             document.getElementById('calendarModal').classList.remove('hidden');
             renderCalendar();
-            selectCalendarDate(getLocalYMD(new Date())); // Tự động chọn ngày hôm nay
+            selectCalendarDate(getLocalYMD(new Date()));
         }
 
         function changeCalendarMonth(offset) {
@@ -1080,7 +1071,6 @@
             const history = getReviewHistory();
             const todayStr = getLocalYMD(new Date());
 
-            // Tạo các ô trống đầu tháng
             for (let i = 0; i < firstDay; i++) {
                 grid.innerHTML += `<div></div>`;
             }
@@ -1098,21 +1088,19 @@
                     borderClass = "border-2 border-[#F5AFAF]";
                 }
                 
-                // Hiệu ứng màu xanh đậm dần dựa vào số lượng ôn
+                // NÂNG CẤP: Bỏ số câu trên ô lịch, màu xanh hiển thị nhạt đi một chút
                 if (count > 0) {
-                    if (count < 5) bgClass = "bg-green-200 hover:bg-green-300";
-                    else if (count < 15) bgClass = "bg-green-400 hover:bg-green-500";
-                    else bgClass = "bg-green-600 hover:bg-green-700";
+                    if (count < 5) bgClass = "bg-green-100 hover:bg-green-200";
+                    else if (count < 15) bgClass = "bg-green-200 hover:bg-green-300";
+                    else bgClass = "bg-green-300 hover:bg-green-400";
                     
-                    if (count >= 15) textClass = "text-white";
-                    else textClass = "text-green-900";
+                    textClass = "text-green-800";
                 }
 
                 grid.innerHTML += `
                     <button onclick="selectCalendarDate('${dateStr}')" 
                         class="calendar-cell ${bgClass} ${textClass} ${borderClass}">
-                        <span class="font-bold sm:text-base ${count > 0 ? '-mt-1' : ''}">${day}</span>
-                        ${count > 0 ? `<span class="text-[0.6rem] sm:text-xs font-bold opacity-90 absolute bottom-0.5 sm:bottom-1">${count}</span>` : ''}
+                        <span class="font-bold sm:text-base">${day}</span>
                     </button>
                 `;
             }
@@ -1134,7 +1122,7 @@
             } else {
                 detailBox.innerHTML = `
                     <span class="font-bold text-gray-700">Ngày ${displayDate}</span>
-                    <span class="text-gray-500 font-medium">Bạn không học mục nào hôm nay</span>
+                    <span class="text-gray-500 font-medium">Bạn không học mục nào ngày này</span>
                 `;
                 detailBox.className = "bg-gray-50 p-4 rounded-xl border border-gray-200 text-center shadow-sm flex flex-col gap-1 min-h-[80px] justify-center transition-all";
             }
@@ -1601,8 +1589,8 @@
                                         <tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Cấu trúc</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.structure || '<i class="text-gray-400">Trống</i>'}</td></tr>
                                         ${g.example ? `<tr class="border-b border-theme flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#FBEFEF] text-[#4A4A4A] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">Ví dụ</th><td class="p-3 text-gray-800 rich-text align-top break-words">${g.example}</td></tr>` : ''}
                                         ${(eqGrammars.length > 0 || g.similarText) ? `<tr class="flex flex-col sm:table-row"><th class="w-full sm:w-1/3 md:w-1/4 p-3 bg-[#fff8e1] text-[#d35400] border-b sm:border-b-0 sm:border-r border-theme align-top font-bold">🔗 Tương đương / Phân biệt</th><td class="p-3 text-gray-800 align-top bg-[#fffdf5] break-words">
-                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs font-bold bg-white text-blue-600 px-3 py-1.5 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer">${eq.name}</button>`).join('')}</div>` : ''}
-                                            ${g.similarText ? `<div class="text-xs text-gray-700 italic border-t border-orange-100 pt-2 mt-2 whitespace-pre-wrap">${g.similarText}</div>` : ''}
+                                            ${eqGrammars.length > 0 ? `<div class="flex flex-wrap gap-2 mb-2">${eqGrammars.map(eq => `<button type="button" onclick="showGrammarDetailModal(${eq.id})" class="text-xs sm:text-sm font-bold bg-white text-blue-600 px-3 py-2 rounded-lg border border-orange-200 hover:bg-orange-50 shadow-sm transition-colors cursor-pointer w-full sm:w-auto text-left sm:text-center">${eq.name} (Chi tiết)</button>`).join('')}</div>` : ''}
+                                            ${g.similarText ? `<div class="text-xs sm:text-sm text-gray-700 italic border-t border-orange-100 pt-2 mt-2 whitespace-pre-wrap">${g.similarText}</div>` : ''}
                                         </td></tr>` : ''}
                                     </tbody>
                                 </table>
@@ -1879,7 +1867,12 @@
             if (isCorrect) {
                 showToast("Đúng rồi 🥳", "success"); if (target.level < 8) target.level = (target.level || 0) + 1;
                 if (target.level !== 9) { const lIdx = Math.max(0, Math.min(target.level - 1, intervals.length - 1)); target.nextReviewDate = Date.now() + (intervals[lIdx] * 60000); }
-            } else { showToast("Sai rồi! Hãy xem đáp án.", "error"); showCorrectDetail(target); target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); }
+                showCorrectDetail(target); // Đã thêm vào đây
+            } else { 
+                showToast("Sai rồi! Hãy xem đáp án.", "error"); 
+                showCorrectDetail(target); 
+                target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); 
+            }
             
             recordDailyReview(target.id);
             
