@@ -47,11 +47,25 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .bg-primary { background-color: var(--color1); }
-        .text-primary { color: var(--color1); }
-        .bg-card { background-color: var(--bg); }
-        .border-theme { border-color: var(--color2); }
-        .bg-input { background-color: var(--color2); }
+        .bg-primary {
+            background-color: var(--color1);
+        }
+
+        .text-primary {
+            color: var(--color1);
+        }
+
+        .bg-card {
+            background-color: var(--bg);
+        }
+
+        .border-theme {
+            border-color: var(--color2);
+        }
+
+        .bg-input {
+            background-color: var(--color2);
+        }
 
         /* Hiệu ứng kính (Glassmorphism) */
         .glass-btn {
@@ -91,10 +105,22 @@
             font-weight: bold;
         }
 
-        .hide-scrollbar::-webkit-scrollbar { display: none; }
-        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        .time-filters { scrollbar-width: none; }
-        .time-filters::-webkit-scrollbar { display: none; }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .time-filters {
+            scrollbar-width: none;
+        }
+
+        .time-filters::-webkit-scrollbar {
+            display: none;
+        }
 
         .time-filter-btn {
             transition: 0.2s;
@@ -132,28 +158,86 @@
             transform: translateX(100%);
         }
 
-        .toast.success { background-color: var(--success); }
-        .toast.error { background-color: var(--danger); }
-        .toast.warning { background-color: var(--warning); }
+        .toast.success {
+            background-color: var(--success);
+        }
 
-        @keyframes slideIn { to { opacity: 1; transform: translateX(0); } }
-        @keyframes fadeOut { to { opacity: 0; transform: translateX(100%); } }
+        .toast.error {
+            background-color: var(--danger);
+        }
 
-        .quiz-option-m, .quiz-option-s { transition: all 0.2s ease; cursor: pointer; }
-        .quiz-option-m:hover, .quiz-option-s:hover {
+        .toast.warning {
+            background-color: var(--warning);
+        }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(100%);
+            }
+        }
+
+        .quiz-option-m,
+        .quiz-option-s {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .quiz-option-m:hover,
+        .quiz-option-s:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(245, 175, 175, 0.4);
         }
 
-        .correct-answer { background-color: #eafaf1 !important; color: #1e8449 !important; border-color: #a3e4d7 !important; }
-        .wrong-answer { background-color: var(--danger) !important; color: white !important; border-color: var(--danger) !important; }
-        .wrong-answer div { color: white !important; }
+        .correct-answer {
+            background-color: #eafaf1 !important;
+            color: #1e8449 !important;
+            border-color: #a3e4d7 !important;
+        }
 
-        .rich-text-editor { min-height: 80px; }
-        .rich-text-editor:empty:before { content: attr(placeholder); color: #9ca3af; pointer-events: none; }
-        .rich-text ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.5rem; margin-bottom: 0.5rem; }
-        .rich-text b, .rich-text strong { font-weight: bold; }
-        .rich-text i, .rich-text em { font-style: italic; }
+        .wrong-answer {
+            background-color: var(--danger) !important;
+            color: white !important;
+            border-color: var(--danger) !important;
+        }
+
+        .wrong-answer div {
+            color: white !important;
+        }
+
+        .rich-text-editor {
+            min-height: 80px;
+        }
+
+        .rich-text-editor:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+            pointer-events: none;
+        }
+
+        .rich-text ul {
+            list-style-type: disc;
+            padding-left: 1.5rem;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .rich-text b,
+        .rich-text strong {
+            font-weight: bold;
+        }
+
+        .rich-text i,
+        .rich-text em {
+            font-style: italic;
+        }
 
         .toolbar-btn {
             padding: 4px 8px;
@@ -166,11 +250,23 @@
             transition: 0.2s;
         }
 
-        .toolbar-btn:hover { background: var(--color3); }
+        .toolbar-btn:hover {
+            background: var(--color3);
+        }
 
-        .toggle-checkbox:checked { right: 0; border-color: #F5AFAF; }
-        .toggle-checkbox:checked+.toggle-label { background-color: #F5AFAF; }
-        .toggle-checkbox:checked+.toggle-label:after { transform: translateX(100%); border-color: white; }
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #F5AFAF;
+        }
+
+        .toggle-checkbox:checked+.toggle-label {
+            background-color: #F5AFAF;
+        }
+
+        .toggle-checkbox:checked+.toggle-label:after {
+            transform: translateX(100%);
+            border-color: white;
+        }
 
         select {
             appearance: none;
@@ -198,10 +294,19 @@
             padding-right: 1.2rem !important;
         }
 
-        .scrollbar-thin::-webkit-scrollbar { width: 6px; }
-        .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
-        .scrollbar-thin::-webkit-scrollbar-thumb { background-color: var(--color1); border-radius: 20px; }
-        
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: var(--color1);
+            border-radius: 20px;
+        }
+
         .calendar-cell {
             aspect-ratio: 1 / 1;
             display: flex;
@@ -375,27 +480,76 @@
     </div>
     <!-- KẾT THÚC SIDEBAR -->
 
+    <!-- NÂNG CẤP: Modal Báo Cáo Xung Đột Đồng Bộ -->
+    <div id="syncResolutionModal"
+        class="fixed inset-0 bg-black bg-opacity-50 hidden z-[200] flex justify-center items-center backdrop-blur-sm">
+        <div class="bg-white p-6 rounded-2xl w-11/12 max-w-lg shadow-2xl flex flex-col gap-4 border border-theme">
+            <h3 class="text-xl font-bold text-primary flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                </svg>
+                Xác nhận Đồng bộ
+            </h3>
+            <p class="text-sm text-gray-600">Ứng dụng vừa tải thông tin từ Cloud. Vui lòng chọn bản dữ liệu bạn muốn áp
+                dụng <b class="text-red-500">(Bản bị loại bỏ sẽ mất vĩnh viễn)</b>.</p>
+
+            <div class="flex flex-col gap-3 mt-2">
+                <button onclick="resolveSync('cloud')"
+                    class="bg-[#f0f9ff] border-2 border-[#3498db] p-4 rounded-xl text-left hover:bg-[#e0f2fe] transition-colors relative">
+                    <div class="font-bold text-[#2980b9] text-lg mb-1">☁️ Chọn dữ liệu từ Cloud (Mây)</div>
+                    <div class="text-sm text-gray-600" id="sync-cloud-info">Đang tải thông tin...</div>
+                </button>
+
+                <button onclick="resolveSync('local')"
+                    class="bg-[#fffbeb] border-2 border-[#f59e0b] p-4 rounded-xl text-left hover:bg-[#fef3c7] transition-colors relative">
+                    <div class="font-bold text-[#d97706] text-lg mb-1">💻 Chọn dữ liệu trên Máy này</div>
+                    <div class="text-sm text-gray-600" id="sync-local-info">Đang tải thông tin...</div>
+                </button>
+            </div>
+
+            <div class="flex justify-end mt-2">
+                <button onclick="cancelSync()"
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition-colors">Hủy
+                    & Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal Lịch Theo Dõi Học Tập -->
-    <div id="calendarModal" class="fixed inset-0 bg-black bg-opacity-40 hidden z-[130] flex justify-center items-center backdrop-blur-sm transition-opacity">
-        <div class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-md flex flex-col shadow-2xl border border-theme transform transition-transform text-center relative max-h-[90vh] overflow-y-auto scrollbar-thin">
-            <button onclick="closeModal('calendarModal')" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors" title="Đóng">&times;</button>
+    <div id="calendarModal"
+        class="fixed inset-0 bg-black bg-opacity-40 hidden z-[130] flex justify-center items-center backdrop-blur-sm transition-opacity">
+        <div
+            class="bg-card p-4 sm:p-6 rounded-2xl w-11/12 max-w-md flex flex-col shadow-2xl border border-theme transform transition-transform text-center relative max-h-[90vh] overflow-y-auto scrollbar-thin">
+            <button onclick="closeModal('calendarModal')"
+                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-red-100 hover:text-red-500 font-bold transition-colors"
+                title="Đóng">&times;</button>
             <h2 class="text-xl sm:text-2xl font-bold mb-6 text-primary flex items-center justify-center gap-2">
                 📅 Lịch Sử Ôn Tập
             </h2>
 
             <div class="flex justify-between items-center mb-4 px-2">
-                <button onclick="changeCalendarMonth(-1)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full hover:bg-gray-100 font-bold text-gray-600 transition-colors shadow-sm">◀</button>
+                <button onclick="changeCalendarMonth(-1)"
+                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full hover:bg-gray-100 font-bold text-gray-600 transition-colors shadow-sm">◀</button>
                 <span id="calendar-month-year" class="font-bold text-lg text-gray-700"></span>
-                <button onclick="changeCalendarMonth(1)" class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full hover:bg-gray-100 font-bold text-gray-600 transition-colors shadow-sm">▶</button>
+                <button onclick="changeCalendarMonth(1)"
+                    class="w-10 h-10 flex items-center justify-center bg-white border border-gray-200 rounded-full hover:bg-gray-100 font-bold text-gray-600 transition-colors shadow-sm">▶</button>
             </div>
 
             <div class="grid grid-cols-7 gap-1 text-center font-bold text-gray-500 text-xs sm:text-sm mb-2 px-1">
-                <div class="text-red-400">CN</div><div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div class="text-blue-400">T7</div>
+                <div class="text-red-400">CN</div>
+                <div>T2</div>
+                <div>T3</div>
+                <div>T4</div>
+                <div>T5</div>
+                <div>T6</div>
+                <div class="text-blue-400">T7</div>
             </div>
 
             <div id="calendar-grid" class="grid grid-cols-7 gap-1.5 sm:gap-2 mb-6 px-1"></div>
 
-            <div id="calendar-details" class="bg-white p-4 rounded-xl border border-theme text-center shadow-sm flex flex-col gap-1 min-h-[80px] justify-center transition-all">
+            <div id="calendar-details"
+                class="bg-white p-4 rounded-xl border border-theme text-center shadow-sm flex flex-col gap-1 min-h-[80px] justify-center transition-all">
                 <p class="text-gray-500 font-medium text-sm">Chọn một ngày để xem tiến độ...</p>
             </div>
         </div>
@@ -636,9 +790,10 @@
                         <path
                             d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
                     </svg><span id="google-login-text">Đăng nhập đồng bộ</span></button>
-                
-                <!-- NÚT KÉO CLOUD (Chỉ hiển thị khi đã đăng nhập) -->
-                <button id="btn-force-pull" onclick="forcePullFromCloud()" class="hidden w-full md:w-auto justify-center bg-white border border-[#3498db] text-[#3498db] px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2 hover:bg-blue-50 transition-colors" title="Cưỡng chế tải dữ liệu mới nhất từ Cloud xuống máy này">
+
+                <button id="btn-force-pull" onclick="checkSyncStatus()"
+                    class="hidden w-full md:w-auto justify-center bg-white border border-[#3498db] text-[#3498db] px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2 hover:bg-blue-50 transition-colors"
+                    title="Cưỡng chế kiểm tra & tải dữ liệu mới nhất từ Cloud xuống máy này">
                     ☁️ Kéo Cloud
                 </button>
             </div>
@@ -670,9 +825,11 @@
                 </svg> Học Ngữ Pháp
             </h1>
             <p class="text-sm sm:text-base opacity-80">Ghi nhớ ngữ pháp dễ dàng hơn mỗi ngày</p>
-            
-            <div onclick="openCalendarModal()" class="mt-3 inline-block bg-white px-4 py-1.5 rounded-full border border-theme shadow-sm transition-transform hover:scale-105 cursor-pointer">
-                <span class="text-sm font-bold text-gray-600">🔥 Hôm nay đã ôn: <span id="daily-review-count" class="text-[#27ae60] text-base mx-1">0</span> mục</span>
+
+            <div onclick="openCalendarModal()"
+                class="mt-3 inline-block bg-white px-4 py-1.5 rounded-full border border-theme shadow-sm transition-transform hover:scale-105 cursor-pointer">
+                <span class="text-sm font-bold text-gray-600">🔥 Hôm nay đã ôn: <span id="daily-review-count"
+                        class="text-[#27ae60] text-base mx-1">0</span> mục</span>
             </div>
         </header>
 
@@ -705,9 +862,13 @@
                             <h2 class="text-lg sm:text-2xl font-bold text-primary">Danh Sách (<span
                                     id="grammar-count">0</span>)</h2>
                             <div class="flex items-center gap-3">
-                                <label class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none hover:text-[#F5AFAF] transition-colors">
-                                    <input type="checkbox" id="cb-select-all" class="w-5 h-5 accent-[#F5AFAF] cursor-pointer flex-shrink-0" onclick="toggleSelectAll(this)">
-                                    <span class="whitespace-nowrap text-sm sm:text-base hidden sm:inline">Chọn nhiều</span>
+                                <label
+                                    class="flex items-center gap-2 cursor-pointer font-bold text-gray-700 select-none hover:text-[#F5AFAF] transition-colors">
+                                    <input type="checkbox" id="cb-select-all"
+                                        class="w-5 h-5 accent-[#F5AFAF] cursor-pointer flex-shrink-0"
+                                        onclick="toggleSelectAll(this)">
+                                    <span class="whitespace-nowrap text-sm sm:text-base hidden sm:inline">Chọn
+                                        nhiều</span>
                                 </label>
                                 <button onclick="openSidebar()"
                                     class="bg-action px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg text-sm sm:text-base font-bold shadow-md flex items-center gap-2 hover:scale-105 transition-transform">
@@ -724,53 +885,78 @@
 
                         <!-- CỤM LỌC VÀ THAO TÁC -->
                         <div class="w-full mt-4 bg-white p-3 rounded-lg border border-theme shadow-sm transition-all">
-                            
+
                             <div id="normal-filters-container" class="flex flex-col gap-3 w-full">
                                 <div class="flex flex-col sm:flex-row gap-2 w-full">
-                                    <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()" placeholder="🔍 Tìm tên..." class="w-full sm:flex-1 p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] min-w-0">
-                                    <select id="filter-source" onchange="renderGrammars()" class="w-full sm:w-auto min-w-[150px] p-2 border-theme text-sm sm:text-base rounded-lg outline-none flex-shrink-0">
+                                    <input type="text" id="search-name" onkeyup="debouncedRenderGrammars()"
+                                        placeholder="🔍 Tìm tên..."
+                                        class="w-full sm:flex-1 p-2 border border-theme text-sm sm:text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-[#F5AFAF] min-w-0">
+                                    <select id="filter-source" onchange="renderGrammars()"
+                                        class="w-full sm:w-auto min-w-[150px] p-2 border-theme text-sm sm:text-base rounded-lg outline-none flex-shrink-0">
                                         <option value="all">Tất cả nguồn</option>
                                     </select>
-                                    <div class="flex items-center bg-gray-50 px-3 py-2 rounded-lg border border-theme flex-shrink-0">
-                                        <label class="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-600 select-none">
-                                            <input type="checkbox" id="toggle-advanced-filters" class="w-4 h-4 accent-[#F5AFAF] cursor-pointer" onchange="toggleAdvancedFilters()">
+                                    <div
+                                        class="flex items-center bg-gray-50 px-3 py-2 rounded-lg border border-theme flex-shrink-0">
+                                        <label
+                                            class="flex items-center gap-2 cursor-pointer text-sm font-bold text-gray-600 select-none">
+                                            <input type="checkbox" id="toggle-advanced-filters"
+                                                class="w-4 h-4 accent-[#F5AFAF] cursor-pointer"
+                                                onchange="toggleAdvancedFilters()">
                                             <span class="whitespace-nowrap">Lọc mở rộng</span>
                                         </label>
                                     </div>
                                 </div>
-                        
-                                <div id="advanced-filters-container" class="hidden flex flex-col sm:flex-row gap-2 w-full transition-all">
-                                    <select id="filter-group" onchange="renderGrammars()" class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
+
+                                <div id="advanced-filters-container"
+                                    class="hidden flex flex-col sm:flex-row gap-2 w-full transition-all">
+                                    <select id="filter-group" onchange="renderGrammars()"
+                                        class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
                                         <option value="all">Tất cả nhóm</option>
                                     </select>
-                                    <select id="filter-context" onchange="renderGrammars()" class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
+                                    <select id="filter-context" onchange="renderGrammars()"
+                                        class="w-full sm:flex-1 p-2 border-theme text-sm sm:text-base rounded-lg outline-none">
                                         <option value="all">Tất cả ngữ cảnh</option>
                                     </select>
                                 </div>
-                        
+
                                 <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center w-full min-w-0">
-                                    <div class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto flex-shrink-0 hide-scrollbar py-2 px-1">
-                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium active shadow-sm" onclick="setTimeFilter('all')" id="tf-all">Tất cả</button>
-                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap" onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn</button>
-                                        <button class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap" onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến</button>
+                                    <div
+                                        class="time-filters flex gap-2 overflow-x-auto w-full sm:w-auto flex-shrink-0 hide-scrollbar py-2 px-1">
+                                        <button
+                                            class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium active shadow-sm"
+                                            onclick="setTimeFilter('all')" id="tf-all">Tất cả</button>
+                                        <button
+                                            class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap"
+                                            onclick="setTimeFilter('due')" id="tf-due">⏰ Đến hạn</button>
+                                        <button
+                                            class="time-filter-btn px-3 py-1.5 rounded-lg border border-theme text-sm font-medium shadow-sm whitespace-nowrap"
+                                            onclick="setTimeFilter('not_due')" id="tf-not_due">💤 Chưa đến</button>
                                     </div>
                                     <div class="hidden sm:block w-px h-6 bg-gray-200 flex-shrink-0"></div>
-                                    
-                                    <div id="level-filter-btns" class="flex overflow-x-auto hide-scrollbar gap-2 py-2 px-1 w-full sm:flex-1 min-w-0">
+
+                                    <div id="level-filter-btns"
+                                        class="flex overflow-x-auto hide-scrollbar gap-2 py-2 px-1 w-full sm:flex-1 min-w-0">
                                         <!-- Nút Level Glassmorphism sinh tự động ở JS -->
                                     </div>
                                 </div>
                             </div>
 
-                            <div id="bulk-actions-container" class="hidden flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <div id="bulk-actions-container"
+                                class="hidden flex flex-col sm:flex-row items-start sm:items-center gap-3">
                                 <span class="font-bold text-primary flex items-center gap-2 whitespace-nowrap">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
                                     Đang chọn nhiều mục
                                 </span>
                                 <div class="hidden sm:block h-6 w-px bg-gray-300 mx-2"></div>
-                                
+
                                 <div class="flex gap-2 w-full sm:w-auto flex-wrap">
-                                    <select id="bulk-level-select" class="flex-1 sm:flex-none p-2 border-theme text-sm font-bold cursor-pointer rounded-lg outline-none focus:ring-2 focus:ring-[#F5AFAF]">
+                                    <select id="bulk-level-select"
+                                        class="flex-1 sm:flex-none p-2 border-theme text-sm font-bold cursor-pointer rounded-lg outline-none focus:ring-2 focus:ring-[#F5AFAF]">
                                         <option value="">-- Đổi nhanh Level --</option>
                                         <option value="0">Level 0</option>
                                         <option value="1">Level 1</option>
@@ -783,16 +969,21 @@
                                         <option value="8">Level 8</option>
                                         <option value="9">Lv.9 (Đã thuộc)</option>
                                     </select>
-                                    <button id="btn-bulk-level" onclick="applyBulkLevel()" class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập Nhật Level</button>
+                                    <button id="btn-bulk-level" onclick="applyBulkLevel()"
+                                        class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập
+                                        Nhật Level</button>
                                 </div>
 
                                 <div class="hidden sm:block h-6 w-px bg-gray-300 mx-2"></div>
 
                                 <div class="flex gap-2 w-full sm:w-auto flex-wrap mt-1 sm:mt-0">
-                                    <select id="bulk-source-select" class="flex-1 sm:flex-none p-2 border-theme text-sm font-bold cursor-pointer rounded-lg outline-none focus:ring-2 focus:ring-[#F5AFAF]">
+                                    <select id="bulk-source-select"
+                                        class="flex-1 sm:flex-none p-2 border-theme text-sm font-bold cursor-pointer rounded-lg outline-none focus:ring-2 focus:ring-[#F5AFAF]">
                                         <option value="">-- Chuyển Nguồn --</option>
                                     </select>
-                                    <button id="btn-bulk-source" onclick="applyBulkSource()" class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập Nhật Nguồn</button>
+                                    <button id="btn-bulk-source" onclick="applyBulkSource()"
+                                        class="bg-action px-4 py-2 rounded-lg text-sm font-bold shadow-sm transition-colors whitespace-nowrap">Cập
+                                        Nhật Nguồn</button>
                                 </div>
                             </div>
                         </div>
@@ -879,7 +1070,7 @@
         let currentQuizCorrect = null; let selectedQuizLevels = []; let selectedQuizMode = 'due';
         let sessionAnsweredIds = []; let quizTotalQuestions = 0; let currentTimeFilter = 'all';
         let currentLevelFilter = 'all'; let rawCSVData = []; let currentQuizSelection = { meaningId: null, structureId: null };
-        let currentQuizSessionPool = []; 
+        let currentQuizSessionPool = [];
 
         function openSidebar() {
             document.getElementById('sidebar-overlay').classList.remove('hidden');
@@ -908,25 +1099,46 @@
         };
         let db; let auth; let currentUser = null; let unsubscribeCloudSync = null;
 
+        // Trạng thái đã phân giải xung đột chưa
+        let isSyncResolved = false;
+        let pendingCloudData = null;
+
+        // Hàm tạo Device ID
+        function getDeviceId() {
+            let deviceId = localStorage.getItem('nhg_device_id');
+            if (!deviceId) {
+                const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                const prefix = isMobile ? 'Mobile' : 'PC';
+                deviceId = prefix + '_' + Date.now().toString().slice(-6) + '_' + Math.floor(Math.random() * 1000);
+                localStorage.setItem('nhg_device_id', deviceId);
+            }
+            return deviceId;
+        }
+
         try {
             firebase.initializeApp(firebaseConfig); db = firebase.firestore(); auth = firebase.auth();
             auth.onAuthStateChanged((user) => {
                 const btnText = document.getElementById('google-login-text');
                 const btnForce = document.getElementById('btn-force-pull');
-                
+
                 if (user) {
-                    currentUser = user; btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
-                    btnForce.classList.remove('hidden'); // Hiện nút Kéo Cloud khi đã đăng nhập
+                    currentUser = user;
+                    btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
+                    btnForce.classList.remove('hidden');
+                    isSyncResolved = false;
 
                     if (sessionStorage.getItem('isManualLogin') === 'true') {
                         showToast("Đã kết nối tài khoản: " + user.displayName, "success");
                         sessionStorage.removeItem('isManualLogin');
                     }
 
-                    fetchFromFirebaseRealtime();
+                    // KHÔNG LẤY TỰ ĐỘNG, MÀ KIỂM TRA TRƯỚC
+                    checkSyncStatus();
                 } else {
-                    currentUser = null; btnText.innerText = "Đăng nhập đồng bộ";
-                    btnForce.classList.add('hidden'); // Ẩn nút Kéo Cloud khi chưa đăng nhập
+                    currentUser = null;
+                    btnText.innerText = "Đăng nhập đồng bộ";
+                    btnForce.classList.add('hidden');
+                    isSyncResolved = false;
                     if (unsubscribeCloudSync) { unsubscribeCloudSync(); unsubscribeCloudSync = null; }
                 }
             });
@@ -949,6 +1161,152 @@
         }
 
         // ==========================================
+        // CƠ CHẾ RESOLVE SYNC (CHỌN BẢN ĐỒNG BỘ)
+        // ==========================================
+        function checkSyncStatus() {
+            if (!currentUser || !db) return;
+            const btnText = document.getElementById('google-login-text');
+            btnText.innerText = "⏳ Kiểm tra Cloud...";
+
+            db.collection("users").doc(currentUser.uid).get().then(doc => {
+                if (doc.exists) {
+                    pendingCloudData = doc.data();
+
+                    // Thông tin Cloud
+                    let cloudTime = "Chưa rõ";
+                    if (pendingCloudData.lastUpdated) {
+                        const date = pendingCloudData.lastUpdated.toDate();
+                        cloudTime = date.toLocaleTimeString('vi-VN') + ' ' + date.toLocaleDateString('vi-VN');
+                    }
+                    const cloudDevice = pendingCloudData.lastUpdatedByDevice || "Không xác định";
+                    const cloudGrammarsCount = (pendingCloudData.grammars || []).length;
+
+                    document.getElementById('sync-cloud-info').innerHTML = `
+                        Cập nhật lúc: <b>${cloudTime}</b><br>
+                        Bởi thiết bị: <b>${cloudDevice}</b><br>
+                        Số mục ngữ pháp: <b>${cloudGrammarsCount}</b>
+                    `;
+
+                    // Thông tin Local
+                    const localGrammarsCount = grammars.length;
+                    let localTimeStr = "Chưa lưu";
+                    const localTime = localStorage.getItem('nhg_local_last_updated');
+                    if (localTime) {
+                        const d = new Date(parseInt(localTime));
+                        localTimeStr = d.toLocaleTimeString('vi-VN') + ' ' + d.toLocaleDateString('vi-VN');
+                    }
+
+                    document.getElementById('sync-local-info').innerHTML = `
+                        Cập nhật lúc: <b>${localTimeStr}</b><br>
+                        Thiết bị hiện tại: <b>${getDeviceId()}</b><br>
+                        Số mục ngữ pháp: <b>${localGrammarsCount}</b>
+                    `;
+
+                    document.getElementById('syncResolutionModal').classList.remove('hidden');
+                } else {
+                    // Cloud trống, đẩy máy lên luôn
+                    resolveSync('local');
+                }
+            }).catch(e => {
+                console.error(e);
+                btnText.innerText = "❌ Lỗi mạng";
+                showToast("Không thể kiểm tra Cloud, vui lòng thử lại sau.", "error");
+            });
+        }
+
+        function resolveSync(choice) {
+            document.getElementById('syncResolutionModal').classList.add('hidden');
+            const btnText = document.getElementById('google-login-text');
+
+            if (choice === 'cloud' && pendingCloudData) {
+                // LẤY MÂY ĐÈ MÁY
+                groups = pendingCloudData.groups || [];
+                contexts = pendingCloudData.contexts || [];
+                sources = pendingCloudData.sources || [];
+                grammars = pendingCloudData.grammars || [];
+                if (pendingCloudData.reviewHistory) saveReviewHistory(pendingCloudData.reviewHistory);
+
+                // Lưu thẳng vào Local
+                localStorage.setItem('nhg_groups', JSON.stringify(groups));
+                localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+                localStorage.setItem('nhg_sources', JSON.stringify(sources));
+                localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+
+                updateDailyReviewUI();
+                renderGroups(); renderContexts(); renderSources(); renderGrammars();
+                renderRelatedGrammarsList(editingGrammarId);
+                showToast("✅ Đã tải dữ liệu từ Cloud về máy!", "success");
+
+            } else if (choice === 'local') {
+                // LẤY MÁY ĐẨY MÂY
+                syncToFirebase();
+            }
+
+            isSyncResolved = true; // Đánh dấu đã giải quyết xong
+            btnText.innerText = "Đồng bộ: " + currentUser.displayName.split(" ")[0];
+
+            // Bắt đầu lắng nghe realtime ngầm
+            startRealtimeSync();
+        }
+
+        function cancelSync() {
+            document.getElementById('syncResolutionModal').classList.add('hidden');
+            if (auth) auth.signOut();
+            showToast("Đã hủy đồng bộ và đăng xuất để an toàn.", "warning");
+        }
+
+        function startRealtimeSync() {
+            if (!currentUser || !db) return;
+            if (unsubscribeCloudSync) unsubscribeCloudSync();
+
+            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot({ includeMetadataChanges: true }, (doc) => {
+                if (doc.metadata.hasPendingWrites) return;
+
+                if (doc.exists) {
+                    const data = doc.data();
+                    groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || []; grammars = data.grammars || [];
+                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+                    if (data.reviewHistory) { saveReviewHistory(data.reviewHistory); updateDailyReviewUI(); }
+
+                    renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(editingGrammarId);
+                }
+            });
+        }
+
+        function syncToFirebase() {
+            if (!currentUser || !db) return;
+
+            const btnText = document.getElementById('google-login-text');
+            const originalName = currentUser.displayName.split(" ")[0];
+            btnText.innerText = "⏳ Đang đồng bộ...";
+
+            const currentDeviceId = getDeviceId();
+
+            // Lọc dữ liệu sạch
+            const cleanData = JSON.parse(JSON.stringify({
+                groups: groups || [],
+                contexts: contexts || [],
+                sources: sources || [],
+                grammars: grammars || [],
+                reviewHistory: getReviewHistory() || {}
+            }));
+
+            cleanData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+            cleanData.lastUpdatedByDevice = currentDeviceId;
+
+            db.collection("users").doc(currentUser.uid).set(cleanData).then(() => {
+                console.log("☁️ Đã tải dữ liệu lên Cloud từ thiết bị:", currentDeviceId);
+                btnText.innerText = "✅ Đã đồng bộ";
+                setTimeout(() => { if (currentUser) btnText.innerText = "Đồng bộ: " + originalName; }, 2000);
+            }).catch((error) => {
+                console.error("Lỗi đồng bộ Firebase:", error);
+                btnText.innerText = "❌ Lỗi đồng bộ";
+                showToast("Lỗi đẩy lên Cloud!", "error");
+            });
+        }
+
+        // ==========================================
         // CƠ CHẾ LƯU TRỮ LỊCH SỬ ÔN TẬP
         // ==========================================
         function getLocalYMD(dateObj = new Date()) {
@@ -960,7 +1318,7 @@
 
         function getReviewHistory() {
             try { return JSON.parse(localStorage.getItem('nhg_review_history')) || {}; }
-            catch(e) { return {}; }
+            catch (e) { return {}; }
         }
 
         function saveReviewHistory(history) {
@@ -979,7 +1337,7 @@
             const todayStr = getLocalYMD();
             const history = getReviewHistory();
             if (!history[todayStr]) history[todayStr] = [];
-            
+
             if (!history[todayStr].includes(grammarId)) {
                 history[todayStr].push(grammarId);
                 saveReviewHistory(history);
@@ -987,104 +1345,15 @@
             }
         }
 
-        function syncToFirebase() {
-            if (!currentUser || !db) return;
-
-            const btnText = document.getElementById('google-login-text');
-            const originalName = currentUser.displayName.split(" ")[0];
-            btnText.innerText = "⏳ Đang đồng bộ...";
-
-            // BỘ LỌC LÀM SẠCH DỮ LIỆU: Loại bỏ 'undefined' để tránh lỗi Firebase từ chối lưu
-            const cleanData = JSON.parse(JSON.stringify({
-                groups: groups || [],
-                contexts: contexts || [],
-                sources: sources || [],
-                grammars: grammars || [],
-                reviewHistory: getReviewHistory() || {}
-            }));
-            cleanData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-
-            db.collection("users").doc(currentUser.uid).set(cleanData).then(() => {
-                console.log("Đã lưu dữ liệu hiện tại lên Cloud.");
-                btnText.innerText = "✅ Đã đồng bộ";
-                setTimeout(() => { if (currentUser) btnText.innerText = "Đồng bộ: " + originalName; }, 2000); 
-            }).catch((error) => {
-                console.error("Lỗi đồng bộ Firebase:", error); 
-                btnText.innerText = "❌ Lỗi đồng bộ";
-                showToast("Lỗi đẩy lên Cloud (Có thể do dữ liệu quá lớn)!", "error");
-            });
-        }
-
-        function fetchFromFirebaseRealtime() {
-            if (!currentUser || !db) return;
-            if (unsubscribeCloudSync) unsubscribeCloudSync();
-
-            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-
-                    groups = data.groups || []; 
-                    contexts = data.contexts || []; 
-                    sources = data.sources || []; 
-                    grammars = data.grammars || [];
-                    
-                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); 
-                    localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
-                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); 
-                    localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-
-                    if (data.reviewHistory) {
-                        saveReviewHistory(data.reviewHistory);
-                        updateDailyReviewUI();
-                    }
-                    
-                    renderGroups(); renderContexts(); renderSources(); renderGrammars(); 
-                    renderRelatedGrammarsList(editingGrammarId);
-
-                } else { syncToFirebase(); }
-            }, (error) => { console.error("Lỗi lắng nghe Cloud:", error); });
-        }
-
-        // Cưỡng chế tải dữ liệu mới nhất (Nút Kéo Cloud)
-        function forcePullFromCloud() {
-            if (!currentUser || !db) return showToast("Vui lòng đăng nhập đồng bộ trước!", "warning");
-            showToast("Đang kéo dữ liệu từ Cloud...", "success");
-            
-            db.collection("users").doc(currentUser.uid).get().then((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-                    groups = data.groups || []; 
-                    contexts = data.contexts || []; 
-                    sources = data.sources || []; 
-                    grammars = data.grammars || [];
-                    
-                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); 
-                    localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
-                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); 
-                    localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-
-                    if (data.reviewHistory) {
-                        saveReviewHistory(data.reviewHistory);
-                        updateDailyReviewUI();
-                    }
-                    
-                    renderGroups(); renderContexts(); renderSources(); renderGrammars(); 
-                    renderRelatedGrammarsList(editingGrammarId);
-                    
-                    showToast("✅ Đã kéo dữ liệu mới nhất thành công!", "success");
-                } else {
-                    showToast("Cloud chưa có dữ liệu nào để tải về.", "warning");
-                }
-            }).catch(e => {
-                console.error(e);
-                showToast("Lỗi khi tải dữ liệu Cloud!", "error");
-            });
-        }
-
         function saveData() {
-            localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
-            localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-            if (typeof syncToFirebase === 'function') syncToFirebase();
+            localStorage.setItem('nhg_groups', JSON.stringify(groups));
+            localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+            localStorage.setItem('nhg_sources', JSON.stringify(sources));
+            localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+            localStorage.setItem('nhg_local_last_updated', Date.now()); // Lưu thời gian cập nhật nội bộ
+
+            // Chỉ tự động lưu lên mạng nếu đã hoàn thành màn hình xác nhận Đồng Bộ ban đầu
+            if (isSyncResolved && typeof syncToFirebase === 'function') syncToFirebase();
         }
 
         // ==========================================
@@ -1111,10 +1380,10 @@
 
             const firstDay = new Date(year, month, 1).getDay(); // 0 là Chủ nhật
             const daysInMonth = new Date(year, month + 1, 0).getDate();
-            
+
             const grid = document.getElementById('calendar-grid');
             grid.innerHTML = '';
-            
+
             const history = getReviewHistory();
             const todayStr = getLocalYMD(new Date());
 
@@ -1126,25 +1395,22 @@
                 const dateObj = new Date(year, month, day);
                 const dateStr = getLocalYMD(dateObj);
                 const count = history[dateStr] ? history[dateStr].length : 0;
-                
+
                 let bgClass = "bg-gray-50 hover:bg-gray-100";
                 let textClass = "text-gray-600";
                 let borderClass = "border border-gray-100";
-                
+
                 if (dateStr === todayStr) {
                     borderClass = "border-2 border-[#F5AFAF]";
                 }
-                
-                // Đã chỉnh màu xanh nhạt hơn, không chói
+
                 if (count > 0) {
-                    if (count < 5) bgClass = "bg-[#d4edda] hover:bg-[#c3e6cb]"; 
-                    else if (count < 15) bgClass = "bg-[#a3e4d7] hover:bg-[#76d7c4]"; 
-                    else bgClass = "bg-[#73c6b6] hover:bg-[#48c9b0]"; 
-                    
+                    if (count < 5) bgClass = "bg-[#d4edda] hover:bg-[#c3e6cb]";
+                    else if (count < 15) bgClass = "bg-[#a3e4d7] hover:bg-[#76d7c4]";
+                    else bgClass = "bg-[#73c6b6] hover:bg-[#48c9b0]";
                     textClass = "text-green-900";
                 }
 
-                // Xóa thẻ span hiển thị số đếm trong ô lịch
                 grid.innerHTML += `
                     <button onclick="selectCalendarDate('${dateStr}')" 
                         class="calendar-cell ${bgClass} ${textClass} ${borderClass}">
@@ -1159,7 +1425,7 @@
             const displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
             const history = getReviewHistory();
             const count = history[dateStr] ? history[dateStr].length : 0;
-            
+
             const detailBox = document.getElementById('calendar-details');
             if (count > 0) {
                 detailBox.innerHTML = `
@@ -1278,8 +1544,8 @@
                             if (pauseTime && g.level !== 9 && g.nextReviewDate > exportTime) g.nextReviewDate += timeDiff; return g;
                         });
                         groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || [];
-                        if(data.reviewHistory) saveReviewHistory(data.reviewHistory);
-                        
+                        if (data.reviewHistory) saveReviewHistory(data.reviewHistory);
+
                         saveData(); updateDailyReviewUI(); renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
                         showToast(`Đã phục hồi ${grammars.length} ngữ pháp thành công!`, "success");
                     } else showToast("File không đúng cấu trúc!", "error");
@@ -1487,7 +1753,7 @@
             const list = document.getElementById('source-list'); const container = document.getElementById('g-source-container');
             const filterSelect = document.getElementById('filter-source'); const quizSelect = document.getElementById('quiz-source-select');
             const bulkSelect = document.getElementById('bulk-source-select'); const importSelect = document.getElementById('import-source-select');
-            
+
             let currentQuizSrc = quizSelect ? quizSelect.value : 'all';
 
             if (list) list.innerHTML = ''; if (container) container.innerHTML = ''; if (filterSelect) filterSelect.innerHTML = '<option value="all">Tất cả nguồn</option>';
@@ -1560,14 +1826,14 @@
                 levelFilterContainer.innerHTML = '';
                 const allCount = baseGrammars.length;
                 const isAllActive = currentLevelFilter === 'all';
-                
+
                 levelFilterContainer.innerHTML += `<button onclick="setLevelFilter('all')" class="glass-btn flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isAllActive ? 'ring-2 ring-gray-400 opacity-100' : 'opacity-60 hover:opacity-100'}" style="background: rgba(240, 240, 240, 0.5); color:#444;">Tất cả (${allCount})</button>`;
 
                 for (let i = 0; i <= 9; i++) {
                     const count = baseGrammars.filter(g => g.level === i).length;
                     const isActive = currentLevelFilter === i;
                     let label = i === 0 ? 'Mới' : (i === 9 ? 'Không ôn' : `Lv ${i}`);
-                    
+
                     levelFilterContainer.innerHTML += `<button onclick="setLevelFilter(${i})" class="glass-btn flex-shrink-0 whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${isActive ? 'ring-2 ring-offset-1 ring-gray-400 opacity-100' : 'opacity-70 hover:opacity-100'}" style="background: color-mix(in srgb, var(--lv${i}) 15%, transparent); border: 1px solid var(--lv${i}); color: var(--lv${i}); backdrop-filter: blur(8px);">${label} (${count})</button>`;
                 }
             }
@@ -1678,18 +1944,18 @@
         }
 
         function toggleSelectAll(checkbox) { const cbs = document.querySelectorAll('.grammar-bulk-cb'); cbs.forEach(cb => cb.checked = checkbox.checked); updateBulkActionsState(); }
-        
+
         function updateBulkActionsState() {
-            const cbs = document.querySelectorAll('.grammar-bulk-cb'); 
+            const cbs = document.querySelectorAll('.grammar-bulk-cb');
             const checkedCbs = document.querySelectorAll('.grammar-bulk-cb:checked');
             const cbAll = document.getElementById('cb-select-all');
             const hasChecked = checkedCbs.length > 0;
 
             if (cbs.length > 0 && cbs.length === checkedCbs.length) { if (cbAll) cbAll.checked = true; } else { if (cbAll) cbAll.checked = false; }
-            
+
             const normalFilters = document.getElementById('normal-filters-container');
             const bulkActions = document.getElementById('bulk-actions-container');
-            
+
             if (hasChecked) {
                 if (normalFilters) normalFilters.classList.add('hidden');
                 if (bulkActions) bulkActions.classList.remove('hidden');
@@ -1795,22 +2061,22 @@
             const sourceFilter = document.getElementById('quiz-source-select').value; let filteredGrammars = grammars;
             if (sourceFilter !== 'all') { filteredGrammars = filteredGrammars.filter(g => (g.sourceIds || []).includes(parseInt(sourceFilter))); }
             const total0to8 = filteredGrammars.filter(g => g.level !== 9).length; const isAllSelected = [0, 1, 2, 3, 4, 5, 6, 7, 8].every(l => selectedQuizLevels.includes(l)) && selectedQuizLevels.length > 0;
-            
-            const btnAll = document.createElement('button'); 
-            btnAll.className = `glass-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 text-gray-700 w-[45%] sm:w-auto text-sm sm:text-lg ${isAllSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-70 hover:opacity-100'}`; 
+
+            const btnAll = document.createElement('button');
+            btnAll.className = `glass-btn px-4 sm:px-6 py-2 sm:py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 text-gray-700 w-[45%] sm:w-auto text-sm sm:text-lg ${isAllSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-70 hover:opacity-100'}`;
             btnAll.style.background = "rgba(240,240,240,0.6)";
-            btnAll.innerText = `Tất cả Level 0-8 (${total0to8})`; 
+            btnAll.innerText = `Tất cả Level 0-8 (${total0to8})`;
             btnAll.onclick = () => toggleQuizLevel('all'); container.appendChild(btnAll);
 
             for (let i = 0; i <= 9; i++) {
                 const count = filteredGrammars.filter(g => g.level === i).length; const isSelected = selectedQuizLevels.includes(i);
-                const btn = document.createElement('button'); 
-                btn.className = `glass-btn px-4 sm:px-5 py-2 sm:py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 w-[45%] sm:min-w-[110px] sm:w-auto text-sm sm:text-lg ${isSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-70 hover:opacity-100'}`; 
+                const btn = document.createElement('button');
+                btn.className = `glass-btn px-4 sm:px-5 py-2 sm:py-3 rounded-xl font-bold shadow-sm transition-transform hover:scale-105 w-[45%] sm:min-w-[110px] sm:w-auto text-sm sm:text-lg ${isSelected ? 'ring-4 ring-offset-2 ring-gray-400 scale-105 opacity-100' : 'opacity-70 hover:opacity-100'}`;
                 btn.style.background = `color-mix(in srgb, var(--lv${i}) 15%, transparent)`;
                 btn.style.border = `1px solid var(--lv${i})`;
                 btn.style.color = `var(--lv${i})`;
-                
-                let label = i === 0 ? 'Mới' : (i === 9 ? 'Không ôn' : `Lv ${i}`); 
+
+                let label = i === 0 ? 'Mới' : (i === 9 ? 'Không ôn' : `Lv ${i}`);
                 btn.innerText = `${label} (${count})`; btn.onclick = () => toggleQuizLevel(i); container.appendChild(btn);
             }
             let actionContainer = document.getElementById('quiz-step-1-actions'); if (selectedQuizLevels.length > 0) { actionContainer.classList.remove('hidden'); } else { actionContainer.classList.add('hidden'); }
@@ -1915,15 +2181,15 @@
             if (isCorrect) {
                 showToast("Đúng rồi 🥳", "success"); if (target.level < 8) target.level = (target.level || 0) + 1;
                 if (target.level !== 9) { const lIdx = Math.max(0, Math.min(target.level - 1, intervals.length - 1)); target.nextReviewDate = Date.now() + (intervals[lIdx] * 60000); }
-                showCorrectDetail(target); // Đã thêm vào đây: luôn show lý thuyết khi ĐÚNG
-            } else { 
-                showToast("Sai rồi! Hãy xem đáp án.", "error"); 
-                showCorrectDetail(target); 
-                target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); 
+                showCorrectDetail(target); // Đã thêm vào đây
+            } else {
+                showToast("Sai rồi! Hãy xem đáp án.", "error");
+                showCorrectDetail(target);
+                target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000);
             }
-            
+
             recordDailyReview(target.id);
-            
+
             sessionAnsweredIds.push(target.id); saveData();
             const btnAction = document.getElementById('btn-quiz-action'); btnAction.onclick = nextQuestion; btnAction.className = "bg-action w-full sm:w-auto px-10 py-3 rounded-xl font-bold text-lg transition-transform hover:scale-105 shadow-md"; btnAction.innerText = "Tiếp Tục ➔";
         }
@@ -1933,8 +2199,8 @@
             const target = grammars.find(g => g.id === currentQuizCorrect.id);
             const correctBtnM = document.getElementById(`opt-m-${currentQuizCorrect.id}`); const correctBtnS = document.getElementById(`opt-s-${currentQuizCorrect.id}`);
             if (correctBtnM) correctBtnM.classList.add('correct-answer'); if (correctBtnS) correctBtnS.classList.add('correct-answer');
-            showToast("Đã bỏ qua.", "warning"); showCorrectDetail(target); target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000); 
-            
+            showToast("Đã bỏ qua.", "warning"); showCorrectDetail(target); target.level = 1; target.nextReviewDate = Date.now() + (5 * 60000);
+
             recordDailyReview(target.id);
 
             sessionAnsweredIds.push(target.id); saveData();
@@ -1975,7 +2241,7 @@
             const sc = localStorage.getItem('nhg_contexts'); if (sc) contexts = JSON.parse(sc);
             const ss = localStorage.getItem('nhg_sources'); if (ss) sources = JSON.parse(ss);
             const sgr = localStorage.getItem('nhg_grammars'); if (sgr) grammars = JSON.parse(sgr);
-            
+
             const showAdv = localStorage.getItem('nhg_show_advanced') === 'true';
             document.getElementById('toggle-advanced-filters').checked = showAdv;
             if (showAdv) {
