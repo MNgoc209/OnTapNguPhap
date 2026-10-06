@@ -7,10 +7,7 @@
     <title>Học Ngữ Pháp Tiếng Nhật</title>
     <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Thư viện Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+    <!-- Lưu ý: Đã gỡ bỏ thư viện Firebase cũ ở đây để dùng bản Modular chuẩn ở cuối file -->
 
     <style>
         :root {
@@ -480,42 +477,6 @@
     </div>
     <!-- KẾT THÚC SIDEBAR -->
 
-    <!-- NÂNG CẤP: Modal Báo Cáo Xung Đột Đồng Bộ -->
-    <div id="syncResolutionModal"
-        class="fixed inset-0 bg-black bg-opacity-50 hidden z-[200] flex justify-center items-center backdrop-blur-sm">
-        <div class="bg-white p-6 rounded-2xl w-11/12 max-w-lg shadow-2xl flex flex-col gap-4 border border-theme">
-            <h3 class="text-xl font-bold text-primary flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                </svg>
-                Xác nhận Đồng bộ
-            </h3>
-            <p class="text-sm text-gray-600">Ứng dụng vừa tải thông tin từ Cloud. Vui lòng chọn bản dữ liệu bạn muốn áp
-                dụng <b class="text-red-500">(Bản bị loại bỏ sẽ mất vĩnh viễn)</b>.</p>
-
-            <div class="flex flex-col gap-3 mt-2">
-                <button onclick="resolveSync('cloud')"
-                    class="bg-[#f0f9ff] border-2 border-[#3498db] p-4 rounded-xl text-left hover:bg-[#e0f2fe] transition-colors relative">
-                    <div class="font-bold text-[#2980b9] text-lg mb-1">☁️ Chọn dữ liệu từ Cloud (Mây)</div>
-                    <div class="text-sm text-gray-600" id="sync-cloud-info">Đang tải thông tin...</div>
-                </button>
-
-                <button onclick="resolveSync('local')"
-                    class="bg-[#fffbeb] border-2 border-[#f59e0b] p-4 rounded-xl text-left hover:bg-[#fef3c7] transition-colors relative">
-                    <div class="font-bold text-[#d97706] text-lg mb-1">💻 Chọn dữ liệu trên Máy này</div>
-                    <div class="text-sm text-gray-600" id="sync-local-info">Đang tải thông tin...</div>
-                </button>
-            </div>
-
-            <div class="flex justify-end mt-2">
-                <button onclick="cancelSync()"
-                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-bold hover:bg-gray-300 transition-colors">Hủy
-                    & Đăng xuất</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Modal Lịch Theo Dõi Học Tập -->
     <div id="calendarModal"
         class="fixed inset-0 bg-black bg-opacity-40 hidden z-[130] flex justify-center items-center backdrop-blur-sm transition-opacity">
@@ -783,6 +744,7 @@
                         <line x1="12" y1="3" x2="12" y2="15"></line>
                     </svg>Nhập Backup</button>
                 <input type="file" id="json-file" class="hidden" accept=".json" onchange="handleJSONUpload(event)">
+
                 <button id="btn-google-login" onclick="toggleGoogleLogin()"
                     class="w-full md:w-auto justify-center mt-1 md:mt-0 bg-action px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2"><svg
                         xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
@@ -793,8 +755,8 @@
 
                 <button id="btn-force-pull" onclick="checkSyncStatus()"
                     class="hidden w-full md:w-auto justify-center bg-white border border-[#3498db] text-[#3498db] px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2 hover:bg-blue-50 transition-colors"
-                    title="Cưỡng chế kiểm tra & tải dữ liệu mới nhất từ Cloud xuống máy này">
-                    ☁️ Kéo Cloud
+                    title="Cưỡng chế tải dữ liệu mới nhất từ Cloud xuống máy này">
+                    ☁️ Tải dữ liệu Cloud
                 </button>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
@@ -1065,12 +1027,13 @@
     </div>
 
     <script>
-        let groups = []; let contexts = []; let sources = []; let grammars = [];
-        let editingGrammarId = null;
-        let currentQuizCorrect = null; let selectedQuizLevels = []; let selectedQuizMode = 'due';
-        let sessionAnsweredIds = []; let quizTotalQuestions = 0; let currentTimeFilter = 'all';
-        let currentLevelFilter = 'all'; let rawCSVData = []; let currentQuizSelection = { meaningId: null, structureId: null };
-        let currentQuizSessionPool = [];
+        // BƯỚC QUAN TRỌNG: Sửa toàn bộ let thành var để file Module ở dưới có thể đọc và đồng bộ được lên mạng
+        var groups = []; var contexts = []; var sources = []; var grammars = [];
+        var editingGrammarId = null;
+        var currentQuizCorrect = null; var selectedQuizLevels = []; var selectedQuizMode = 'due';
+        var sessionAnsweredIds = []; var quizTotalQuestions = 0; var currentTimeFilter = 'all';
+        var currentLevelFilter = 'all'; var rawCSVData = []; var currentQuizSelection = { meaningId: null, structureId: null };
+        var currentQuizSessionPool = [];
 
         function openSidebar() {
             document.getElementById('sidebar-overlay').classList.remove('hidden');
@@ -1092,18 +1055,7 @@
         const debouncedRenderGrammars = debounce(() => renderGrammars(), 300);
         const debouncedFilterRelated = debounce(() => filterRelatedGrammars(), 300);
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyCVZiAZB9yO2kRvf68nDbBV8nDbO_HjagQ", authDomain: "nguphapjlpt.firebaseapp.com",
-            projectId: "nguphapjlpt", storageBucket: "nguphapjlpt.firebasestorage.app",
-            messagingSenderId: "1080205092846", appId: "1:1080205092846:web:47d6a3c3236dc46a3850ff", measurementId: "G-QG56WVK813"
-        };
-        let db; let auth; let currentUser = null; let unsubscribeCloudSync = null;
-
-        // Trạng thái đã phân giải xung đột chưa
-        let isSyncResolved = false;
-        let pendingCloudData = null;
-
-        // Hàm tạo Device ID
+        // Hàm tạo Device ID (Giữ nguyên)
         function getDeviceId() {
             let deviceId = localStorage.getItem('nhg_device_id');
             if (!deviceId) {
@@ -1113,197 +1065,6 @@
                 localStorage.setItem('nhg_device_id', deviceId);
             }
             return deviceId;
-        }
-
-        try {
-            firebase.initializeApp(firebaseConfig); db = firebase.firestore(); auth = firebase.auth();
-            auth.onAuthStateChanged((user) => {
-                const btnText = document.getElementById('google-login-text');
-                const btnForce = document.getElementById('btn-force-pull');
-
-                if (user) {
-                    currentUser = user;
-                    btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
-                    btnForce.classList.remove('hidden');
-                    isSyncResolved = false;
-
-                    if (sessionStorage.getItem('isManualLogin') === 'true') {
-                        showToast("Đã kết nối tài khoản: " + user.displayName, "success");
-                        sessionStorage.removeItem('isManualLogin');
-                    }
-
-                    // KHÔNG LẤY TỰ ĐỘNG, MÀ KIỂM TRA TRƯỚC
-                    checkSyncStatus();
-                } else {
-                    currentUser = null;
-                    btnText.innerText = "Đăng nhập đồng bộ";
-                    btnForce.classList.add('hidden');
-                    isSyncResolved = false;
-                    if (unsubscribeCloudSync) { unsubscribeCloudSync(); unsubscribeCloudSync = null; }
-                }
-            });
-        } catch (e) { console.error("Firebase init error:", e); }
-
-        function toggleGoogleLogin() {
-            if (currentUser) {
-                if (confirm("Bạn có muốn đăng xuất khỏi tài khoản " + currentUser.displayName + " không?")) {
-                    auth.signOut().then(() => showToast("Đã đăng xuất", "success"));
-                }
-            } else {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                sessionStorage.setItem('isManualLogin', 'true');
-
-                auth.signInWithPopup(provider).catch(error => {
-                    showToast("Lỗi đăng nhập: " + error.message, "error");
-                    sessionStorage.removeItem('isManualLogin');
-                });
-            }
-        }
-
-        // ==========================================
-        // CƠ CHẾ RESOLVE SYNC (CHỌN BẢN ĐỒNG BỘ)
-        // ==========================================
-        function checkSyncStatus() {
-            if (!currentUser || !db) return;
-            const btnText = document.getElementById('google-login-text');
-            btnText.innerText = "⏳ Kiểm tra Cloud...";
-
-            db.collection("users").doc(currentUser.uid).get().then(doc => {
-                if (doc.exists) {
-                    pendingCloudData = doc.data();
-
-                    // Thông tin Cloud
-                    let cloudTime = "Chưa rõ";
-                    if (pendingCloudData.lastUpdated) {
-                        const date = pendingCloudData.lastUpdated.toDate();
-                        cloudTime = date.toLocaleTimeString('vi-VN') + ' ' + date.toLocaleDateString('vi-VN');
-                    }
-                    const cloudDevice = pendingCloudData.lastUpdatedByDevice || "Không xác định";
-                    const cloudGrammarsCount = (pendingCloudData.grammars || []).length;
-
-                    document.getElementById('sync-cloud-info').innerHTML = `
-                        Cập nhật lúc: <b>${cloudTime}</b><br>
-                        Bởi thiết bị: <b>${cloudDevice}</b><br>
-                        Số mục ngữ pháp: <b>${cloudGrammarsCount}</b>
-                    `;
-
-                    // Thông tin Local
-                    const localGrammarsCount = grammars.length;
-                    let localTimeStr = "Chưa lưu";
-                    const localTime = localStorage.getItem('nhg_local_last_updated');
-                    if (localTime) {
-                        const d = new Date(parseInt(localTime));
-                        localTimeStr = d.toLocaleTimeString('vi-VN') + ' ' + d.toLocaleDateString('vi-VN');
-                    }
-
-                    document.getElementById('sync-local-info').innerHTML = `
-                        Cập nhật lúc: <b>${localTimeStr}</b><br>
-                        Thiết bị hiện tại: <b>${getDeviceId()}</b><br>
-                        Số mục ngữ pháp: <b>${localGrammarsCount}</b>
-                    `;
-
-                    document.getElementById('syncResolutionModal').classList.remove('hidden');
-                } else {
-                    // Cloud trống, đẩy máy lên luôn
-                    resolveSync('local');
-                }
-            }).catch(e => {
-                console.error(e);
-                btnText.innerText = "❌ Lỗi mạng";
-                showToast("Không thể kiểm tra Cloud, vui lòng thử lại sau.", "error");
-            });
-        }
-
-        function resolveSync(choice) {
-            document.getElementById('syncResolutionModal').classList.add('hidden');
-            const btnText = document.getElementById('google-login-text');
-
-            if (choice === 'cloud' && pendingCloudData) {
-                // LẤY MÂY ĐÈ MÁY
-                groups = pendingCloudData.groups || [];
-                contexts = pendingCloudData.contexts || [];
-                sources = pendingCloudData.sources || [];
-                grammars = pendingCloudData.grammars || [];
-                if (pendingCloudData.reviewHistory) saveReviewHistory(pendingCloudData.reviewHistory);
-
-                // Lưu thẳng vào Local
-                localStorage.setItem('nhg_groups', JSON.stringify(groups));
-                localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
-                localStorage.setItem('nhg_sources', JSON.stringify(sources));
-                localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-
-                updateDailyReviewUI();
-                renderGroups(); renderContexts(); renderSources(); renderGrammars();
-                renderRelatedGrammarsList(editingGrammarId);
-                showToast("✅ Đã tải dữ liệu từ Cloud về máy!", "success");
-
-            } else if (choice === 'local') {
-                // LẤY MÁY ĐẨY MÂY
-                syncToFirebase();
-            }
-
-            isSyncResolved = true; // Đánh dấu đã giải quyết xong
-            btnText.innerText = "Đồng bộ: " + currentUser.displayName.split(" ")[0];
-
-            // Bắt đầu lắng nghe realtime ngầm
-            startRealtimeSync();
-        }
-
-        function cancelSync() {
-            document.getElementById('syncResolutionModal').classList.add('hidden');
-            if (auth) auth.signOut();
-            showToast("Đã hủy đồng bộ và đăng xuất để an toàn.", "warning");
-        }
-
-        function startRealtimeSync() {
-            if (!currentUser || !db) return;
-            if (unsubscribeCloudSync) unsubscribeCloudSync();
-
-            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot({ includeMetadataChanges: true }, (doc) => {
-                if (doc.metadata.hasPendingWrites) return;
-
-                if (doc.exists) {
-                    const data = doc.data();
-                    groups = data.groups || []; contexts = data.contexts || []; sources = data.sources || []; grammars = data.grammars || [];
-                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
-                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-                    if (data.reviewHistory) { saveReviewHistory(data.reviewHistory); updateDailyReviewUI(); }
-
-                    renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(editingGrammarId);
-                }
-            });
-        }
-
-        function syncToFirebase() {
-            if (!currentUser || !db) return;
-
-            const btnText = document.getElementById('google-login-text');
-            const originalName = currentUser.displayName.split(" ")[0];
-            btnText.innerText = "⏳ Đang đồng bộ...";
-
-            const currentDeviceId = getDeviceId();
-
-            // Lọc dữ liệu sạch
-            const cleanData = JSON.parse(JSON.stringify({
-                groups: groups || [],
-                contexts: contexts || [],
-                sources: sources || [],
-                grammars: grammars || [],
-                reviewHistory: getReviewHistory() || {}
-            }));
-
-            cleanData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
-            cleanData.lastUpdatedByDevice = currentDeviceId;
-
-            db.collection("users").doc(currentUser.uid).set(cleanData).then(() => {
-                console.log("☁️ Đã tải dữ liệu lên Cloud từ thiết bị:", currentDeviceId);
-                btnText.innerText = "✅ Đã đồng bộ";
-                setTimeout(() => { if (currentUser) btnText.innerText = "Đồng bộ: " + originalName; }, 2000);
-            }).catch((error) => {
-                console.error("Lỗi đồng bộ Firebase:", error);
-                btnText.innerText = "❌ Lỗi đồng bộ";
-                showToast("Lỗi đẩy lên Cloud!", "error");
-            });
         }
 
         // ==========================================
@@ -1345,15 +1106,18 @@
             }
         }
 
+        // BƯỚC QUAN TRỌNG: Hàm saveData nay sẽ gọi tính năng đồng bộ Modular một cách an toàn
         function saveData() {
             localStorage.setItem('nhg_groups', JSON.stringify(groups));
             localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
             localStorage.setItem('nhg_sources', JSON.stringify(sources));
             localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
-            localStorage.setItem('nhg_local_last_updated', Date.now()); // Lưu thời gian cập nhật nội bộ
+            localStorage.setItem('nhg_local_last_updated', Date.now());
 
-            // Chỉ tự động lưu lên mạng nếu đã hoàn thành màn hình xác nhận Đồng Bộ ban đầu
-            if (isSyncResolved && typeof syncToFirebase === 'function') syncToFirebase();
+            // Kích hoạt đồng bộ đám mây tự động
+            if (typeof window.syncToFirebase === 'function') {
+                window.syncToFirebase();
+            }
         }
 
         // ==========================================
@@ -2253,6 +2017,197 @@
             renderGroups(); renderContexts(); renderSources(); renderGrammars(); renderRelatedGrammarsList(null);
             document.getElementById('sec-grammar').style.display = 'flex';
         };
+    </script>
+
+    <!-- ========================================== -->
+    <!-- TÍCH HỢP FIREBASE (CLOUD SYNC) BẢN MỚI     -->
+    <!-- ========================================== -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+        // Cấu hình bằng chính mã dự án của bạn
+        const firebaseConfig = {
+            apiKey: "AIzaSyCVZiAZB9yO2kRvf68nDbBV8nDbO_HjagQ",
+            authDomain: "nguphapjlpt.firebaseapp.com",
+            projectId: "nguphapjlpt",
+            storageBucket: "nguphapjlpt.firebasestorage.app",
+            messagingSenderId: "1080205092846",
+            appId: "1:1080205092846:web:47d6a3c3236dc46a3850ff",
+            measurementId: "G-QG56WVK813"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+        let isDownloading = false;
+        let unsubscribeCloudSync = null;
+
+        const btnText = document.getElementById('google-login-text');
+        const btnForce = document.getElementById('btn-force-pull');
+
+        // Theo dõi trạng thái đăng nhập
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
+                btnForce.classList.remove('hidden');
+
+                if (sessionStorage.getItem('isManualLogin') === 'true') {
+                    window.showToast("Đã kết nối tài khoản: " + user.displayName, "success");
+                    sessionStorage.removeItem('isManualLogin');
+                }
+
+                // Tự động tải dữ liệu từ mây về khi vừa đăng nhập
+                downloadFromCloud(false);
+                startRealtimeSync();
+            } else {
+                currentUser = null;
+                btnText.innerText = "Đăng nhập đồng bộ";
+                btnForce.classList.add('hidden');
+                if (unsubscribeCloudSync) { unsubscribeCloudSync(); unsubscribeCloudSync = null; }
+            }
+        });
+
+        // Hàm Đăng nhập / Đăng xuất (Gắn vào window để gọi từ HTML)
+        window.toggleGoogleLogin = function () {
+            if (currentUser) {
+                if (confirm("Bạn có muốn đăng xuất khỏi tài khoản " + currentUser.displayName + " không?")) {
+                    signOut(auth).then(() => window.showToast("Đã đăng xuất", "success"));
+                }
+            } else {
+                sessionStorage.setItem('isManualLogin', 'true');
+                signInWithPopup(auth, provider).catch(error => {
+                    window.showToast("Lỗi đăng nhập: " + error.message, "error");
+                    sessionStorage.removeItem('isManualLogin');
+                });
+            }
+        };
+
+        // Hàm Tải ép buộc
+        window.checkSyncStatus = function () {
+            downloadFromCloud(true);
+        };
+
+        // Hàm Đồng bộ lên mây (Được gọi tự động từ saveData)
+        window.syncToFirebase = async function () {
+            if (!currentUser || !db || isDownloading) return;
+
+            const originalName = currentUser.displayName.split(" ")[0];
+            btnText.innerText = "⏳ Đang đồng bộ...";
+
+            try {
+                const dataToSave = {
+                    groups: window.groups || [],
+                    contexts: window.contexts || [],
+                    sources: window.sources || [],
+                    grammars: window.grammars || [],
+                    reviewHistory: window.getReviewHistory(),
+                    lastUpdated: Date.now(),
+                    lastUpdatedByDevice: window.getDeviceId()
+                };
+
+                await setDoc(doc(db, "users", currentUser.uid), dataToSave);
+                btnText.innerText = "✅ Đã đồng bộ";
+                setTimeout(() => { if (currentUser) btnText.innerText = "Đồng bộ: " + originalName; }, 2000);
+            } catch (error) {
+                console.error("Lỗi đồng bộ Firebase:", error);
+                btnText.innerText = "❌ Lỗi đồng bộ";
+                window.showToast("Lỗi đẩy lên Cloud! Vui lòng thử lại.", "error");
+            }
+        };
+
+        // Hàm Tải dữ liệu từ mây xuống máy
+        async function downloadFromCloud(needReload = false) {
+            if (!currentUser || !db) return;
+
+            isDownloading = true;
+            btnText.innerText = "⏳ Đang tải...";
+
+            try {
+                const docRef = doc(db, "users", currentUser.uid);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+
+                    // Cập nhật bộ nhớ trực tiếp
+                    window.groups = data.groups || [];
+                    window.contexts = data.contexts || [];
+                    window.sources = data.sources || [];
+                    window.grammars = data.grammars || [];
+
+                    // Lưu xuống local storage
+                    localStorage.setItem('nhg_groups', JSON.stringify(window.groups));
+                    localStorage.setItem('nhg_contexts', JSON.stringify(window.contexts));
+                    localStorage.setItem('nhg_sources', JSON.stringify(window.sources));
+                    localStorage.setItem('nhg_grammars', JSON.stringify(window.grammars));
+
+                    if (data.reviewHistory) window.saveReviewHistory(data.reviewHistory);
+
+                    if (needReload) {
+                        window.showToast("Đã tải dữ liệu mới nhất!", "success");
+                        setTimeout(() => { location.reload(); }, 500);
+                    } else {
+                        // Cập nhật giao diện ngầm
+                        window.updateDailyReviewUI();
+                        window.renderGroups();
+                        window.renderContexts();
+                        window.renderSources();
+                        window.renderGrammars();
+                        isDownloading = false;
+                        btnText.innerText = "Đồng bộ: " + currentUser.displayName.split(" ")[0];
+                    }
+                } else {
+                    // Nếu tài khoản mới chưa có dữ liệu mây, đẩy dữ liệu máy lên
+                    isDownloading = false;
+                    window.syncToFirebase();
+                }
+            } catch (error) {
+                console.error("Lỗi khi tải từ mây:", error);
+                btnText.innerText = "❌ Lỗi mạng/Quyền";
+                isDownloading = false;
+                window.showToast("Mạng không ổn định. Đang dùng dữ liệu trên máy.", "warning");
+            }
+        }
+
+        // Lắng nghe dữ liệu ngầm (Chạy nền)
+        function startRealtimeSync() {
+            if (!currentUser || !db) return;
+            if (unsubscribeCloudSync) unsubscribeCloudSync();
+
+            unsubscribeCloudSync = onSnapshot(doc(db, "users", currentUser.uid), (docSnap) => {
+                if (docSnap.metadata.hasPendingWrites) return; // Bỏ qua nếu là dữ liệu do chính thiết bị này vừa đẩy lên
+
+                if (docSnap.exists()) {
+                    const data = docSnap.data();
+                    window.groups = data.groups || [];
+                    window.contexts = data.contexts || [];
+                    window.sources = data.sources || [];
+                    window.grammars = data.grammars || [];
+
+                    localStorage.setItem('nhg_groups', JSON.stringify(window.groups));
+                    localStorage.setItem('nhg_contexts', JSON.stringify(window.contexts));
+                    localStorage.setItem('nhg_sources', JSON.stringify(window.sources));
+                    localStorage.setItem('nhg_grammars', JSON.stringify(window.grammars));
+
+                    if (data.reviewHistory) {
+                        window.saveReviewHistory(data.reviewHistory);
+                        window.updateDailyReviewUI();
+                    }
+
+                    window.renderGroups();
+                    window.renderContexts();
+                    window.renderSources();
+                    window.renderGrammars();
+                    if (typeof window.renderRelatedGrammarsList === 'function') window.renderRelatedGrammarsList(window.editingGrammarId);
+                }
+            });
+        }
     </script>
 </body>
 
