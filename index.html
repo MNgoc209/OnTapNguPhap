@@ -636,6 +636,11 @@
                         <path
                             d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z" />
                     </svg><span id="google-login-text">Đăng nhập đồng bộ</span></button>
+                
+                <!-- NÚT KÉO CLOUD (Chỉ hiển thị khi đã đăng nhập) -->
+                <button id="btn-force-pull" onclick="forcePullFromCloud()" class="hidden w-full md:w-auto justify-center bg-white border border-[#3498db] text-[#3498db] px-3 py-2 rounded-lg font-bold shadow-sm text-sm flex items-center gap-2 hover:bg-blue-50 transition-colors" title="Cưỡng chế tải dữ liệu mới nhất từ Cloud xuống máy này">
+                    ☁️ Kéo Cloud
+                </button>
             </div>
             <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
                 <button onclick="document.getElementById('csv-file').click()"
@@ -907,8 +912,11 @@
             firebase.initializeApp(firebaseConfig); db = firebase.firestore(); auth = firebase.auth();
             auth.onAuthStateChanged((user) => {
                 const btnText = document.getElementById('google-login-text');
+                const btnForce = document.getElementById('btn-force-pull');
+                
                 if (user) {
                     currentUser = user; btnText.innerText = "Đồng bộ: " + user.displayName.split(" ")[0];
+                    btnForce.classList.remove('hidden'); // Hiện nút Kéo Cloud khi đã đăng nhập
 
                     if (sessionStorage.getItem('isManualLogin') === 'true') {
                         showToast("Đã kết nối tài khoản: " + user.displayName, "success");
@@ -918,6 +926,7 @@
                     fetchFromFirebaseRealtime();
                 } else {
                     currentUser = null; btnText.innerText = "Đăng nhập đồng bộ";
+                    btnForce.classList.add('hidden'); // Ẩn nút Kéo Cloud khi chưa đăng nhập
                     if (unsubscribeCloudSync) { unsubscribeCloudSync(); unsubscribeCloudSync = null; }
                 }
             });
@@ -985,20 +994,24 @@
             const originalName = currentUser.displayName.split(" ")[0];
             btnText.innerText = "⏳ Đang đồng bộ...";
 
-            const dataToSync = {
-                groups, contexts, sources, grammars,
-                reviewHistory: getReviewHistory(),
-                lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-            };
+            // BỘ LỌC LÀM SẠCH DỮ LIỆU: Loại bỏ 'undefined' để tránh lỗi Firebase từ chối lưu
+            const cleanData = JSON.parse(JSON.stringify({
+                groups: groups || [],
+                contexts: contexts || [],
+                sources: sources || [],
+                grammars: grammars || [],
+                reviewHistory: getReviewHistory() || {}
+            }));
+            cleanData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
 
-            db.collection("users").doc(currentUser.uid).set(dataToSync).then(() => {
+            db.collection("users").doc(currentUser.uid).set(cleanData).then(() => {
                 console.log("Đã lưu dữ liệu hiện tại lên Cloud.");
                 btnText.innerText = "✅ Đã đồng bộ";
                 setTimeout(() => { if (currentUser) btnText.innerText = "Đồng bộ: " + originalName; }, 2000); 
             }).catch((error) => {
                 console.error("Lỗi đồng bộ Firebase:", error); 
                 btnText.innerText = "❌ Lỗi đồng bộ";
-                showToast("Lỗi đẩy lên Cloud!", "error");
+                showToast("Lỗi đẩy lên Cloud (Có thể do dữ liệu quá lớn)!", "error");
             });
         }
 
@@ -1006,9 +1019,7 @@
             if (!currentUser || !db) return;
             if (unsubscribeCloudSync) unsubscribeCloudSync();
 
-            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot({ includeMetadataChanges: true }, (doc) => {
-                if (doc.metadata.hasPendingWrites) { return; }
-
+            unsubscribeCloudSync = db.collection("users").doc(currentUser.uid).onSnapshot((doc) => {
                 if (doc.exists) {
                     const data = doc.data();
 
@@ -1032,6 +1043,42 @@
 
                 } else { syncToFirebase(); }
             }, (error) => { console.error("Lỗi lắng nghe Cloud:", error); });
+        }
+
+        // Cưỡng chế tải dữ liệu mới nhất (Nút Kéo Cloud)
+        function forcePullFromCloud() {
+            if (!currentUser || !db) return showToast("Vui lòng đăng nhập đồng bộ trước!", "warning");
+            showToast("Đang kéo dữ liệu từ Cloud...", "success");
+            
+            db.collection("users").doc(currentUser.uid).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    groups = data.groups || []; 
+                    contexts = data.contexts || []; 
+                    sources = data.sources || []; 
+                    grammars = data.grammars || [];
+                    
+                    localStorage.setItem('nhg_groups', JSON.stringify(groups)); 
+                    localStorage.setItem('nhg_contexts', JSON.stringify(contexts));
+                    localStorage.setItem('nhg_sources', JSON.stringify(sources)); 
+                    localStorage.setItem('nhg_grammars', JSON.stringify(grammars));
+
+                    if (data.reviewHistory) {
+                        saveReviewHistory(data.reviewHistory);
+                        updateDailyReviewUI();
+                    }
+                    
+                    renderGroups(); renderContexts(); renderSources(); renderGrammars(); 
+                    renderRelatedGrammarsList(editingGrammarId);
+                    
+                    showToast("✅ Đã kéo dữ liệu mới nhất thành công!", "success");
+                } else {
+                    showToast("Cloud chưa có dữ liệu nào để tải về.", "warning");
+                }
+            }).catch(e => {
+                console.error(e);
+                showToast("Lỗi khi tải dữ liệu Cloud!", "error");
+            });
         }
 
         function saveData() {
@@ -1088,15 +1135,16 @@
                     borderClass = "border-2 border-[#F5AFAF]";
                 }
                 
-                // NÂNG CẤP: Bỏ số câu trên ô lịch, màu xanh hiển thị nhạt đi một chút
+                // Đã chỉnh màu xanh nhạt hơn, không chói
                 if (count > 0) {
-                    if (count < 5) bgClass = "bg-green-100 hover:bg-green-200";
-                    else if (count < 15) bgClass = "bg-green-200 hover:bg-green-300";
-                    else bgClass = "bg-green-300 hover:bg-green-400";
+                    if (count < 5) bgClass = "bg-[#d4edda] hover:bg-[#c3e6cb]"; 
+                    else if (count < 15) bgClass = "bg-[#a3e4d7] hover:bg-[#76d7c4]"; 
+                    else bgClass = "bg-[#73c6b6] hover:bg-[#48c9b0]"; 
                     
-                    textClass = "text-green-800";
+                    textClass = "text-green-900";
                 }
 
+                // Xóa thẻ span hiển thị số đếm trong ô lịch
                 grid.innerHTML += `
                     <button onclick="selectCalendarDate('${dateStr}')" 
                         class="calendar-cell ${bgClass} ${textClass} ${borderClass}">
@@ -1867,7 +1915,7 @@
             if (isCorrect) {
                 showToast("Đúng rồi 🥳", "success"); if (target.level < 8) target.level = (target.level || 0) + 1;
                 if (target.level !== 9) { const lIdx = Math.max(0, Math.min(target.level - 1, intervals.length - 1)); target.nextReviewDate = Date.now() + (intervals[lIdx] * 60000); }
-                showCorrectDetail(target); // Đã thêm vào đây
+                showCorrectDetail(target); // Đã thêm vào đây: luôn show lý thuyết khi ĐÚNG
             } else { 
                 showToast("Sai rồi! Hãy xem đáp án.", "error"); 
                 showCorrectDetail(target); 
@@ -1897,7 +1945,7 @@
             const dc = document.getElementById('quiz-correct-detail'); dc.classList.remove('hidden'); const eqGrammars = getEquivalentGrammars(g.id);
             dc.innerHTML = `
                 <div class="bg-card rounded-xl border-2 border-green-300 shadow-md text-left overflow-hidden mt-4 w-full">
-                    <div class="bg-green-100 px-4 py-3 border-b border-green-200"><span class="font-bold text-green-800 text-sm sm:text-base">💡 Đáp án đầy đủ:</span></div>
+                    <div class="bg-green-100 px-4 py-3 border-b border-green-200"><span class="font-bold text-green-800 text-sm sm:text-base">💡 Chi tiết ngữ pháp:</span></div>
                     <div class="p-3 sm:p-5">
                         <div class="overflow-x-auto border border-theme rounded-xl w-full">
                             <table class="w-full text-left border-collapse text-sm bg-white min-w-[300px]">
