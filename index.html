@@ -11,6 +11,19 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
+    <!-- HỆ THỐNG BẮT LỖI TRỰC QUAN -->
+    <script>
+      window.onerror = function (message, source, lineno, colno, error) {
+        let errorMsg = `🚨 LỖI JAVASCRIPT:\n- Lỗi: ${message}\n- Dòng: ${lineno}:${colno}`;
+        alert(errorMsg);
+        console.error(errorMsg);
+        return false;
+      };
+      window.addEventListener("unhandledrejection", function (event) {
+        alert("🚨 LỖI PROMISE/API:\n" + event.reason);
+      });
+    </script>
+
     <style>
       :root {
         /* Theme Colors */
@@ -1259,7 +1272,7 @@
       </main>
     </div>
 
-    <!-- CÁC MODAL HIỂN THỊ CHI TIẾT NGỮ PHÁP ... -->
+    <!-- CÁC MODAL HIỂN THỊ CHI TIẾT NGỮ PHÁP -->
     <div
       id="grammarDetailModal"
       class="fixed inset-0 bg-black bg-opacity-40 hidden z-[120] flex justify-center items-center backdrop-blur-sm transition-opacity"
@@ -1294,8 +1307,6 @@
       </div>
     </div>
 
-    <!-- Modals Soạn Thảo (Ví dụ, Cấu trúc, Tương đương, CSV,...) -->
-    <!-- ... (Giữ nguyên các modal ở phiên bản trước) ... -->
     <div
       id="structureModal"
       class="fixed inset-0 bg-black bg-opacity-40 hidden z-[110] flex justify-center items-center backdrop-blur-sm transition-opacity"
@@ -1533,6 +1544,7 @@
       </div>
     </div>
 
+    <!-- Nâng cấp Code phòng thủ cho Modal Ôn Tập -->
     <script>
       let groups = [];
       let contexts = [];
@@ -2144,7 +2156,6 @@
                 );
               }
 
-              // NÂNG CẤP THỜI GIAN GIÃN CÁCH (TỐI ĐA 6 NGÀY)
               const intervals = [5, 30, 120, 360, 720, 1440, 4320, 8640];
               grammars = data.grammars.map((g) => {
                 g.level = parseInt(g.level || 0);
@@ -2977,7 +2988,6 @@
       function changeGrammarLevel(id, newLevel) {
         const g = grammars.find((item) => item.id === id);
         if (g) {
-          // NÂNG CẤP THỜI GIAN GIÃN CÁCH (TỐI ĐA 6 NGÀY)
           const intervals = [5, 30, 120, 360, 720, 1440, 4320, 8640];
           g.level = parseInt(newLevel);
           if (g.level === 9) {
@@ -3041,8 +3051,6 @@
         );
         if (checkedBoxes.length === 0) return;
         let count = 0;
-
-        // NÂNG CẤP THỜI GIAN GIÃN CÁCH (TỐI ĐA 6 NGÀY)
         const intervals = [5, 30, 120, 360, 720, 1440, 4320, 8640];
         checkedBoxes.forEach((cb) => {
           const id = parseFloat(cb.value);
@@ -3241,10 +3249,28 @@
       }
 
       function openQuizSetup() {
-        document.getElementById("quizSetupModal").classList.remove("hidden");
-        document.getElementById("quiz-setup-step-1").classList.remove("hidden");
-        document.getElementById("quiz-setup-step-2").classList.add("hidden");
-        let actionContainer = document.getElementById("quiz-step-1-actions");
+        // FIX NULL Ở ĐÂY BẰNG CODE PHÒNG THỦ
+        const modal = document.getElementById("quizSetupModal");
+        const step1 = document.getElementById("quiz-setup-step-1");
+        const step2 = document.getElementById("quiz-setup-step-2");
+        const actionContainer = document.getElementById("quiz-step-1-actions");
+
+        if (!modal || !step1 || !step2) {
+          let missing = [];
+          if (!modal) missing.push("quizSetupModal");
+          if (!step1) missing.push("quiz-setup-step-1");
+          if (!step2) missing.push("quiz-setup-step-2");
+          alert(
+            "🚨 LỖI HỆ THỐNG: Bị thiếu HTML của Modal Ôn tập!\nCác thẻ bị mất: " +
+              missing.join(", "),
+          );
+          return;
+        }
+
+        modal.classList.remove("hidden");
+        step1.classList.remove("hidden");
+        step2.classList.add("hidden");
+
         if (actionContainer) actionContainer.classList.add("hidden");
         renderQuizLevelButtons();
       }
@@ -3495,7 +3521,6 @@
             );
           });
 
-        // NÂNG CẤP THỜI GIAN GIÃN CÁCH (TỐI ĐA 6 NGÀY)
         const intervals = [5, 30, 120, 360, 720, 1440, 4320, 8640];
         const mId = currentQuizSelection.meaningId;
         const sId = currentQuizSelection.structureId;

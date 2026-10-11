@@ -1,0 +1,22 @@
+{
+  "name": "ontapnguphap",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MNgoc209/OnTapNguPhap.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MNgoc209/OnTapNguPhap/issues"
+  },
+  "homepage": "https://github.com/MNgoc209/OnTapNguPhap#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.64.0",
+    "@types/node": "^26.6.5"
+  }
+}
