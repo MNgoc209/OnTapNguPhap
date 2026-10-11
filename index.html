@@ -1862,17 +1862,14 @@
               pendingCloudData = doc.data();
 
               let cloudTime = "Chưa rõ";
-              // BẢN SỬA LỖI: Kiểm tra kiểu dữ liệu của lastUpdated trước khi parse
               if (pendingCloudData.lastUpdated) {
                 if (typeof pendingCloudData.lastUpdated.toDate === "function") {
-                  // Firebase Timestamp
                   const date = pendingCloudData.lastUpdated.toDate();
                   cloudTime =
                     date.toLocaleTimeString("vi-VN") +
                     " " +
                     date.toLocaleDateString("vi-VN");
                 } else {
-                  // Date.now() number or string
                   const parsedDate = parseInt(pendingCloudData.lastUpdated);
                   if (!isNaN(parsedDate)) {
                     const date = new Date(parsedDate);
@@ -1919,11 +1916,13 @@
             }
           })
           .catch((e) => {
-            console.error(e);
+            console.error("🚨 CHI TIẾT LỖI TẢI CLOUD:", e);
             btnText.innerText = "❌ Lỗi mạng";
-            showToast(
-              "Không thể kiểm tra Cloud, vui lòng thử lại sau.",
-              "error",
+            showToast("Không thể kiểm tra Cloud!", "error");
+
+            // BỔ SUNG: Bật popup show chi tiết lỗi để chẩn đoán
+            alert(
+              `🚨 LỖI KIỂM TRA ĐỒNG BỘ:\nMã lỗi (Code): ${e.code || "Không rõ"}\nChi tiết (Message): ${e.message || e}`,
             );
           });
       }
@@ -1975,38 +1974,46 @@
         unsubscribeCloudSync = db
           .collection("users")
           .doc(currentUser.uid)
-          .onSnapshot({ includeMetadataChanges: true }, (doc) => {
-            if (doc.metadata.hasPendingWrites) return;
+          .onSnapshot(
+            { includeMetadataChanges: true },
+            (doc) => {
+              if (doc.metadata.hasPendingWrites) return;
 
-            if (doc.exists) {
-              const data = doc.data();
+              if (doc.exists) {
+                const data = doc.data();
+                if (data.lastUpdatedByDevice === getDeviceId()) return;
 
-              // KIỂM TRA: Chỉ cập nhật giao diện nếu dữ liệu đến từ thiết bị KHÁC
-              if (data.lastUpdatedByDevice === getDeviceId()) return;
+                groups = data.groups || [];
+                contexts = data.contexts || [];
+                sources = data.sources || [];
+                grammars = data.grammars || [];
+                localStorage.setItem("nhg_groups", JSON.stringify(groups));
+                localStorage.setItem("nhg_contexts", JSON.stringify(contexts));
+                localStorage.setItem("nhg_sources", JSON.stringify(sources));
+                localStorage.setItem("nhg_grammars", JSON.stringify(grammars));
+                localStorage.setItem("nhg_local_last_updated", Date.now());
 
-              groups = data.groups || [];
-              contexts = data.contexts || [];
-              sources = data.sources || [];
-              grammars = data.grammars || [];
-              localStorage.setItem("nhg_groups", JSON.stringify(groups));
-              localStorage.setItem("nhg_contexts", JSON.stringify(contexts));
-              localStorage.setItem("nhg_sources", JSON.stringify(sources));
-              localStorage.setItem("nhg_grammars", JSON.stringify(grammars));
-              localStorage.setItem("nhg_local_last_updated", Date.now());
+                if (data.reviewHistory) {
+                  saveReviewHistory(data.reviewHistory);
+                  updateDailyReviewUI();
+                }
 
-              if (data.reviewHistory) {
-                saveReviewHistory(data.reviewHistory);
-                updateDailyReviewUI();
+                renderGroups();
+                renderContexts();
+                renderSources();
+                renderGrammars();
+                renderRelatedGrammarsList(editingGrammarId);
+                showToast("Đã nhận bản cập nhật mới từ Cloud", "success");
               }
-
-              renderGroups();
-              renderContexts();
-              renderSources();
-              renderGrammars();
-              renderRelatedGrammarsList(editingGrammarId);
-              showToast("Đã nhận bản cập nhật mới từ Cloud", "success");
-            }
-          });
+            },
+            // BỔ SUNG: Hàm callback thứ 2 của onSnapshot dùng để bắt lỗi
+            (error) => {
+              console.error("🚨 LỖI REALTIME SYNC:", error);
+              alert(
+                `🚨 LỖI ĐỒNG BỘ NGẦM (REALTIME):\nMã lỗi: ${error.code || "Không rõ"}\nChi tiết: ${error.message || error}`,
+              );
+            },
+          );
       }
 
       function syncToFirebase() {
@@ -2028,11 +2035,9 @@
           }),
         );
 
-        // BẢN SỬA LỖI: Thống nhất dùng Date.now() thay vì FieldValue
         cleanData.lastUpdated = Date.now();
         cleanData.lastUpdatedByDevice = currentDeviceId;
 
-        // Sử dụng { merge: true } để cập nhật an toàn, không xóa các trường không xác định
         db.collection("users")
           .doc(currentUser.uid)
           .set(cleanData, { merge: true })
@@ -2042,17 +2047,20 @@
               currentDeviceId,
             );
             btnText.innerText = "✅ Đã đồng bộ";
-            // Hiện thông báo thành công để xác nhận
             showToast("Đã đồng bộ lên Cloud thành công!", "success");
             setTimeout(() => {
               if (currentUser) btnText.innerText = "Đồng bộ: " + originalName;
             }, 2000);
           })
           .catch((error) => {
-            console.error("Lỗi đồng bộ Firebase:", error);
+            console.error("🚨 CHI TIẾT LỖI ĐẨY CLOUD:", error);
             btnText.innerText = "❌ Lỗi đồng bộ";
-            // Hiển thị mã lỗi chi tiết từ Firebase ra màn hình
-            showToast("Lỗi đẩy lên Cloud: " + error.message, "error");
+            showToast("Lỗi đẩy lên Cloud!", "error");
+
+            // BỔ SUNG: Bật popup show chi tiết lỗi để chẩn đoán
+            alert(
+              `🚨 LỖI LƯU DỮ LIỆU LÊN CLOUD:\nMã lỗi (Code): ${error.code || "Không rõ"}\nChi tiết (Message): ${error.message || error}`,
+            );
           });
       }
 
