@@ -1966,6 +1966,10 @@
 
             if (doc.exists) {
               const data = doc.data();
+
+              // KIỂM TRA: Chỉ cập nhật giao diện nếu dữ liệu đến từ thiết bị KHÁC
+              if (data.lastUpdatedByDevice === getDeviceId()) return;
+
               groups = data.groups || [];
               contexts = data.contexts || [];
               sources = data.sources || [];
@@ -1986,6 +1990,7 @@
               renderSources();
               renderGrammars();
               renderRelatedGrammarsList(editingGrammarId);
+              showToast("Đã nhận bản cập nhật mới từ Cloud", "success");
             }
           });
       }
@@ -2012,15 +2017,18 @@
         cleanData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
         cleanData.lastUpdatedByDevice = currentDeviceId;
 
+        // Sử dụng { merge: true } để cập nhật an toàn, không xóa các trường không xác định
         db.collection("users")
           .doc(currentUser.uid)
-          .set(cleanData)
+          .set(cleanData, { merge: true })
           .then(() => {
             console.log(
               "☁️ Đã tải dữ liệu lên Cloud từ thiết bị:",
               currentDeviceId,
             );
             btnText.innerText = "✅ Đã đồng bộ";
+            // Hiện thông báo thành công để xác nhận
+            showToast("Đã đồng bộ lên Cloud thành công!", "success");
             setTimeout(() => {
               if (currentUser) btnText.innerText = "Đồng bộ: " + originalName;
             }, 2000);
@@ -2028,7 +2036,8 @@
           .catch((error) => {
             console.error("Lỗi đồng bộ Firebase:", error);
             btnText.innerText = "❌ Lỗi đồng bộ";
-            showToast("Lỗi đẩy lên Cloud!", "error");
+            // Hiển thị mã lỗi chi tiết từ Firebase ra màn hình
+            showToast("Lỗi đẩy lên Cloud: " + error.message, "error");
           });
       }
 
