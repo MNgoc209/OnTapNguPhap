@@ -1862,12 +1862,26 @@
               pendingCloudData = doc.data();
 
               let cloudTime = "Chưa rõ";
+              // BẢN SỬA LỖI: Kiểm tra kiểu dữ liệu của lastUpdated trước khi parse
               if (pendingCloudData.lastUpdated) {
-                const date = pendingCloudData.lastUpdated.toDate();
-                cloudTime =
-                  date.toLocaleTimeString("vi-VN") +
-                  " " +
-                  date.toLocaleDateString("vi-VN");
+                if (typeof pendingCloudData.lastUpdated.toDate === "function") {
+                  // Firebase Timestamp
+                  const date = pendingCloudData.lastUpdated.toDate();
+                  cloudTime =
+                    date.toLocaleTimeString("vi-VN") +
+                    " " +
+                    date.toLocaleDateString("vi-VN");
+                } else {
+                  // Date.now() number or string
+                  const parsedDate = parseInt(pendingCloudData.lastUpdated);
+                  if (!isNaN(parsedDate)) {
+                    const date = new Date(parsedDate);
+                    cloudTime =
+                      date.toLocaleTimeString("vi-VN") +
+                      " " +
+                      date.toLocaleDateString("vi-VN");
+                  }
+                }
               }
               const cloudDevice =
                 pendingCloudData.lastUpdatedByDevice || "Không xác định";
@@ -2014,7 +2028,8 @@
           }),
         );
 
-        cleanData.lastUpdated = firebase.firestore.FieldValue.serverTimestamp();
+        // BẢN SỬA LỖI: Thống nhất dùng Date.now() thay vì FieldValue
+        cleanData.lastUpdated = Date.now();
         cleanData.lastUpdatedByDevice = currentDeviceId;
 
         // Sử dụng { merge: true } để cập nhật an toàn, không xóa các trường không xác định
