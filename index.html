@@ -1796,6 +1796,13 @@
       try {
         firebase.initializeApp(firebaseConfig);
         db = firebase.firestore();
+
+        // CẤU HÌNH VƯỢT TƯỜNG LỬA / TRÌNH CHẶN QUẢNG CÁO
+        db.settings({
+          experimentalForceLongPolling: true,
+          useFetchStreams: false,
+        });
+
         auth = firebase.auth();
         auth.onAuthStateChanged((user) => {
           const btnText = document.getElementById("google-login-text");
@@ -1919,8 +1926,6 @@
             console.error("🚨 CHI TIẾT LỖI TẢI CLOUD:", e);
             btnText.innerText = "❌ Lỗi mạng";
             showToast("Không thể kiểm tra Cloud!", "error");
-
-            // BỔ SUNG: Bật popup show chi tiết lỗi để chẩn đoán
             alert(
               `🚨 LỖI KIỂM TRA ĐỒNG BỘ:\nMã lỗi (Code): ${e.code || "Không rõ"}\nChi tiết (Message): ${e.message || e}`,
             );
@@ -2006,7 +2011,6 @@
                 showToast("Đã nhận bản cập nhật mới từ Cloud", "success");
               }
             },
-            // BỔ SUNG: Hàm callback thứ 2 của onSnapshot dùng để bắt lỗi
             (error) => {
               console.error("🚨 LỖI REALTIME SYNC:", error);
               alert(
@@ -2056,8 +2060,6 @@
             console.error("🚨 CHI TIẾT LỖI ĐẨY CLOUD:", error);
             btnText.innerText = "❌ Lỗi đồng bộ";
             showToast("Lỗi đẩy lên Cloud!", "error");
-
-            // BỔ SUNG: Bật popup show chi tiết lỗi để chẩn đoán
             alert(
               `🚨 LỖI LƯU DỮ LIỆU LÊN CLOUD:\nMã lỗi (Code): ${error.code || "Không rõ"}\nChi tiết (Message): ${error.message || error}`,
             );
